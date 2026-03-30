@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOFTON — Dashboard Campañas Digitales 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --dark: #1B2A4A;
+    --blue: #2E5090;
+    --light-blue: #4A90D9;
+    --accent: #F4A100;
+    --green: #28A745;
+    --red: #DC3545;
+    --gray-bg: #F4F6FA;
+    --gray-card: #FFFFFF;
+    --gray-border: #E2E8F0;
+    --text: #1B2A4A;
+    --text-muted: #6B7280;
+    --shadow: 0 2px 12px rgba(27,42,74,.08);
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--gray-bg); color:var(--text); min-height:100vh; }
+
+  /* ── HEADER ── */
+  .header { background:var(--dark); color:#fff; padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.25); }
+  .header-logo { display:flex; align-items:center; gap:14px; }
+  .header-logo .logo-mark { width:40px; height:40px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; color:#fff; letter-spacing:-.5px; }
+  .header-logo h1 { font-size:18px; font-weight:700; }
+  .header-logo span { font-size:12px; color:#94A3B8; display:block; }
+  .header-badge { background:rgba(244,161,0,.15); border:1px solid var(--accent); color:var(--accent); padding:4px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+
+  /* ── NAV ── */
+  .nav { background:#fff; border-bottom:2px solid var(--gray-border); padding:0 32px; display:flex; gap:4px; overflow-x:auto; }
+  .nav-btn { padding:16px 20px; font-size:13px; font-weight:600; color:var(--text-muted); background:none; border:none; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; display:flex; align-items:center; gap:8px; }
+  .nav-btn:hover { color:var(--blue); }
+  .nav-btn.active { color:var(--blue); border-bottom-color:var(--blue); }
+  .nav-btn .tab-icon { font-size:16px; }
+
+  /* ── LAYOUT ── */
+  .page { display:none; padding:28px 32px; max-width:1400px; margin:0 auto; }
+  .page.active { display:block; }
+
+  /* ── CARDS ── */
+  .card { background:var(--gray-card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--gray-border); }
+  .card-header { padding:20px 24px 0; }
+  .card-body { padding:20px 24px 24px; }
+  .card-title { font-size:14px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; }
+  .card-value { font-size:32px; font-weight:800; color:var(--dark); line-height:1.1; margin-top:4px; }
+  .card-sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .card-tag { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; margin-top:8px; }
+  .tag-green { background:#D1FAE5; color:#065F46; }
+  .tag-orange { background:#FEF3C7; color:#92400E; }
+  .tag-red { background:#FEE2E2; color:#991B1B; }
+  .tag-blue { background:#DBEAFE; color:#1E40AF; }
+
+  /* ── GRID ── */
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:24px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:24px; }
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-bottom:24px; }
+  @media(max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:700px){ .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;} }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x:auto; border-radius:var(--radius); border:1px solid var(--gray-border); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead th { background:var(--dark); color:#fff; padding:12px 16px; text-align:left; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.05em; white-space:nowrap; }
+  tbody tr { border-bottom:1px solid var(--gray-border); transition:background .15s; }
+  tbody tr:hover { background:#F8FAFF; }
+  tbody tr:last-child { border-bottom:none; }
+  td { padding:12px 16px; vertical-align:top; }
+  .section-row td { background:var(--blue); color:#fff; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em; padding:8px 16px; }
+  .section-row-meta td { background:#1877F2; color:#fff; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em; padding:8px 16px; }
+  .section-row-google td { background:#34A853; color:#fff; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em; padding:8px 16px; }
+
+  /* ── BADGES ── */
+  .badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .b-alta { background:#FEE2E2; color:#991B1B; }
+  .b-muy-alta { background:#FECACA; color:#7F1D1D; }
+  .b-media-alta { background:#FEF3C7; color:#92400E; }
+  .b-media { background:#D1FAE5; color:#065F46; }
+  .b-p0 { background:#1B2A4A; color:#fff; }
+  .b-p1 { background:#DBEAFE; color:#1E40AF; }
+  /* Platform color tokens */
+  --meta-color: #1877F2;
+  --meta-light: #EBF3FF;
+  --google-color: #34A853;
+  --google-light: #E6F4EA;
+
+  .b-search { background:#E6F4EA; color:#1A6632; border:1px solid #34A853; }
+  .b-display { background:#E6F4EA; color:#1A6632; border:1px solid #34A853; }
+  .b-social { background:#EBF3FF; color:#1251AA; border:1px solid #1877F2; }
+
+  /* ── SEARCH / FILTER ── */
+  .filter-bar { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
+  .filter-input { padding:9px 14px; border:1px solid var(--gray-border); border-radius:8px; font-size:13px; background:#fff; outline:none; transition:border .2s; flex:1; min-width:200px; }
+  .filter-input:focus { border-color:var(--light-blue); }
+  .filter-select { padding:9px 14px; border:1px solid var(--gray-border); border-radius:8px; font-size:13px; background:#fff; outline:none; cursor:pointer; }
+  .filter-count { font-size:12px; color:var(--text-muted); }
+
+  /* ── CALENDAR ── */
+  .cal-wrap { overflow-x:auto; }
+  .cal-grid { display:grid; grid-template-columns:200px repeat(12,1fr); min-width:900px; }
+  .cal-header { background:var(--dark); color:#fff; padding:10px 8px; font-size:11px; font-weight:700; text-align:center; text-transform:uppercase; letter-spacing:.05em; border:1px solid rgba(255,255,255,.1); }
+  .cal-label { padding:10px 12px; font-size:12px; font-weight:600; background:#fff; border:1px solid var(--gray-border); display:flex; align-items:center; gap:6px; }
+  .cal-label .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .cal-cell { padding:4px; background:#fff; border:1px solid var(--gray-border); }
+  .cal-block { border-radius:4px; height:28px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; padding:2px 4px; text-align:center; overflow:hidden; }
+  .cal-section-label { background:var(--dark); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:6px 12px; }
+  .cal-section-cell { background:var(--dark); opacity:.3; }
+
+  /* ── BUDGET VIZ ── */
+  .budget-bar { height:24px; background:var(--gray-border); border-radius:12px; overflow:hidden; margin:8px 0; }
+  .budget-fill { height:100%; border-radius:12px; display:flex; align-items:center; justify-content:flex-end; padding:0 10px; font-size:11px; font-weight:700; color:#fff; }
+
+  /* ── EXPANDABLE ROWS ── */
+  .expand-btn { background:none; border:none; cursor:pointer; color:var(--blue); font-size:18px; line-height:1; padding:2px 8px; border-radius:4px; transition:background .2s; }
+  .expand-btn:hover { background:var(--gray-bg); }
+  .detail-row { display:none; }
+  .detail-row.open { display:table-row; }
+  .detail-cell { background:#F8FAFF; padding:16px 20px 16px 48px !important; font-size:12px; }
+  .detail-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .detail-item label { font-weight:700; color:var(--text-muted); font-size:11px; text-transform:uppercase; letter-spacing:.04em; display:block; margin-bottom:3px; }
+  .detail-item p { color:var(--text); line-height:1.5; }
+
+  /* ── KPI METER ── */
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; }
+  .kpi-card { background:var(--gray-bg); border-radius:10px; padding:16px; text-align:center; border:1px solid var(--gray-border); }
+  .kpi-label { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; }
+  .kpi-value { font-size:22px; font-weight:800; color:var(--dark); margin:6px 0 2px; }
+  .kpi-note { font-size:11px; color:var(--text-muted); }
+
+  /* ── PROGRESS RINGS ── */
+  .section-title { font-size:18px; font-weight:800; color:var(--dark); margin-bottom:4px; }
+  .section-sub { font-size:13px; color:var(--text-muted); margin-bottom:20px; }
+
+  /* ── CHIP ── */
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; background:var(--gray-bg); border:1px solid var(--gray-border); color:var(--text); }
+  .chip.pos { background:#D1FAE5; border-color:#6EE7B7; color:#065F46; }
+  .chip.neg { background:#FEE2E2; border-color:#FCA5A5; color:#991B1B; }
+
+  /* ── MONTH TOGGLE ── */
+  .month-pills { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+  .m-pill { padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid var(--gray-border); background:#fff; color:var(--text-muted); transition:all .2s; }
+  .m-pill.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+  /* ── MISC ── */
+  .mb16 { margin-bottom:16px; }
+  .mb24 { margin-bottom:24px; }
+  .flex { display:flex; gap:12px; align-items:center; }
+  .text-right { text-align:right; }
+  .fw700 { font-weight:700; }
+  .text-blue { color:var(--blue); }
+  .divider { border:none; border-top:1px solid var(--gray-border); margin:16px 0; }
+  .tip { background:#EFF6FF; border-left:4px solid var(--light-blue); padding:12px 16px; border-radius:0 8px 8px 0; font-size:13px; margin-bottom:20px; }
+  .tip strong { color:var(--blue); }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-box { position:relative; height:260px; }
+  .chart-box-sm { position:relative; height:220px; }
+
+  /* ── MONTHLY BUDGET TABLE ── */
+  .monthly-tbl { font-size:12px; }
+  .monthly-tbl th { background:var(--dark); color:#fff; padding:8px 10px; text-align:center; }
+  .monthly-tbl td { padding:8px 10px; text-align:center; border-bottom:1px solid var(--gray-border); }
+  .monthly-tbl tr:hover td { background:#F0F7FF; }
+  .monthly-total td { background:#EFF6FF; font-weight:800; color:var(--dark); }
+
+  /* ── PLATFORM PILL HEADERS ── */
+  .platform-pill { display:inline-flex; align-items:center; gap:8px; padding:5px 14px; border-radius:20px; font-size:13px; font-weight:700; margin-bottom:16px; }
+  .pill-meta { background:#EBF3FF; color:#1251AA; border:2px solid #1877F2; }
+  .pill-google { background:#E6F4EA; color:#1A6632; border:2px solid #34A853; }
+
+  /* ── PLATFORM-COLORED CARDS ── */
+  .card-meta { border-top:4px solid #1877F2; }
+  .card-google { border-top:4px solid #34A853; }
+
+  /* ── NAV TAB PLATFORM COLORS ── */
+  .nav-btn[data-tab="meta"].active { color:#1877F2; border-bottom-color:#1877F2; }
+  .nav-btn[data-tab="google"].active { color:#34A853; border-bottom-color:#34A853; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">
+    <div class="logo-mark">L</div>
+    <div>
+      <h1>LOFTON Servicios Integrales</h1>
+      <span>Dashboard de Campañas Digitales 2026</span>
+    </div>
+  </div>
+  <div class="header-badge">Presupuesto total: $300,000 MXN</div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" data-tab="overview" onclick="showTab('overview')"><span class="tab-icon">📊</span> Resumen</button>
+  <button class="nav-btn" data-tab="meta" onclick="showTab('meta')" style="border-bottom-color:transparent"><span class="tab-icon" style="font-size:15px">🔵</span> <span style="color:#1877F2;font-weight:700">Meta Ads</span></button>
+  <button class="nav-btn" data-tab="google" onclick="showTab('google')" style="border-bottom-color:transparent"><span class="tab-icon" style="font-size:15px">🟢</span> <span style="color:#34A853;font-weight:700">Google Ads</span></button>
+  <button class="nav-btn" data-tab="keywords" onclick="showTab('keywords')"><span class="tab-icon">🔑</span> Keywords</button>
+  <button class="nav-btn" data-tab="calendar" onclick="showTab('calendar')"><span class="tab-icon">📅</span> Calendario</button>
+  <button class="nav-btn" data-tab="kpis" onclick="showTab('kpis')"><span class="tab-icon">🎯</span> KPIs & Benchmarks</button>
+</div>
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div id="tab-overview" class="page active">
+
+  <div class="grid-4 mb24">
+    <div class="card"><div class="card-header"><div class="card-title">Presupuesto Total</div></div><div class="card-body"><div class="card-value">$300,000</div><div class="card-sub">MXN · Meta + Google 2026</div><div class="card-tag tag-blue">Anual</div></div></div>
+    <div class="card card-google"><div class="card-header"><div class="card-title">🟢 Google Ads</div></div><div class="card-body"><div class="card-value" style="color:#34A853">$135,000</div><div class="card-sub">45% del presupuesto total</div><div class="card-tag tag-green">Search + Display</div></div></div>
+    <div class="card card-meta"><div class="card-header"><div class="card-title">🔵 Meta Ads</div></div><div class="card-body"><div class="card-value" style="color:#1877F2">$120,000</div><div class="card-sub">40% del presupuesto total</div><div class="card-tag tag-blue">Facebook + Instagram</div></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">Reserva Estratégica</div></div><div class="card-body"><div class="card-value">$45,000</div><div class="card-sub">10% optimización + 5% testing</div><div class="card-tag tag-orange">Fondo de contingencia</div></div></div>
+  </div>
+
+  <div class="grid-2 mb24">
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Distribución de Presupuesto</div></div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="budgetDonut"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Inversión Mensual por Plataforma</div></div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="monthlyBar"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16">Priorización de Servicios</div>
+  <div class="tip"><strong>Criterio de priorización:</strong> Se combinó % de crecimiento requerido, ROI por lead y monto de meta de crecimiento. Fiscal lidera por requerir 141.7% de crecimiento; Auditoría y Nómina por el mayor volumen monetario.</div>
+
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Servicio</th><th>Ingresos 2025</th><th>Meta Crecimiento</th><th>% Crecimiento</th><th>Leads Necesarios</th><th>ROI / Lead</th><th>Prioridad</th><th>% Budget Sugerido</th><th>Budget Aprox.</th>
+          </tr></thead>
+          <tbody id="svc-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16">Budget por Servicio</div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div id="budget-bars"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ META ADS ═══════════════ -->
+<div id="tab-meta" class="page">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+    <div style="width:44px;height:44px;background:#1877F2;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">📘</div>
+    <div>
+      <div class="section-title" style="color:#1877F2">Meta Ads — Plan Completo 2026</div>
+      <div class="section-sub" style="margin-bottom:0">Facebook + Instagram · $120,000 MXN anuales · 22 campañas activas</div>
+    </div>
+  </div>
+  <div style="height:4px;background:linear-gradient(90deg,#1877F2,#42A5F5);border-radius:2px;margin-bottom:20px"></div>
+
+  <div class="tip"><strong>Consejo 2026:</strong> Usa máximo 3–5 creativos activos por ad set. Rota los de menor CTR cada 3–4 semanas para evitar fatiga creativa. Prioriza Reels + Imagen estática en captación; Carrusel en consideración.</div>
+
+  <div class="filter-bar">
+    <input class="filter-input" id="meta-search" placeholder="🔍  Buscar campaña, servicio o mensaje…" oninput="filterMeta()">
+    <select class="filter-select" id="meta-svc" onchange="filterMeta()">
+      <option value="">Todos los servicios</option>
+      <option>Auditoría / Dictamen</option>
+      <option>Fiscal</option>
+      <option>Nómina</option>
+      <option>Laboral</option>
+      <option>Corporativo</option>
+      <option>Contabilidad</option>
+      <option>Always On</option>
+    </select>
+    <select class="filter-select" id="meta-type" onchange="filterMeta()">
+      <option value="">Todos los tipos</option>
+      <option value="always">Always On</option>
+      <option value="temporal">Temporal</option>
+    </select>
+    <span class="filter-count" id="meta-count"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="meta-table">
+      <thead><tr>
+        <th></th><th>Campaña</th><th>Servicio</th><th>Objetivo</th><th>Fechas</th><th>Budget</th><th>Formatos</th><th># Creativos</th>
+      </tr></thead>
+      <tbody id="meta-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ GOOGLE ADS ═══════════════ -->
+<div id="tab-google" class="page">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+    <div style="width:44px;height:44px;background:#34A853;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">🔍</div>
+    <div>
+      <div class="section-title" style="color:#34A853">Google Ads — Plan Completo 2026</div>
+      <div class="section-sub" style="margin-bottom:0">Search + Display · $135,000 MXN anuales · 9 grupos de campaña</div>
+    </div>
+  </div>
+  <div style="height:4px;background:linear-gradient(90deg,#EA4335,#FBBC05,#34A853,#4285F4);border-radius:2px;margin-bottom:20px"></div>
+
+  <div class="grid-3 mb24">
+    <div class="card card-google"><div class="card-header"><div class="card-title">Search</div></div><div class="card-body"><div class="card-value" style="color:#34A853">$87,000</div><div class="card-sub">7 campañas de búsqueda</div><div class="card-tag tag-green">Alta intención</div></div></div>
+    <div class="card card-google"><div class="card-header"><div class="card-title">Display</div></div><div class="card-body"><div class="card-value" style="color:#34A853">$26,000</div><div class="card-sub">Remarketing + awareness</div><div class="card-tag tag-green">Branding</div></div></div>
+    <div class="card card-google"><div class="card-header"><div class="card-title">Brand Protection</div></div><div class="card-body"><div class="card-value" style="color:#34A853">$12,000</div><div class="card-sub">Campaña de marca siempre activa</div><div class="card-tag tag-orange">Always On</div></div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input class="filter-input" id="google-search" placeholder="🔍  Buscar campaña, keyword o servicio…" oninput="filterGoogle()">
+    <select class="filter-select" id="google-type" onchange="filterGoogle()">
+      <option value="">Todos los tipos</option>
+      <option value="Search">Search</option>
+      <option value="Display">Display</option>
+    </select>
+    <span class="filter-count" id="google-count"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th></th><th>Campaña</th><th>Tipo</th><th>Fechas</th><th>Budget</th><th>Título 1</th><th>Título 2</th><th>Título 3</th>
+      </tr></thead>
+      <tbody id="google-tbody"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:24px">
+  <div class="section-title mb16">Extensiones de Anuncio Recomendadas</div>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tipo de Extensión</th><th>Contenido</th><th>Aplica a</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sitelinks</strong></td><td>Auditoría · Fiscal · Nómina · Laboral · Corporativo · Contacto</td><td>Todas las campañas</td></tr>
+            <tr><td><strong>Callout</strong></td><td>Más de 30 años · Diagnóstico sin costo · Equipo multidisciplinario · Atención personalizada</td><td>Todas las campañas</td></tr>
+            <tr><td><strong>Snippets estructurados</strong></td><td>Servicios: Dictamen Fiscal, Defensa Fiscal, Nómina, Blindaje Laboral, Gobierno Corporativo</td><td>Campañas principales</td></tr>
+            <tr><td><strong>Extensión de llamada</strong></td><td>Teléfono directo Lofton</td><td>Todas las campañas</td></tr>
+            <tr><td><strong>Formulario de lead</strong></td><td>Formulario directo en el anuncio</td><td>Auditoría, Fiscal, Nómina</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══════════════ KEYWORDS ═══════════════ -->
+<div id="tab-keywords" class="page">
+  <div class="section-title">Banco de Keywords 🔄 ACTUALIZADO MARZO 2026</div>
+  <div class="section-sub">67 palabras clave positivas + 72 negativas clasificadas por intención, volumen y prioridad. <span style="font-size:12px;color:#28A745;font-weight:700">✓ 22 keywords nuevos agregados</span></div>
+
+  <div style="background:#E6F4EA;border-left:4px solid #34A853;padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:16px">
+    <strong style="color:#1A6632">📊 Actualización Marzo 2026:</strong> Se han integrado 22 keywords positivos nuevos + 42 keywords negativos del análisis de términos de búsqueda. Los datos antiguos se mantienen. Esto incrementa la cobertura total a <strong>67 positivos</strong> y genera oportunidades de captación adicionales en servicios como Corporativo y Contabilidad.
+  </div>
+
+  <div class="filter-bar">
+    <input class="filter-input" id="kw-search" placeholder="🔍  Buscar keyword…" oninput="filterKW()">
+    <select class="filter-select" id="kw-svc" onchange="filterKW()">
+      <option value="">Todos los servicios</option>
+      <option>Auditoría</option><option>Fiscal</option><option>Nómina</option><option>Laboral</option><option>Corporativo</option><option>Contabilidad</option>
+    </select>
+    <select class="filter-select" id="kw-intent" onchange="filterKW()">
+      <option value="">Toda intención</option>
+      <option>Transaccional</option><option>Informativa</option>
+    </select>
+    <select class="filter-select" id="kw-prio" onchange="filterKW()">
+      <option value="">Toda prioridad</option>
+      <option>P0</option><option>P1</option>
+    </select>
+    <span class="filter-count" id="kw-count"></span>
+  </div>
+
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Keyword</th><th>Servicio</th><th>Match Type</th><th>Intención</th><th>Volumen</th><th>Prioridad</th></tr></thead>
+          <tbody id="kw-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16" style="color:var(--red)">🚫 Palabras Clave Negativas</div>
+  <div class="tip" style="border-color:var(--red);background:#FFF5F5"><strong>¿Por qué son importantes?</strong> Las negativas evitan que tus anuncios aparezcan ante usuarios que no son tu cliente objetivo (estudiantes, buscadores de empleo, usuarios DIY). Añadirlas correctamente reduce el desperdicio de presupuesto 20–40%.</div>
+
+  <div class="filter-bar">
+    <input class="filter-input" id="neg-search" placeholder="🔍  Buscar negativa…" oninput="filterNeg()">
+    <select class="filter-select" id="neg-cat" onchange="filterNeg()">
+      <option value="">Todas las categorías</option>
+      <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>No relevante</option>
+    </select>
+    <span class="filter-count" id="neg-count"></span>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Categoría</th><th>Keyword Negativa</th><th>Razón de Exclusión</th></tr></thead>
+          <tbody id="neg-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CALENDAR ═══════════════ -->
+<div id="tab-calendar" class="page">
+  <div class="section-title">Calendario de Campañas 2026</div>
+  <div class="section-sub">Vista mensual de todas las campañas activas por plataforma</div>
+
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="chips mb16" id="cal-legend"></div>
+      <div class="cal-wrap" id="cal-grid"></div>
+    </div>
+  </div>
+
+  <div class="section-title mb16">Presupuesto Mensual Detallado</div>
+  <div class="card">
+    <div class="card-body">
+      <div class="chart-box" style="height:300px"><canvas id="monthlyDetail"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ KPIs ═══════════════ -->
+<div id="tab-kpis" class="page">
+  <div class="section-title">KPIs & Benchmarks de Referencia</div>
+  <div class="section-sub">Metas de rendimiento para campañas digitales B2B México 2026</div>
+
+  <div class="tip"><strong>Importante:</strong> Estos son benchmarks de referencia para el sector servicios profesionales B2B en México. Los resultados reales variarán según creativos, oferta y estacionalidad. Úsalos para saber cuándo optimizar y cuándo escalar.</div>
+
+  <div class="section-title mb16" style="font-size:16px;">Meta Ads — Benchmarks por Objetivo</div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Métrica</th><th>Awareness</th><th>Consideración</th><th>Lead Gen</th><th>Retargeting</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">CTR</td><td>0.8 – 1.5%</td><td>1.0 – 2.5%</td><td>1.5 – 3.5%</td><td>2.0 – 5.0%</td></tr>
+            <tr><td class="fw700">CPM (MXN)</td><td>$40 – $80</td><td>$60 – $120</td><td>$80 – $150</td><td>$100 – $200</td></tr>
+            <tr><td class="fw700">CPC (MXN)</td><td>$5 – $15</td><td>$8 – $20</td><td>$10 – $25</td><td>$8 – $18</td></tr>
+            <tr><td class="fw700">CPL (MXN)</td><td>—</td><td>—</td><td>$150 – $400</td><td>$80 – $250</td></tr>
+            <tr><td class="fw700">Frecuencia</td><td>1.5 – 2.5</td><td>2 – 4</td><td>2 – 5</td><td>3 – 8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16" style="font-size:16px;">Google Ads — Benchmarks Search</div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Servicio</th><th>CTR Esperado</th><th>CPC Estimado (MXN)</th><th>CPL Objetivo (MXN)</th><th>Conv. Rate Landing</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">Auditoría / Dictamen</td><td>3 – 6%</td><td>$25 – $60</td><td>$300 – $600</td><td>8 – 15%</td></tr>
+            <tr><td class="fw700">Fiscal / Defensa</td><td>4 – 8%</td><td>$30 – $70</td><td>$250 – $550</td><td>8 – 18%</td></tr>
+            <tr><td class="fw700">Nómina</td><td>5 – 9%</td><td>$20 – $45</td><td>$150 – $350</td><td>10 – 20%</td></tr>
+            <tr><td class="fw700">Laboral / STPS</td><td>4 – 7%</td><td>$20 – $50</td><td>$200 – $400</td><td>8 – 15%</td></tr>
+            <tr><td class="fw700">Corporativo</td><td>3 – 5%</td><td>$30 – $65</td><td>$350 – $700</td><td>5 – 12%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16" style="font-size:16px;">Señales de Alerta — ¿Cuándo actuar?</div>
+  <div class="grid-2 mb24">
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="color:var(--red);font-size:14px;">🚨 Meta Ads — Pausar / Optimizar si…</div></div>
+      <div class="card-body">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+          <li><span class="badge b-alta">CTR &lt; 0.8%</span> <span style="margin-left:8px;font-size:13px">Problema creativo. Renovar inmediatamente.</span></li>
+          <li><span class="badge b-alta">CPL &gt; 2x objetivo</span> <span style="margin-left:8px;font-size:13px">Revisar audiencia o la oferta del anuncio.</span></li>
+          <li><span class="badge b-muy-alta">Frecuencia &gt; 5</span> <span style="margin-left:8px;font-size:13px">Fatiga de audiencia. Rotar creativos.</span></li>
+          <li><span class="badge b-media-alta">Conv. rate LP &lt; 5%</span> <span style="margin-left:8px;font-size:13px">Problema de landing page, no del anuncio.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="color:var(--green);font-size:14px;">✅ Google Ads — Escalar si…</div></div>
+      <div class="card-body">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+          <li><span class="badge b-media">CTR &gt; 6%</span> <span style="margin-left:8px;font-size:13px">Anuncio muy relevante. Incrementar presupuesto.</span></li>
+          <li><span class="badge b-media">CPL estable 2 semanas</span> <span style="margin-left:8px;font-size:13px">Campaña en fase de aprendizaje estable.</span></li>
+          <li><span class="badge b-media">Conv. rate LP &gt; 15%</span> <span style="margin-left:8px;font-size:13px">Usar reserva estratégica para escalar.</span></li>
+          <li><span class="badge b-media">ROAS positivo &gt; 3:1</span> <span style="margin-left:8px;font-size:13px">Excelente retorno. Usa el fondo de optimización.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title mb16" style="font-size:16px;">Creativos por Campaña — Guía Rápida</div>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tipo de Campaña</th><th>Formatos Recomendados</th><th>Cant. Mínima</th><th>Renovación</th><th>Prioridad de Formato</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">Always On / Brand</td><td>Reel 15-30s + Imagen estática</td><td>3 creativos</td><td>Cada 2 meses</td><td>Reel &gt; Imagen</td></tr>
+            <tr><td class="fw700">Captación (picos)</td><td>Reel 30s + Carrusel + Imagen urgencia</td><td>4–5 creativos</td><td>Cada 4 semanas</td><td>Imagen urgencia = Reel</td></tr>
+            <tr><td class="fw700">Remarketing</td><td>Imagen testimonio + Carrusel casos</td><td>2–3 creativos</td><td>Cada 6 semanas</td><td>Testimonio &gt; Carrusel</td></tr>
+            <tr><td class="fw700">Educativo / Awareness</td><td>Carrusel informativo + Reel educativo</td><td>2 creativos</td><td>Mensual</td><td>Carrusel &gt; Reel</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const SERVICES = [
+  {name:"Auditoría",income:"$7,200,000",meta:"$1,250,000",pct:"17.4%",leads:"5",roi:"$250,000",prio:"ALTA",budgetPct:"25%",budgetAmt:"$65,250",color:"#2E5090"},
+  {name:"Nómina",income:"$8,800,000",meta:"$1,000,000",pct:"11.4%",leads:"80",roi:"$12,500",prio:"ALTA",budgetPct:"20%",budgetAmt:"$52,200",color:"#28A745"},
+  {name:"Fiscal",income:"$600,000",meta:"$850,000",pct:"141.7%",leads:"3.4",roi:"$250,000",prio:"MUY ALTA",budgetPct:"20%",budgetAmt:"$52,200",color:"#DC3545"},
+  {name:"Corporativo",income:"$1,500,000",meta:"$1,000,000",pct:"66.7%",leads:"—",roi:"—",prio:"MEDIA-ALTA",budgetPct:"15%",budgetAmt:"$39,150",color:"#F4A100"},
+  {name:"Contabilidad",income:"$10,800,000",meta:"$750,000",pct:"6.9%",leads:"3",roi:"$250,000",prio:"MEDIA",budgetPct:"10%",budgetAmt:"$26,100",color:"#4A90D9"},
+  {name:"Laboral",income:"$250,000",meta:"$150,000",pct:"60%",leads:"10",roi:"$15,000",prio:"MEDIA",budgetPct:"10%",budgetAmt:"$26,100",color:"#8B5CF6"},
+];
+
+const META_CAMPAIGNS = [
+  {section:"ALWAYS ON",name:"Always On — Brand Awareness",svc:"Always On",obj:"Reconocimiento de marca",dates:"Ene–Dic 2026",budget:"$30,000/año",formats:"Video (Reels) + Carrusel",creativos:"3 Reels + 2 Carruseles",tipo:"always",segmentacion:"Dueños de empresa 30–55 años · CDMX, GDL, MTY · Intereses: gestión empresarial, contabilidad",headline:"Tu empresa merece certeza, no incertidumbre",body:"En Lofton no vendemos servicios, vendemos control, protección y tranquilidad para tu negocio. Más de 30 años blindando empresas.",cta:"Conoce más"},
+  {name:"Always On — Remarketing",svc:"Always On",obj:"Conversiones / Leads",dates:"Ene–Dic 2026",budget:"$18,000/año",formats:"Imagen estática + Carrusel",creativos:"2 Estáticas + 1 Carrusel",tipo:"always",segmentacion:"Visitantes web 90d · Interactuaron con RRSS · Abrieron formulario · Lookalike 1% clientes",headline:"¿Ya revisaste los riesgos fiscales de tu empresa?",body:"Agenda un diagnóstico sin costo. Nuestros especialistas analizan tu situación y te dan un plan de acción claro.",cta:"Agenda tu diagnóstico"},
+  {section:"T1: ENERO — MARZO",name:"Dictamen Fiscal — Captación temprana",svc:"Auditoría / Dictamen",obj:"Generación de leads",dates:"10 Feb – 25 Mar",budget:"$8,000",formats:"Reel 30s + Carrusel + Imagen",creativos:"2 Reels + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas ingresos >$100M · CFOs · Contadores internos · CDMX y ZM",headline:"El dictamen fiscal tiene fecha límite: 15 de mayo",body:"Cada año el SAT incrementa sus revisiones. ¿Tu dictamen está listo? Acompañamiento desde el aviso hasta la presentación.",cta:"Solicita cotización"},
+  {name:"Dictamen CDMX — Contribuciones Locales",svc:"Auditoría / Dictamen",obj:"Generación de leads",dates:"16 Feb – 13 Mar",budget:"$4,000",formats:"Imagen + Carrusel fechas",creativos:"1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas con operación en CDMX · Responsables nómina y predial · Geo: CDMX exclusivo",headline:"Aviso del dictamen CDMX: 15 de marzo",body:"El dictamen de contribuciones locales en CDMX tiene plazos estrictos. Nómina y predial deben estar en orden.",cta:"Solicita información"},
+  {name:"Dictamen IMSS/INFONAVIT",svc:"Auditoría / Dictamen",obj:"Generación de leads",dates:"15 Feb – 31 Mar",budget:"$5,000",formats:"Video testimonial + Imagen + Carrusel",creativos:"1 Reel + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas con +50 empleados · Directores de RH · CDMX, EdoMex, GDL, MTY",headline:"Aviso de dictamen IMSS: límite 30 de abril",body:"El IMSS no perdona omisiones. Evita multas presentando tu dictamen a tiempo. Proceso completo con Lofton.",cta:"Agenda asesoría"},
+  {name:"Nómina — Arranque de año",svc:"Nómina",obj:"Generación de leads",dates:"9 Feb – 28 Feb",budget:"$4,000",formats:"Carrusel + Reel",creativos:"1 Reel + 1 Carrusel + 1 Estática",tipo:"temporal",segmentacion:"Empresas 50–500 empleados · Directores de RH · Dueños PYMES · CDMX nacional",headline:"¿Sigues calculando nómina en Excel?",body:"Errores de nómina = multas + demandas. Profesionaliza el proceso: cálculo, timbrado y cumplimiento garantizado.",cta:"Cotiza tu nómina"},
+  {name:"Reparto de utilidades / CUCA-CUFIN",svc:"Fiscal / Contabilidad",obj:"Leads + Awareness",dates:"9 Feb – 23 Mar",budget:"$3,000",formats:"Carrusel + Imagen",creativos:"1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"CFOs y directores de finanzas · Contadores · Empresas con +3 años operando",headline:"¿Sabes cuánto PTU deberás repartir este año?",body:"CUCA, CUFIN y reparto de utilidades requieren cálculos precisos. Un error puede costarte una contingencia fiscal.",cta:"Solicita diagnóstico"},
+  {section:"T2: ABRIL — JUNIO",name:"Inspecciones STPS — Prevención",svc:"Laboral",obj:"Generación de leads",dates:"1 May – 30 Jun",budget:"$5,000",formats:"Video 'sabías que' + Carrusel + Imagen",creativos:"2 Reels + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas con REPSE · Directores de RH y Legal · CDMX, GDL, MTY, QRO",headline:"¿Tu REPSE está al día? STPS puede visitarte sin aviso",body:"Las inspecciones STPS se intensifican en 2026. ¿Tienes todo documentado? Te preparamos para pasar cualquier revisión.",cta:"Agenda tu revisión"},
+  {name:"Blindaje Laboral — Prevención",svc:"Laboral",obj:"Generación de leads",dates:"1 May – 30 Jun",budget:"$4,500",formats:"Carrusel 'señales de riesgo' + Reel",creativos:"1 Reel + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Dueños de empresas · Directores de RH · Abogados corporativos internos",headline:"¿Pagas liquidaciones porque no sabes cómo dar de baja?",body:"La prevención laboral te ahorra demandas costosas. Blindamos tu operación para gestionar tu equipo con certeza legal.",cta:"Solicita diagnóstico laboral"},
+  {name:"Gobierno Corporativo",svc:"Corporativo",obj:"Leads cualificados",dates:"2 May – 31 Oct",budget:"$6,000",formats:"Video thought leadership + Carrusel + Imagen",creativos:"2 Reels + 2 Carruseles + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas familiares en transición · Consejos de administración · CFOs · Inversión extranjera",headline:"¿Quién controla realmente tu empresa?",body:"Un gobierno corporativo sólido protege tu patrimonio, atrae inversión y previene conflictos. Diagnosticamos tu estructura.",cta:"Solicita diagnóstico corporativo"},
+  {name:"PTU — Cálculo e inspecciones",svc:"Laboral",obj:"Leads",dates:"18 Mar – 30 Abr",budget:"$2,500",formats:"Imagen urgencia + Carrusel",creativos:"1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Todas las empresas con empleados · Directores de RH · CDMX + Nacional",headline:"Mayo es mes de PTU. ¿Calculaste bien?",body:"Un mal cálculo de participación de utilidades puede generar inspecciones y sanciones. Te ayudamos con el cálculo correcto.",cta:"Calcula tu PTU"},
+  {name:"Defensa Fiscal",svc:"Fiscal",obj:"Leads cualificados",dates:"17 Mar – 30 Abr",budget:"$4,000",formats:"Video educativo + Imagen",creativos:"1 Reel + 2 Estáticas",tipo:"temporal",segmentacion:"Empresas con auditorías activas del SAT · CFOs · Abogados fiscalistas · Nacional",headline:"¿Te están auditando y no tienes estrategia?",body:"Una mala defensa ante el SAT puede costarte millones. Nuestro equipo construye estrategias sólidas para proteger tu patrimonio.",cta:"Agenda tu caso"},
+  {name:"Contratos Mercantiles",svc:"Corporativo",obj:"Leads",dates:"1 Jun – 31 Ago",budget:"$3,500",formats:"Carrusel tipos + Imagen",creativos:"1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Directores generales y legales · Empresas con operaciones comerciales complejas",headline:"¿Tus contratos te protegen o te exponen?",body:"Un contrato mercantil mal redactado puede costarte más que un abogado. Revisamos y redactamos contratos que blindan tus operaciones.",cta:"Solicita revisión de contrato"},
+  {section:"T3: JULIO — SEPTIEMBRE",name:"Nómina — Segundo pico",svc:"Nómina",obj:"Leads",dates:"1 Jul – 31 Jul",budget:"$3,500",formats:"Video testimonio + Carrusel",creativos:"1 Reel + 1 Carrusel + 1 Estática",tipo:"temporal",segmentacion:"Misma T1 + lookalike leads T1",headline:"Segundo semestre: momento ideal para profesionalizar tu nómina",body:"No esperes a diciembre para poner orden. Migra tu nómina con Lofton y cierra el año sin pendientes.",cta:"Cotiza ahora"},
+  {name:"Inspecciones STPS — Segunda ola",svc:"Laboral",obj:"Leads",dates:"1 Ago – 30 Sep",budget:"$3,500",formats:"Nuevos creativos enfoque urgencia",creativos:"1 Reel + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Misma T2 + empresas manufactureras y de servicios",headline:"Las inspecciones STPS no avisan. ¿Estás preparado?",body:"No esperes a la multa. Prepara tu empresa para cualquier inspección con nuestro programa de blindaje laboral.",cta:"Agenda revisión"},
+  {section:"T4: OCTUBRE — DICIEMBRE",name:"Cierre Fiscal + Planeación",svc:"Fiscal / Contabilidad",obj:"Leads cualificados",dates:"14 Sep – 15 Nov",budget:"$7,000",formats:"Video + Carrusel + Imagen",creativos:"2 Reels + 2 Carruseles + 2 Estáticas",tipo:"temporal",segmentacion:"CFOs · Contadores internos senior · Dueños de empresas · Nacional",headline:"¿Cómo vas a cerrar fiscalmente el 2026?",body:"La planeación fiscal antes de diciembre define cuánto pagarás en 2027. Optimizamos tu cierre con estrategias legales probadas.",cta:"Agenda planeación fiscal"},
+  {name:"Blindaje Laboral — Cierre sin contingencias",svc:"Laboral",obj:"Leads",dates:"1 Sep – 31 Oct",budget:"$4,000",formats:"Carrusel + Imagen",creativos:"1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Misma T2 + empresas que contrataron en el año",headline:"Cierra el año sin contingencias laborales",body:"Revisa contratos, expedientes y cumplimiento NOM antes de diciembre. Te ayudamos a cerrar limpio.",cta:"Solicita auditoría laboral"},
+  {name:"Aguinaldo — Cálculo correcto",svc:"Laboral / Nómina",obj:"Leads + Awareness",dates:"15 Oct – 15 Nov",budget:"$2,500",formats:"Carrusel + Imagen deadline",creativos:"1 Carrusel + 1 Estática",tipo:"temporal",segmentacion:"Todas las empresas con empleados · Directores de RH",headline:"¿Sabes calcular correctamente el aguinaldo?",body:"Un error en el cálculo de aguinaldo puede generar demandas y multas. Asegura el cumplimiento con asesoría profesional.",cta:"Calcula con nosotros"},
+  {name:"Declaración Anual — Captación temprana",svc:"Fiscal / Contabilidad",obj:"Awareness + Leads",dates:"1 Dic – 31 Ene 2027",budget:"$3,500",formats:"Reel + Carrusel + Imagen",creativos:"1 Reel + 1 Carrusel + 2 Estáticas",tipo:"temporal",segmentacion:"Personas morales y físicas · Contadores · CFOs · Nacional",headline:"Declaración anual 2026: ¿ya tienes todo listo?",body:"La declaración anual PM es en marzo, PF en abril. Empieza a prepararte ahora. Te acompañamos paso a paso.",cta:"Agenda tu declaración"},
+];
+
+const GOOGLE_CAMPAIGNS = [
+  {section:"ALWAYS ON — SEARCH",name:"Brand Campaign",tipo:"Search",dates:"Ene–Dic",budget:"$12,000/año",t1:"Lofton Servicios Integrales",t2:"Auditoría, Fiscal y Laboral",t3:"Más de 30 Años de Experiencia",desc:"Certeza, control y protección para tu empresa. Servicios de auditoría, fiscal, laboral y corporativo.",keywords:"[lofton servicios]\n[lofton auditoría]\n\"despacho lofton\"",negativas:"lofton salud, lofton bienes raíces, lofton comida"},
+  {name:"Auditoría — Search",tipo:"Search",dates:"Feb–May / Sep–Nov",budget:"$20,000/año",t1:"Dictamen Fiscal 2026",t2:"Evita Multas del SAT",t3:"Auditoría Profesional",desc:"Presenta tu dictamen fiscal a tiempo. Acompañamiento integral desde el aviso hasta la presentación.",keywords:"[dictamen fiscal]\n[auditoría de estados financieros]\n\"dictamen fiscal obligatorio\"\n[dictamen imss]\n[dictamen infonavit]",negativas:"auditoría médica, auditoría ambiental, curso auditoría, plantilla auditoría"},
+  {name:"Fiscal — Search",tipo:"Search",dates:"Mar–Nov",budget:"$18,000/año",t1:"¿Te Audita el SAT?",t2:"Defensa Fiscal Profesional",t3:"Protege Tu Patrimonio",desc:"Estrategias legales para enfrentar auditorías fiscales. Evita créditos excesivos con asesoría especializada.",keywords:"[asesoría fiscal]\n[defensa fiscal sat]\n\"auditoría del sat qué hacer\"\ncarta invitación sat\nvigilancia profunda sat",negativas:"asesoría fiscal gratis, curso fiscal, contador gratis, trámites sat cita"},
+  {name:"Nómina — Search",tipo:"Search",dates:"Feb–Mar / Jul / Oct–Nov",budget:"$12,000/año",t1:"Nómina Sin Errores",t2:"Cálculo y Timbrado Exacto",t3:"Profesionaliza Tu Nómina",desc:"Eliminamos errores de nómina que generan multas y demandas. Cálculo, timbrado y cumplimiento garantizado.",keywords:"[administración de nómina]\n[servicio de nómina outsourcing]\n\"cálculo de nómina empresas\"\ntimbrado de nómina\nmaquila de nómina",negativas:"software nómina, nómina gratis, cómo hacer nómina, nomipaq"},
+  {name:"Laboral — Search",tipo:"Search",dates:"Mar–Jun / Ago–Nov",budget:"$12,000/año",t1:"Blindaje Laboral Integral",t2:"Prevén Demandas Costosas",t3:"Inspección STPS Sin Miedo",desc:"Protege tu empresa ante inspecciones STPS y demandas laborales. Cumplimiento normativo integral.",keywords:"[blindaje laboral]\n[inspección stps]\n\"compliance laboral empresas\"\nrepse obligaciones\ndemanda laboral empresa qué hacer",negativas:"abogado laboral gratis, demanda laboral trabajador, curso stps, capacitación stps"},
+  {name:"Corporativo — Search",tipo:"Search",dates:"May–Nov",budget:"$8,400/año",t1:"Gobierno Corporativo",t2:"Protege Tu Patrimonio",t3:"Blindaje Legal Empresarial",desc:"Estructura corporativa sólida para proteger patrimonio y atraer inversión. Actas, contratos y gobierno corporativo.",keywords:"[gobierno corporativo]\n[actas de asamblea]\n\"contratos mercantiles empresa\"\nbeneficiario controlador\n[constitución de empresas]",negativas:"gobierno corporativo qué es, acta constitutiva gratis, formato contrato, plantilla acta"},
+  {name:"Contabilidad — Search",tipo:"Search",dates:"Jul / Oct–Nov",budget:"$4,800/año",t1:"Contabilidad Profesional",t2:"Control Total de Tus Cifras",t3:"Outsourcing Contable Integral",desc:"Llevamos la contabilidad de tu empresa con precisión y cumplimiento. Enfócate en crecer.",keywords:"[servicio de contabilidad empresas]\n[outsourcing contable]\n\"llevar contabilidad empresa\"\ncontabilidad integral",negativas:"contador gratis, curso contabilidad, software contable, como llevar contabilidad"},
+  {section:"DISPLAY / REMARKETING",name:"Display — Remarketing General",tipo:"Display",dates:"Ene–Dic",budget:"$18,000/año",t1:"Lofton: Tu Aliado Fiscal",t2:"Diagnóstico Sin Costo",t3:"30+ Años de Experiencia",desc:"¿Buscas certeza fiscal y laboral? En Lofton protegemos empresas como la tuya. Diagnóstico sin compromiso.",keywords:"Audiencias: visitantes web 90d · Similar audiences · Custom intent fiscal",negativas:"N/A — Display"},
+  {name:"Display — Campañas Temporales",tipo:"Display",dates:"Feb–May / Sep–Nov",budget:"$8,000/año",t1:"Dictamen Fiscal — Fecha Límite",t2:"¿Te Audita el SAT?",t3:"Cierre Fiscal 2026",desc:"Los plazos fiscales no esperan. Asegura tu cumplimiento con especialistas. Lofton: certeza, control y protección.",keywords:"Audiencias: In-market servicios legales · In-market software contable · Custom intent por temporalidad",negativas:"N/A — Display"},
+];
+
+const KEYWORDS = [
+  // ════════════════════════════════════════════════════════════════
+  // KEYWORDS NUEVOS (Marzo 2026) — Archivo de términos de búsqueda
+  // ════════════════════════════════════════════════════════════════
+  ["auditoria","Auditoría","Broad","Transaccional","Alto","P0"],
+  ["dictamen de estados financieros","Auditoría","Exact","Transaccional","Bajo","P0"],
+  ["dictamen imss e infonavit","Auditoría","Exact","Transaccional","Bajo-Medio","P0"],
+  ["estrategias fiscales","Fiscal","Phrase","Informativa","Medio","P1"],
+  ["planeación fiscal","Fiscal","Exact","Transaccional","Medio","P0"],
+  ["contabilidad empresarial","Contabilidad","Phrase","Transaccional","Medio","P1"],
+  ["despacho de nóminas","Nómina","Exact","Transaccional","Medio-Alto","P0"],
+  ["outsourcing de nómina","Nómina","Exact","Transaccional","Medio-Alto","P0"],
+  ["icsoe y sisub","Nómina","Phrase","Informativa","Bajo","P1"],
+  ["despacho laboral para empresas","Laboral","Exact","Transaccional","Bajo-Medio","P0"],
+  ["asesoria laboral empresas","Laboral","Phrase","Transaccional","Medio","P1"],
+  ["inspecciones laborales STPS","Laboral","Exact","Informativa","Bajo","P1"],
+  ["asesoria legal corporativa","Corporativo","Exact","Transaccional","Bajo","P0"],
+  ["jurídico corporativo","Corporativo","Phrase","Transaccional","Bajo","P1"],
+  ["constitución de empresas méxico","Corporativo","Exact","Transaccional","Bajo-Medio","P1"],
+  ["arrendamiento personas morales","Corporativo","Exact","Informativa","Muy Bajo","P0"],
+  ["arrendamiento seguro","Corporativo","Phrase","Informativa","Muy Bajo","P1"],
+  ["despacho contable y fiscal","Contabilidad","Exact","Transaccional","Medio","P0"],
+  ["abogados para empresas","Contabilidad","Broad","Transaccional","Medio-Alto","P0"],
+  ["consultoría empresarial","Contabilidad","Broad","Informativa","Medio-Alto","P0"],
+  ["asesoria empresarial","Contabilidad","Phrase","Informativa","Medio-Alto","P1"],
+  ["bufete juridico","Contabilidad","Phrase","Transaccional","Bajo-Medio","P0"],
+  
+  // ════════════════════════════════════════════════════════════════
+  // KEYWORDS ORIGINALES (Plan 2026 v1) — Se mantienen
+  // ════════════════════════════════════════════════════════════════
+  ["Auditoría","dictamen fiscal","Exact","Transaccional","Alto","P0"],
+  ["Auditoría","dictamen fiscal obligatorio","Phrase","Informativa","Medio","P1"],
+  ["Auditoría","auditoría de estados financieros","Exact","Transaccional","Medio","P0"],
+  ["Auditoría","auditoría fiscal empresas","Broad Modified","Investigación","Medio","P1"],
+  ["Auditoría","dictamen fiscal sat","Phrase","Transaccional","Alto","P0"],
+  ["Auditoría","dictamen imss","Exact","Transaccional","Medio","P0"],
+  ["Auditoría","dictamen infonavit","Exact","Transaccional","Medio","P1"],
+  ["Auditoría","dictamen contribuciones locales cdmx","Exact","Transaccional","Bajo","P0"],
+  ["Auditoría","auditoría contribuciones locales edomex","Phrase","Transaccional","Bajo","P1"],
+  ["Auditoría","precio dictamen fiscal","Phrase","Transaccional","Medio","P0"],
+  ["Auditoría","quién está obligado al dictamen fiscal","Phrase","Informativa","Alto","P1"],
+  ["Fiscal","asesoría fiscal empresas","Exact","Transaccional","Alto","P0"],
+  ["Fiscal","defensa fiscal sat","Exact","Transaccional","Alto","P0"],
+  ["Fiscal","auditoría del sat qué hacer","Phrase","Informativa","Alto","P0"],
+  ["Fiscal","carta invitación sat","Broad Modified","Informativa","Alto","P1"],
+  ["Fiscal","vigilancia profunda sat","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","recurso de revocación fiscal","Exact","Transaccional","Medio","P1"],
+  ["Fiscal","planeación fiscal empresas","Phrase","Transaccional","Medio","P0"],
+  ["Fiscal","cierre fiscal 2026","Phrase","Transaccional","Alto","P0"],
+  ["Fiscal","materialidad fiscal 2026","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","despacho fiscal méxico","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","administración de nómina","Exact","Transaccional","Alto","P0"],
+  ["Nómina","servicio de nómina outsourcing","Exact","Transaccional","Alto","P0"],
+  ["Nómina","cálculo de nómina empresas","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","timbrado de nómina","Phrase","Transaccional","Medio","P1"],
+  ["Nómina","maquila de nómina","Exact","Transaccional","Alto","P0"],
+  ["Nómina","outsourcing nómina méxico","Exact","Transaccional","Alto","P0"],
+  ["Laboral","blindaje laboral empresas","Exact","Transaccional","Medio","P0"],
+  ["Laboral","inspección stps","Exact","Informativa","Alto","P1"],
+  ["Laboral","compliance laboral empresas","Phrase","Transaccional","Medio","P0"],
+  ["Laboral","repse obligaciones","Phrase","Informativa","Medio","P1"],
+  ["Laboral","demanda laboral empresa qué hacer","Phrase","Informativa","Alto","P0"],
+  ["Laboral","prevención laboral","Phrase","Transaccional","Bajo","P1"],
+  ["Laboral","litigio laboral empresas","Phrase","Transaccional","Medio","P0"],
+  ["Corporativo","gobierno corporativo empresas","Exact","Transaccional","Medio","P0"],
+  ["Corporativo","actas de asamblea","Phrase","Transaccional","Medio","P1"],
+  ["Corporativo","contratos mercantiles empresa","Phrase","Transaccional","Medio","P0"],
+  ["Corporativo","beneficiario controlador","Exact","Informativa","Alto","P1"],
+  ["Corporativo","constitución de empresas","Exact","Transaccional","Alto","P1"],
+  ["Corporativo","blindaje patrimonial","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","servicio de contabilidad empresas","Exact","Transaccional","Alto","P0"],
+  ["Contabilidad","outsourcing contable","Exact","Transaccional","Alto","P0"],
+  ["Contabilidad","llevar contabilidad empresa","Phrase","Transaccional","Medio","P1"],
+  ["Contabilidad","contabilidad integral","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","despacho contable méxico","Phrase","Transaccional","Medio","P0"],
+];
+
+const NEGATIVES = [
+  // ════════════════════════════════════════════════════════════════
+  // NEGATIVAS NUEVAS (Marzo 2026) — Archivo keywords negativas
+  // ════════════════════════════════════════════════════════════════
+  // AUDITORÍA (12)
+  ["Auditoría","asesoría sat teléfono","Excluir — entidad pública"],
+  ["Auditoría","asf","Excluir — entidad pública (Auditoría Superior Federación)"],
+  ["Auditoría","auditoría forense","Excluir — especialidad diferente"],
+  ["Auditoría","auditoría superior de la federación","Excluir — entidad pública"],
+  ["Auditoría","centro de servicios fiscales","Excluir — entidad pública"],
+  ["Auditoría","condusef asesoría (todo lo relacionado a condusef)","Excluir — organismo público"],
+  ["Auditoría","constancia de situación fiscal","Excluir — trámite SAT, no servicio"],
+  ["Auditoría","cómo hacer una auditoría","Excluir — DIY / contenido educativo"],
+  ["Auditoría","procedimiento de auditoría","Excluir — contenido educativo"],
+  ["Auditoría","servicios aspel","Excluir — software contable"],
+  ["Auditoría","software para auditoría","Excluir — búsqueda de herramientas"],
+  ["Auditoría","técnicas de auditoría","Excluir — contenido educativo"],
+  
+  // NÓMINAS (4)
+  ["Nóminas","descargar recibos de nómina","Excluir — intent de empleado"],
+  ["Nóminas","nomipay","Excluir — software de nómina (DIY)"],
+  ["Nóminas","préstamos","Excluir — servicios financieros"],
+  ["Nóminas","recibos de nómina","Excluir — búsqueda de empleado"],
+  
+  // LABORAL (6)
+  ["Laboral","abogados laborales gratuitos","Excluir — sin presupuesto"],
+  ["Laboral","asesoría laboral gratuita","Excluir — intent sin presupuesto"],
+  ["Laboral","condusef","Excluir — organismo público"],
+  ["Laboral","demandar mi trabajo","Excluir — acción personal, no corporativa"],
+  ["Laboral","no me quieren dar mi finiquito","Excluir — intent de empleado"],
+  ["Laboral","profedet asesoría (todo lo relacionado a profedet)","Excluir — procuraduría federal"],
+  
+  // CORPORATIVO (12)
+  ["Corporativo","abogados de lo familiar","Excluir — especialidad distinta"],
+  ["Corporativo","abogados de oficio","Excluir — servicios públicos"],
+  ["Corporativo","abogados gratuitos","Excluir — servicios pro bono"],
+  ["Corporativo","alfa patrimonial","Excluir — competidor"],
+  ["Corporativo","asesoria legal gratuita","Excluir — intent sin presupuesto"],
+  ["Corporativo","asesoria profeco","Excluir — organismo público"],
+  ["Corporativo","buho legal","Excluir — competidor"],
+  ["Corporativo","condusef","Excluir — organismo público"],
+  ["Corporativo","despachos de cobranza","Excluir — servicio diferente"],
+  ["Corporativo","dif","Excluir — entidad pública"],
+  ["Corporativo","profedet","Excluir — entidad pública"],
+  ["Corporativo","redeco","Excluir — entidad reguladora"],
+  
+  // CONTABILIDAD (8)
+  ["Contabilidad","alfa patrimonial","Excluir — competidor"],
+  ["Contabilidad","asesoría sat teléfono","Excluir — línea SAT, no servicio"],
+  ["Contabilidad","centro de contabilidad y procesamiento","Excluir — competidor"],
+  ["Contabilidad","centro de servicios fiscales","Excluir — entidad pública"],
+  ["Contabilidad","condusef asesoría (todo lo relacionado a condusef)","Excluir — público"],
+  ["Contabilidad","constancia de situación fiscal","Excluir — trámite, no servicio"],
+  ["Contabilidad","cpware","Excluir — software de contabilidad"],
+  ["Contabilidad","servicios aspel","Excluir — software contable"],
+  
+  // ════════════════════════════════════════════════════════════════
+  // NEGATIVAS ORIGINALES (Plan 2026 v1) — Se mantienen
+  // ════════════════════════════════════════════════════════════════
+  ["Gratuito/Empleo","gratis","Filtra usuarios que buscan servicios sin costo"],
+  ["Gratuito/Empleo","gratuito","Mismo caso — excluir siempre"],
+  ["Gratuito/Empleo","empleo","Búsquedas laborales, no servicios profesionales"],
+  ["Gratuito/Empleo","vacantes","Ofertas de trabajo"],
+  ["Gratuito/Empleo","trabajo","Búsquedas de empleo"],
+  ["Educativo","curso","Usuarios buscando capacitación, no servicios"],
+  ["Educativo","diplomado","Formación académica"],
+  ["Educativo","maestría","Educación formal"],
+  ["Educativo","certificación","Credenciales educativas"],
+  ["Educativo","capacitación","Cursos y talleres"],
+  ["Educativo","tesis","Trabajo académico"],
+  ["Software/DIY","software","Usuarios buscando herramientas digitales"],
+  ["Software/DIY","programa contable","Software de contabilidad"],
+  ["Software/DIY","excel","Herramientas ofimáticas"],
+  ["Software/DIY","plantilla","Formatos descargables"],
+  ["Software/DIY","calculadora","Herramientas en línea"],
+  ["Gubernamental","sat cita","Trámites directos SAT"],
+  ["Gubernamental","rfc","Trámite personal en SAT"],
+  ["Gubernamental","imss cita","Cita directa IMSS"],
+  ["Gubernamental","stps normas","Búsqueda de normativa, no servicio"],
+  ["Personal","persona física","Personas físicas sin empresa (baja conversión)"],
+  ["Personal","declaración anual persona","Declaraciones individuales básicas"],
+  ["Competencia","deloitte","Búsqueda de competidor"],
+  ["Competencia","kpmg","Búsqueda de competidor"],
+  ["Competencia","ey méxico","Búsqueda de competidor"],
+  ["Competencia","pwc","Búsqueda de competidor"],
+  ["No relevante","inmobiliaria","Industria diferente"],
+  ["No relevante","salud","Sector salud no relacionado"],
+  ["No relevante","comida","No relacionado"],
+  ["No relevante","restaurante","No relacionado"],
+];
+
+const CAL_CAMPAIGNS = [
+  {label:"Always On Meta",color:"#2E5090",months:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  {label:"Remarketing Meta",color:"#4A90D9",months:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  {label:"Dictamen Fiscal",color:"#DC3545",months:[2,3,9,10]},
+  {label:"Dictamen CDMX",color:"#E85D75",months:[2,3]},
+  {label:"Dictamen IMSS/INF.",color:"#C0392B",months:[2,3]},
+  {label:"Nómina",color:"#28A745",months:[2,3,7,10,11]},
+  {label:"PTU / CUCA-CUFIN",color:"#20C997",months:[2,3,4]},
+  {label:"STPS / Laboral",color:"#8B5CF6",months:[5,6,8,9,10]},
+  {label:"Gobierno Corp.",color:"#F4A100",months:[5,6,7,8,9,10]},
+  {label:"Defensa Fiscal",color:"#FF6B35",months:[3,4,8,9]},
+  {label:"Contratos Mercant.",color:"#F4D700",months:[6,7,8]},
+  {label:"Cierre Fiscal",color:"#1B2A4A",months:[9,10,11]},
+  {label:"Aguinaldo",color:"#6C3483",months:[10,11]},
+  {label:"Declaración Anual",color:"#1A5276",months:[12]},
+  {label:"Brand Google",color:"#34A853",months:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  {label:"Auditoría Google",color:"#2E7D32",months:[2,3,4,5,9,10,11]},
+  {label:"Fiscal Google",color:"#66BB6A",months:[3,4,5,6,8,9,10,11]},
+  {label:"Nómina Google",color:"#1B5E20",months:[2,3,7,10,11]},
+  {label:"Laboral Google",color:"#A5D6A7",months:[3,4,5,6,8,9,10,11]},
+  {label:"Display Remarketing",color:"#43A047",months:[1,2,3,4,5,6,7,8,9,10,11,12]},
+];
+
+const MONTHS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+const MONTHLY_GOOGLE = [2500,5000,7000,5500,6700,3700,3300,3700,6200,7800,7300,1000];
+const MONTHLY_META = [4000,16500,14500,4750,9250,8750,9250,5750,12750,12750,5250,7000];
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+window.onload = () => {
+  renderServices();
+  renderBudgetBars();
+  renderMetaCampaigns();
+  renderGoogleCampaigns();
+  renderKeywords();
+  renderNegatives();
+  renderCalendar();
+  initCharts();
+};
+
+// ── TAB SWITCHING ──
+function showTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── SERVICES TABLE ──
+function renderServices() {
+  const tb = document.getElementById('svc-tbody');
+  tb.innerHTML = '';
+  SERVICES.forEach(s => {
+    const prioClass = s.prio === 'MUY ALTA' ? 'b-muy-alta' : s.prio === 'ALTA' ? 'b-alta' : s.prio === 'MEDIA-ALTA' ? 'b-media-alta' : 'b-media';
+    tb.innerHTML += `<tr>
+      <td class="fw700">${s.name}</td>
+      <td>${s.income}</td>
+      <td>${s.meta}</td>
+      <td class="fw700" style="color:${parseFloat(s.pct)>50?'#DC3545':'#1B2A4A'}">${s.pct}</td>
+      <td>${s.leads}</td>
+      <td>${s.roi}</td>
+      <td><span class="badge ${prioClass}">${s.prio}</span></td>
+      <td class="fw700">${s.budgetPct}</td>
+      <td class="fw700 text-blue">${s.budgetAmt}</td>
+    </tr>`;
+  });
+}
+
+function renderBudgetBars() {
+  const el = document.getElementById('budget-bars');
+  el.innerHTML = '';
+  SERVICES.forEach(s => {
+    const pct = parseInt(s.budgetPct);
+    el.innerHTML += `<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+        <span class="fw700">${s.name}</span>
+        <span style="color:var(--text-muted)">${s.budgetPct} — ${s.budgetAmt}</span>
+      </div>
+      <div class="budget-bar">
+        <div class="budget-fill" style="width:${pct}%;background:${s.color}">${s.budgetPct}</div>
+      </div>
+    </div>`;
+  });
+}
+
+// ── META CAMPAIGNS ──
+let metaData = [];
+function renderMetaCampaigns() {
+  const tb = document.getElementById('meta-tbody');
+  tb.innerHTML = '';
+  metaData = META_CAMPAIGNS.filter(c => !c.section || META_CAMPAIGNS.find(x=>x.section===c.section));
+  let i = 0;
+  META_CAMPAIGNS.forEach((c, idx) => {
+    if (c.section) {
+      tb.innerHTML += `<tr class="section-row-meta" data-section="${c.section}"><td colspan="8">🔵 ${c.section}</td></tr>`;
+      return;
+    }
+    const id = 'meta-' + idx;
+    tb.innerHTML += `<tr data-idx="${idx}" data-svc="${c.svc||''}" data-tipo="${c.tipo||''}" data-name="${(c.name||'').toLowerCase()}" data-headline="${(c.headline||'').toLowerCase()}">
+      <td><button class="expand-btn" onclick="toggleDetail('${id}')">＋</button></td>
+      <td class="fw700">${c.name}</td>
+      <td>${c.svc}</td>
+      <td>${c.obj}</td>
+      <td>${c.dates}</td>
+      <td class="fw700 text-blue">${c.budget}</td>
+      <td>${c.formats}</td>
+      <td><span class="badge b-p0">${c.creativos}</span></td>
+    </tr>
+    <tr class="detail-row" id="${id}">
+      <td class="detail-cell" colspan="8">
+        <div class="detail-grid">
+          <div class="detail-item"><label>Segmentación</label><p>${c.segmentacion}</p></div>
+          <div class="detail-item"><label>Headline Principal</label><p style="font-style:italic;color:var(--blue)">"${c.headline}"</p></div>
+          <div class="detail-item"><label>Body Copy</label><p>${c.body}</p></div>
+          <div class="detail-item"><label>CTA</label><p><strong>${c.cta}</strong></p></div>
+        </div>
+      </td>
+    </tr>`;
+    i++;
+  });
+  document.getElementById('meta-count').textContent = `${i} campañas`;
+}
+
+function toggleDetail(id) {
+  const row = document.getElementById(id);
+  const btn = row.previousElementSibling.querySelector('.expand-btn');
+  if (row.classList.contains('open')) {
+    row.classList.remove('open'); btn.textContent = '＋';
+  } else {
+    row.classList.add('open'); btn.textContent = '－';
+  }
+}
+
+function filterMeta() {
+  const q = document.getElementById('meta-search').value.toLowerCase();
+  const svc = document.getElementById('meta-svc').value;
+  const tipo = document.getElementById('meta-type').value;
+  const rows = document.querySelectorAll('#meta-tbody tr[data-idx]');
+  let count = 0;
+  rows.forEach(r => {
+    const name = r.dataset.name || '';
+    const headline = r.dataset.headline || '';
+    const rsvc = r.dataset.svc || '';
+    const rtipo = r.dataset.tipo || '';
+    const match = (!q || name.includes(q) || headline.includes(q) || rsvc.toLowerCase().includes(q))
+      && (!svc || rsvc.includes(svc))
+      && (!tipo || rtipo === tipo);
+    r.style.display = match ? '' : 'none';
+    if (match) count++;
+    const detail = document.getElementById('meta-' + r.dataset.idx);
+    if (detail && !match) detail.classList.remove('open');
+  });
+  document.getElementById('meta-count').textContent = `${count} campañas`;
+}
+
+// ── GOOGLE CAMPAIGNS ──
+function renderGoogleCampaigns() {
+  const tb = document.getElementById('google-tbody');
+  tb.innerHTML = '';
+  let count = 0;
+  GOOGLE_CAMPAIGNS.forEach((c, idx) => {
+    if (c.section) {
+      tb.innerHTML += `<tr class="section-row-google"><td colspan="8">🟢 ${c.section}</td></tr>`;
+      return;
+    }
+    const id = 'goog-' + idx;
+    const typeClass = c.tipo === 'Search' ? 'b-search' : 'b-display';
+    tb.innerHTML += `<tr data-tipo="${c.tipo}" data-name="${(c.name||'').toLowerCase()}" data-desc="${(c.t1+c.t2+c.t3).toLowerCase()}">
+      <td><button class="expand-btn" onclick="toggleDetail('${id}')">＋</button></td>
+      <td class="fw700">${c.name}</td>
+      <td><span class="badge ${typeClass}">${c.tipo}</span></td>
+      <td>${c.dates}</td>
+      <td class="fw700 text-blue">${c.budget}</td>
+      <td>${c.t1}</td>
+      <td>${c.t2}</td>
+      <td>${c.t3}</td>
+    </tr>
+    <tr class="detail-row" id="${id}">
+      <td class="detail-cell" colspan="8">
+        <div class="detail-grid">
+          <div class="detail-item"><label>Descripción</label><p style="font-style:italic;color:var(--blue)">"${c.desc}"</p></div>
+          <div class="detail-item"><label>Keywords</label><p style="white-space:pre-line">${c.keywords}</p></div>
+          <div class="detail-item"><label>Negativas</label><p style="color:var(--red)">${c.negativas}</p></div>
+        </div>
+      </td>
+    </tr>`;
+    count++;
+  });
+  document.getElementById('google-count').textContent = `${count} campañas`;
+}
+
+function filterGoogle() {
+  const q = document.getElementById('google-search').value.toLowerCase();
+  const tipo = document.getElementById('google-type').value;
+  const rows = document.querySelectorAll('#google-tbody tr[data-tipo]');
+  let count = 0;
+  rows.forEach(r => {
+    const match = (!q || r.dataset.name.includes(q) || r.dataset.desc.includes(q))
+      && (!tipo || r.dataset.tipo === tipo);
+    r.style.display = match ? '' : 'none';
+    if (match) count++;
+  });
+  document.getElementById('google-count').textContent = `${count} campañas`;
+}
+
+// ── KEYWORDS ──
+function renderKeywords(data) {
+  const d = data || KEYWORDS;
+  const tb = document.getElementById('kw-tbody');
+  tb.innerHTML = '';
+  d.forEach(k => {
+    const volClass = k[4]==='Alto' ? 'tag-green' : k[4]==='Medio' ? 'tag-orange' : 'tag-blue';
+    tb.innerHTML += `<tr>
+      <td class="fw700">${k[1]}</td>
+      <td>${k[0]}</td>
+      <td><span class="chip">${k[2]}</span></td>
+      <td><span class="card-tag ${k[3]==='Transaccional'?'tag-green':'tag-blue'}" style="margin:0">${k[3]}</span></td>
+      <td><span class="card-tag ${volClass}" style="margin:0">${k[4]}</span></td>
+      <td><span class="badge ${k[5]==='P0'?'b-p0':'b-p1'}">${k[5]}</span></td>
+    </tr>`;
+  });
+  document.getElementById('kw-count').textContent = `${d.length} keywords`;
+}
+
+function filterKW() {
+  const q = document.getElementById('kw-search').value.toLowerCase();
+  const svc = document.getElementById('kw-svc').value;
+  const intent = document.getElementById('kw-intent').value;
+  const prio = document.getElementById('kw-prio').value;
+  const filtered = KEYWORDS.filter(k =>
+    (!q || k[1].includes(q) || k[0].toLowerCase().includes(q))
+    && (!svc || k[0] === svc)
+    && (!intent || k[3] === intent)
+    && (!prio || k[5] === prio)
+  );
+  renderKeywords(filtered);
+}
+
+function renderNegatives(data) {
+  const d = data || NEGATIVES;
+  const tb = document.getElementById('neg-tbody');
+  tb.innerHTML = '';
+  d.forEach(n => {
+    tb.innerHTML += `<tr>
+      <td><span class="chip neg">${n[0]}</span></td>
+      <td class="fw700" style="color:var(--red)">${n[1]}</td>
+      <td>${n[2]}</td>
+    </tr>`;
+  });
+  document.getElementById('neg-count').textContent = `${d.length} negativas`;
+}
+
+function filterNeg() {
+  const q = document.getElementById('neg-search').value.toLowerCase();
+  const cat = document.getElementById('neg-cat').value;
+  const filtered = NEGATIVES.filter(n =>
+    (!q || n[1].includes(q) || n[0].toLowerCase().includes(q))
+    && (!cat || n[0] === cat)
+  );
+  renderNegatives(filtered);
+}
+
+// ── CALENDAR ──
+function renderCalendar() {
+  const legendEl = document.getElementById('cal-legend');
+  CAL_CAMPAIGNS.forEach(c => {
+    legendEl.innerHTML += `<span class="chip" style="background:${c.color}20;border-color:${c.color};color:${c.color}">${c.label}</span>`;
+  });
+
+  const gridEl = document.getElementById('cal-grid');
+  let html = '<div class="cal-grid">';
+  // Header
+  html += '<div class="cal-header">Campaña</div>';
+  MONTHS.forEach(m => { html += `<div class="cal-header">${m}</div>`; });
+  // Rows
+  CAL_CAMPAIGNS.forEach(c => {
+    html += `<div class="cal-label"><div class="dot" style="background:${c.color}"></div>${c.label}</div>`;
+    MONTHS.forEach((m, mi) => {
+      const active = c.months.includes(mi+1);
+      html += `<div class="cal-cell">${active ? `<div class="cal-block" style="background:${c.color}" title="${c.label}"></div>` : ''}</div>`;
+    });
+  });
+  html += '</div>';
+  gridEl.innerHTML = html;
+}
+
+// ── CHARTS ──
+function initCharts() {
+  // Budget Donut
+  new Chart(document.getElementById('budgetDonut'), {
+    type:'doughnut',
+    data:{
+      labels:['Google Ads','Meta Ads','Reserva Optimización','Testing A/B'],
+      datasets:[{
+        data:[135000,120000,30000,15000],
+        backgroundColor:['#34A853','#1877F2','#F4A100','#FBBC05'],
+        borderWidth:3,
+        borderColor:'#fff',
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'right',labels:{font:{size:12},padding:16}},
+        tooltip:{callbacks:{label:c=>' $'+c.parsed.toLocaleString()+' MXN'}}
+      },
+      cutout:'60%'
+    }
+  });
+
+  // Monthly Bar
+  new Chart(document.getElementById('monthlyBar'), {
+    type:'bar',
+    data:{
+      labels:MONTHS,
+      datasets:[
+        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A85320',borderColor:'#34A853',borderWidth:2,borderRadius:4},
+        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F220',borderColor:'#1877F2',borderWidth:2,borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:12}}}},
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+
+  // Monthly Detail
+  const combined = MONTHLY_GOOGLE.map((v,i)=>v+MONTHLY_META[i]);
+  new Chart(document.getElementById('monthlyDetail'), {
+    type:'bar',
+    data:{
+      labels:MONTHS,
+      datasets:[
+        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A853',borderRadius:6,stack:'total'},
+        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F2',borderRadius:6,stack:'total'},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top'},
+        tooltip:{callbacks:{footer:items=>'Total: $'+items.reduce((a,b)=>a+b.parsed.y,0).toLocaleString()}}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'},stacked:true},
+        x:{grid:{display:false},stacked:true}
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
