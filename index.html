@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LOFTON — Dashboard Campañas Digitales 2026</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Chart.js removido — gráficas con Canvas nativo -->
 <style>
   :root {
     --dark: #1B2A4A;
@@ -777,8 +777,13 @@ window.onload = () => {
 function showTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  event.currentTarget.classList.add('active');
+  const page = document.getElementById('tab-'+tab);
+  if (page) page.classList.add('active');
+  const btn = document.querySelector('.nav-btn[data-tab="'+tab+'"]');
+  if (btn) btn.classList.add('active');
+  // Redraw charts when overview is shown
+  if (tab === 'overview') { setTimeout(()=>{ drawDonut(); drawMonthlyBar(); },50); }
+  if (tab === 'calendar') { setTimeout(()=>{ drawMonthlyDetail(); },50); }
 }
 
 // ── SERVICES TABLE ──
@@ -1019,73 +1024,162 @@ function renderCalendar() {
   gridEl.innerHTML = html;
 }
 
-// ── CHARTS ──
+// ── CHARTS — Pure Canvas (no dependencies) ──
 function initCharts() {
-  // Budget Donut
-  new Chart(document.getElementById('budgetDonut'), {
-    type:'doughnut',
-    data:{
-      labels:['Google Ads','Meta Ads','Reserva Optimización','Testing A/B'],
-      datasets:[{
-        data:[135000,120000,30000,15000],
-        backgroundColor:['#34A853','#1877F2','#F4A100','#FBBC05'],
-        borderWidth:3,
-        borderColor:'#fff',
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'right',labels:{font:{size:12},padding:16}},
-        tooltip:{callbacks:{label:c=>' $'+c.parsed.toLocaleString()+' MXN'}}
-      },
-      cutout:'60%'
-    }
-  });
+  drawDonut();
+  drawMonthlyBar();
+  drawMonthlyDetail();
+}
 
-  // Monthly Bar
-  new Chart(document.getElementById('monthlyBar'), {
-    type:'bar',
-    data:{
-      labels:MONTHS,
-      datasets:[
-        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A85320',borderColor:'#34A853',borderWidth:2,borderRadius:4},
-        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F220',borderColor:'#1877F2',borderWidth:2,borderRadius:4},
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:12}}}},
-      scales:{
-        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'}},
-        x:{grid:{display:false}}
-      }
-    }
+function drawDonut() {
+  const canvas = document.getElementById('budgetDonut');
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth || 400;
+  canvas.height = 260;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width * 0.38, cy = 130, R = 90, r = 55;
+  const data = [135000, 120000, 30000, 15000];
+  const colors = ['#34A853','#1877F2','#F4A100','#FBBC05'];
+  const labels = ['Google Ads','Meta Ads','Reserva Opt.','Testing A/B'];
+  const total = data.reduce((a,b)=>a+b,0);
+  let angle = -Math.PI/2;
+  data.forEach((v,i) => {
+    const slice = (v/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,R,angle,angle+slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,angle,angle+slice);
+    ctx.closePath();
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    angle += slice;
   });
+  // Center text
+  ctx.fillStyle = '#1B2A4A';
+  ctx.font = 'bold 14px Segoe UI';
+  ctx.textAlign = 'center';
+  ctx.fillText('$300,000', cx, cy-4);
+  ctx.font = '11px Segoe UI';
+  ctx.fillStyle = '#6B7280';
+  ctx.fillText('MXN Total', cx, cy+14);
+  // Legend
+  const lx = canvas.width * 0.72, ly = 50;
+  labels.forEach((l,i) => {
+    const y = ly + i*42;
+    ctx.fillStyle = colors[i];
+    ctx.beginPath(); ctx.roundRect(lx, y, 14, 14, 3); ctx.fill();
+    ctx.fillStyle = '#1B2A4A';
+    ctx.font = 'bold 12px Segoe UI';
+    ctx.textAlign = 'left';
+    ctx.fillText(l, lx+20, y+11);
+    ctx.fillStyle = '#6B7280';
+    ctx.font = '11px Segoe UI';
+    const pct = Math.round(data[i]/total*100);
+    ctx.fillText('$'+data[i].toLocaleString()+' ('+pct+'%)', lx+20, y+25);
+  });
+}
 
-  // Monthly Detail
+function drawMonthlyBar() {
+  const canvas = document.getElementById('monthlyBar');
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth || 500;
+  canvas.height = 260;
+  const ctx = canvas.getContext('2d');
+  const pad = {top:40,right:20,bottom:40,left:65};
+  const W = canvas.width - pad.left - pad.right;
+  const H = canvas.height - pad.top - pad.bottom;
+  const allVals = [...MONTHLY_GOOGLE,...MONTHLY_META];
+  const maxVal = Math.max(...allVals) * 1.15;
+  const n = MONTHS.length;
+  const groupW = W/n;
+  const barW = groupW*0.35;
+  // Grid lines
+  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 1;
+  [0,.25,.5,.75,1].forEach(t => {
+    const y = pad.top + H*(1-t);
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+W,y); ctx.stroke();
+    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='right';
+    ctx.fillText('$'+(maxVal*t/1000).toFixed(0)+'k', pad.left-6, y+4);
+  });
+  // Bars
+  MONTHS.forEach((m,i) => {
+    const x = pad.left + i*groupW + groupW*0.1;
+    // Google
+    const gH = (MONTHLY_GOOGLE[i]/maxVal)*H;
+    ctx.fillStyle='#34A853';
+    ctx.fillRect(x, pad.top+H-gH, barW, gH);
+    // Meta
+    const mH = (MONTHLY_META[i]/maxVal)*H;
+    ctx.fillStyle='#1877F2';
+    ctx.fillRect(x+barW+2, pad.top+H-mH, barW, mH);
+    // Label
+    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(m, x+barW, pad.top+H+16);
+  });
+  // Legend
+  ctx.fillStyle='#34A853'; ctx.fillRect(pad.left,10,12,12);
+  ctx.fillStyle='#1B2A4A'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText('Google Ads', pad.left+16, 21);
+  ctx.fillStyle='#1877F2'; ctx.fillRect(pad.left+100,10,12,12);
+  ctx.fillStyle='#1B2A4A'; ctx.fillText('Meta Ads', pad.left+116, 21);
+}
+
+function drawMonthlyDetail() {
+  const canvas = document.getElementById('monthlyDetail');
+  if (!canvas) return;
+  const parent = canvas.parentElement;
+  canvas.width = parent.offsetWidth || 600;
+  canvas.height = 300;
+  const ctx = canvas.getContext('2d');
+  const pad = {top:40,right:20,bottom:40,left:70};
+  const W = canvas.width - pad.left - pad.right;
+  const H = canvas.height - pad.top - pad.bottom;
   const combined = MONTHLY_GOOGLE.map((v,i)=>v+MONTHLY_META[i]);
-  new Chart(document.getElementById('monthlyDetail'), {
-    type:'bar',
-    data:{
-      labels:MONTHS,
-      datasets:[
-        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A853',borderRadius:6,stack:'total'},
-        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F2',borderRadius:6,stack:'total'},
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top'},
-        tooltip:{callbacks:{footer:items=>'Total: $'+items.reduce((a,b)=>a+b.parsed.y,0).toLocaleString()}}
-      },
-      scales:{
-        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'},stacked:true},
-        x:{grid:{display:false},stacked:true}
-      }
+  const maxVal = Math.max(...combined) * 1.15;
+  const n = MONTHS.length;
+  const barW = (W/n)*0.65;
+  // Grid
+  ctx.strokeStyle='#E2E8F0'; ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(t => {
+    const y = pad.top+H*(1-t);
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+W,y); ctx.stroke();
+    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='right';
+    ctx.fillText('$'+(maxVal*t/1000).toFixed(0)+'k', pad.left-6, y+4);
+  });
+  // Stacked bars
+  MONTHS.forEach((m,i) => {
+    const x = pad.left + i*(W/n) + (W/n-barW)/2;
+    const gH = (MONTHLY_GOOGLE[i]/maxVal)*H;
+    const mH = (MONTHLY_META[i]/maxVal)*H;
+    // Meta (bottom)
+    ctx.fillStyle='#1877F2';
+    ctx.fillRect(x, pad.top+H-mH, barW, mH);
+    // Google (top)
+    ctx.fillStyle='#34A853';
+    ctx.fillRect(x, pad.top+H-mH-gH, barW, gH);
+    // Month label
+    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText(m, x+barW/2, pad.top+H+16);
+    // Total label
+    const total = MONTHLY_GOOGLE[i]+MONTHLY_META[i];
+    if (total > 5000) {
+      ctx.fillStyle='#1B2A4A'; ctx.font='bold 9px Segoe UI';
+      ctx.fillText('$'+(total/1000).toFixed(0)+'k', x+barW/2, pad.top+H-mH-gH-4);
     }
   });
+  // Legend
+  ctx.fillStyle='#34A853'; ctx.fillRect(pad.left,12,12,12);
+  ctx.fillStyle='#1B2A4A'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText('Google Ads', pad.left+16,23);
+  ctx.fillStyle='#1877F2'; ctx.fillRect(pad.left+110,12,12,12);
+  ctx.fillStyle='#1B2A4A'; ctx.fillText('Meta Ads', pad.left+126,23);
 }
 </script>
 
