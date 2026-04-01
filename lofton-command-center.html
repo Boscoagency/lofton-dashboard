@@ -1,5 +1,2001 @@
-{
-  "message": "Not Found",
-  "documentation_url": "https://docs.github.com/rest/repos/contents#get-repository-content",
-  "status": "404"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOFTON — Command Center 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ TOKENS ═══════════════ */
+:root {
+  --dark:        #0F1923;
+  --dark-2:      #162030;
+  --dark-3:      #1D2B3A;
+  --dark-4:      #243447;
+  --border:      rgba(255,255,255,.08);
+  --border-2:    rgba(255,255,255,.13);
+  --accent:      #F4A100;
+  --accent-dim:  rgba(244,161,0,.12);
+  --blue:        #3B82F6;
+  --blue-dim:    rgba(59,130,246,.12);
+  --green:       #22C55E;
+  --green-dim:   rgba(34,197,94,.12);
+  --red:         #EF4444;
+  --red-dim:     rgba(239,68,68,.12);
+  --yellow:      #EAB308;
+  --yellow-dim:  rgba(234,179,8,.12);
+  --purple:      #A855F7;
+  --purple-dim:  rgba(168,85,247,.12);
+  --teal:        #14B8A6;
+  --teal-dim:    rgba(20,184,166,.12);
+  --text:        #E8EDF3;
+  --text-2:      #8B98A8;
+  --text-3:      #5A6878;
+  --radius:      12px;
+  --radius-sm:   8px;
+  --radius-lg:   16px;
+  --shadow:      0 4px 24px rgba(0,0,0,.4);
+  --shadow-sm:   0 2px 12px rgba(0,0,0,.3);
+  --font:        'DM Sans', sans-serif;
+  --mono:        'DM Mono', monospace;
+  --sidebar-w:   240px;
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--font); background:var(--dark); color:var(--text); min-height:100vh; display:flex; overflow:hidden; }
+
+/* ═══ NOISE TEXTURE ═══ */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  width:var(--sidebar-w); height:100vh; background:var(--dark-2);
+  border-right:1px solid var(--border); display:flex; flex-direction:column;
+  position:fixed; left:0; top:0; z-index:200; flex-shrink:0;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.sidebar-logo {
+  padding:22px 20px 18px; display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid var(--border);
+}
+.logo-mark {
+  width:38px; height:38px; background:var(--accent); border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:17px; color:#fff; letter-spacing:-.5px; flex-shrink:0;
+}
+.logo-text h1 { font-size:15px; font-weight:700; color:var(--text); }
+.logo-text span { font-size:10px; color:var(--text-3); letter-spacing:.08em; text-transform:uppercase; }
+.sidebar-nav { flex:1; padding:12px 10px; overflow-y:auto; }
+.nav-section { margin-bottom:4px; }
+.nav-label { font-size:10px; font-weight:600; color:var(--text-3); text-transform:uppercase;
+  letter-spacing:.1em; padding:10px 10px 6px; }
+.nav-item {
+  display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:var(--radius-sm);
+  font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer;
+  transition:all .15s; margin-bottom:2px; border:1px solid transparent; text-decoration:none;
+}
+.nav-item:hover { background:var(--dark-3); color:var(--text); border-color:var(--border); }
+.nav-item.active { background:var(--dark-4); color:var(--text); border-color:var(--border-2); }
+.nav-item .nav-icon { font-size:16px; width:20px; text-align:center; flex-shrink:0; }
+.nav-item .nav-badge {
+  margin-left:auto; font-size:10px; font-weight:700; padding:2px 7px;
+  border-radius:20px; background:var(--red-dim); color:var(--red); font-family:var(--mono);
+}
+.nav-item .nav-badge.warn { background:var(--yellow-dim); color:var(--yellow); }
+.sidebar-footer {
+  padding:14px 16px; border-top:1px solid var(--border);
+  font-size:11px; color:var(--text-3); display:flex; flex-direction:column; gap:4px;
+}
+.status-dot { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; }
+
+/* ═══ MAIN ═══ */
+.main { margin-left:var(--sidebar-w); flex:1; height:100vh; overflow-y:auto; position:relative; z-index:1; }
+.topbar {
+  height:58px; background:rgba(15,25,35,.8); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border); display:flex; align-items:center;
+  padding:0 28px; gap:16px; position:sticky; top:0; z-index:100;
+}
+.topbar-title { font-size:15px; font-weight:600; color:var(--text); flex:1; }
+.topbar-date { font-size:12px; color:var(--text-3); font-family:var(--mono); }
+.topbar-user {
+  display:flex; align-items:center; gap:8px; padding:5px 12px 5px 5px;
+  border-radius:20px; background:var(--dark-3); border:1px solid var(--border); cursor:pointer;
+}
+.user-avatar {
+  width:28px; height:28px; border-radius:50%; background:var(--blue-dim);
+  border:1px solid var(--blue); display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:var(--blue);
+}
+.user-name { font-size:12px; font-weight:500; color:var(--text-2); }
+
+/* ═══ CONTENT PAGES ═══ */
+.page { display:none; padding:28px; max-width:1300px; }
+.page.active { display:block; }
+
+/* ═══ SECTION HEADER ═══ */
+.section-head { margin-bottom:24px; }
+.section-head h2 { font-size:22px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.section-head p { font-size:13px; color:var(--text-2); }
+
+/* ═══ GRIDS ═══ */
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:20px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+@media(max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:1fr 1fr;} }
+@media(max-width:700px){ .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;} }
+
+/* ═══ CARDS ═══ */
+.card {
+  background:var(--dark-2); border:1px solid var(--border); border-radius:var(--radius);
+  transition:border-color .2s;
+}
+.card:hover { border-color:var(--border-2); }
+.card-pad { padding:20px; }
+.card-header { padding:18px 20px 0; display:flex; align-items:center; justify-content:space-between; }
+.card-body { padding:16px 20px 20px; }
+.card-title { font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.08em; }
+.card-value { font-size:28px; font-weight:700; color:var(--text); line-height:1.1; margin-top:6px; font-family:var(--mono); }
+.card-sub { font-size:12px; color:var(--text-2); margin-top:4px; }
+
+/* ═══ STAT CARDS ═══ */
+.stat-card { position:relative; overflow:hidden; }
+.stat-card::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  border-radius:inherit; transition:opacity .3s;
+}
+.stat-accent-green { border-top:3px solid var(--green); }
+.stat-accent-red   { border-top:3px solid var(--red); }
+.stat-accent-yellow{ border-top:3px solid var(--yellow); }
+.stat-accent-blue  { border-top:3px solid var(--blue); }
+.stat-icon { font-size:22px; }
+
+/* ═══ SEMAFORO / TASK LISTS ═══ */
+.semaforo-section { margin-bottom:20px; }
+.semaforo-label {
+  display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;
+}
+.sem-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.sem-red    { background:var(--red); box-shadow:0 0 8px var(--red); }
+.sem-yellow { background:var(--yellow); box-shadow:0 0 8px var(--yellow); }
+.sem-green  { background:var(--green); box-shadow:0 0 8px var(--green); }
+
+.task-item {
+  display:flex; align-items:center; gap:12px; padding:10px 14px;
+  background:var(--dark-3); border-radius:var(--radius-sm); border:1px solid var(--border);
+  margin-bottom:6px; cursor:pointer; transition:all .15s;
+}
+.task-item:hover { border-color:var(--border-2); background:var(--dark-4); }
+.task-item.vencida { border-left:3px solid var(--red); }
+.task-item.riesgo  { border-left:3px solid var(--yellow); }
+.task-item.ok      { border-left:3px solid var(--green); }
+.task-label { flex:1; font-size:13px; color:var(--text); }
+.task-meta  { font-size:11px; color:var(--text-3); font-family:var(--mono); }
+.task-owner { font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px; }
+.own-manuel  { background:var(--blue-dim); color:var(--blue); }
+.own-oriana  { background:var(--purple-dim); color:var(--purple); }
+.own-karen   { background:var(--teal-dim); color:var(--teal); }
+
+/* ═══ CARGA PERSONAS ═══ */
+.workload-card { padding:16px 20px; }
+.person-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.person-row:last-child { margin-bottom:0; }
+.person-avatar {
+  width:34px; height:34px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;
+}
+.pa-manuel { background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue); }
+.pa-oriana { background:var(--purple-dim); color:var(--purple); border:1px solid var(--purple); }
+.pa-karen  { background:var(--teal-dim); color:var(--teal); border:1px solid var(--teal); }
+.person-info { flex:1; }
+.person-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:5px; }
+.progress-bar { height:5px; background:var(--dark-4); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:3px; transition:width .5s cubic-bezier(.4,0,.2,1); }
+.progress-count { font-size:11px; color:var(--text-3); margin-top:3px; font-family:var(--mono); }
+.pf-blue   { background:var(--blue); }
+.pf-purple { background:var(--purple); }
+.pf-teal   { background:var(--teal); }
+
+/* ═══ BADGE / CHIPS ═══ */
+.badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; white-space:nowrap; }
+.b-red    { background:var(--red-dim);    color:var(--red); }
+.b-yellow { background:var(--yellow-dim); color:var(--yellow); }
+.b-green  { background:var(--green-dim);  color:var(--green); }
+.b-blue   { background:var(--blue-dim);   color:var(--blue); }
+.b-purple { background:var(--purple-dim); color:var(--purple); }
+.b-teal   { background:var(--teal-dim);   color:var(--teal); }
+.b-accent { background:var(--accent-dim); color:var(--accent); }
+
+/* ═══ DIVIDER ═══ */
+.divider { border:none; border-top:1px solid var(--border); margin:20px 0; }
+
+/* ═══ DESIGN REQUESTS MODULE ═══ */
+.toolbar {
+  display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap;
+}
+.btn {
+  display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
+  border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer;
+  border:1px solid var(--border-2); background:var(--dark-3); color:var(--text);
+  transition:all .15s; font-family:var(--font);
+}
+.btn:hover { background:var(--dark-4); border-color:var(--border-2); }
+.btn-primary { background:var(--accent); color:#000; border-color:var(--accent); }
+.btn-primary:hover { background:#d48e00; border-color:#d48e00; }
+.btn-sm { padding:5px 11px; font-size:12px; }
+.filter-bar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.filter-select, .filter-input {
+  padding:7px 12px; border-radius:var(--radius-sm); font-size:12px;
+  background:var(--dark-3); border:1px solid var(--border-2); color:var(--text);
+  font-family:var(--font); outline:none; cursor:pointer; transition:border .15s;
+}
+.filter-select:focus, .filter-input:focus { border-color:var(--accent); }
+.count-label { font-size:12px; color:var(--text-3); font-family:var(--mono); margin-left:auto; }
+
+/* ═══ TABLE ═══ */
+.table-wrap { overflow-x:auto; border-radius:var(--radius); border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead th {
+  background:var(--dark-3); color:var(--text-2); padding:10px 14px;
+  text-align:left; font-weight:600; font-size:11px; text-transform:uppercase;
+  letter-spacing:.06em; white-space:nowrap; border-bottom:1px solid var(--border);
+}
+tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+tbody tr:hover { background:var(--dark-3); }
+tbody tr:last-child { border-bottom:none; }
+td { padding:11px 14px; vertical-align:middle; }
+.td-bold { font-weight:600; color:var(--text); }
+.td-mono { font-family:var(--mono); font-size:12px; color:var(--text-2); }
+.td-actions { display:flex; gap:6px; }
+
+/* ═══ PRIORITY INDICATORS ═══ */
+.prio-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
+.prio-urgente  { background:var(--red); box-shadow:0 0 6px var(--red); }
+.prio-alta     { background:var(--yellow); }
+.prio-media    { background:var(--blue); }
+.prio-baja     { background:var(--text-3); }
+
+/* ═══ MODAL ═══ */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(4px);
+  z-index:1000; display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal {
+  background:var(--dark-2); border:1px solid var(--border-2); border-radius:var(--radius-lg);
+  width:560px; max-width:95vw; max-height:90vh; overflow-y:auto;
+  transform:translateY(20px) scale(.97); transition:all .25s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.modal-overlay.open .modal { transform:translateY(0) scale(1); }
+.modal-header {
+  padding:22px 24px 0; display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border); padding-bottom:18px; margin-bottom:0;
+}
+.modal-title { font-size:17px; font-weight:700; color:var(--text); }
+.modal-close {
+  width:30px; height:30px; border-radius:var(--radius-sm); background:var(--dark-3);
+  border:1px solid var(--border); cursor:pointer; font-size:16px; color:var(--text-2);
+  display:flex; align-items:center; justify-content:center; transition:all .15s;
+}
+.modal-close:hover { background:var(--dark-4); color:var(--text); }
+.modal-body { padding:22px 24px; }
+.modal-footer { padding:16px 24px; border-top:1px solid var(--border); display:flex; gap:10px; justify-content:flex-end; }
+
+/* ═══ FORM ═══ */
+.form-group { margin-bottom:16px; }
+.form-label { display:block; font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:6px; text-transform:uppercase; letter-spacing:.05em; }
+.form-input, .form-select, .form-textarea {
+  width:100%; padding:10px 14px; border-radius:var(--radius-sm); font-size:13px;
+  background:var(--dark-3); border:1px solid var(--border-2); color:var(--text);
+  font-family:var(--font); outline:none; transition:border .15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--accent); }
+.form-textarea { resize:vertical; min-height:80px; line-height:1.5; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-hint { font-size:11px; color:var(--text-3); margin-top:4px; }
+.form-select option { background:var(--dark-3); }
+
+/* ═══ URGENTE BANNER ═══ */
+.urgente-banner {
+  background:linear-gradient(90deg, rgba(239,68,68,.15), rgba(239,68,68,.05));
+  border:1px solid rgba(239,68,68,.3); border-radius:var(--radius-sm);
+  padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px;
+  font-size:13px; color:var(--red); display:none;
+}
+.urgente-banner.show { display:flex; }
+.pulse { animation:pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ═══ TABS ═══ */
+.tabs { display:flex; gap:2px; margin-bottom:20px; background:var(--dark-2); border-radius:var(--radius-sm); padding:4px; border:1px solid var(--border); width:fit-content; }
+.tab-btn { padding:7px 16px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:none; background:none; color:var(--text-3); transition:all .15s; font-family:var(--font); }
+.tab-btn.active { background:var(--dark-4); color:var(--text); }
+
+/* ═══ EMPTY STATE ═══ */
+.empty-state { text-align:center; padding:48px 24px; color:var(--text-3); }
+.empty-state .empty-icon { font-size:36px; margin-bottom:12px; }
+.empty-state p { font-size:13px; }
+
+/* ═══ TOOLTIP ═══ */
+.tooltip-wrap { position:relative; display:inline-flex; }
+.tooltip { position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:var(--dark-4); border:1px solid var(--border-2); border-radius:6px; padding:5px 10px; font-size:11px; white-space:nowrap; color:var(--text-2); pointer-events:none; opacity:0; transition:opacity .15s; z-index:50; }
+.tooltip-wrap:hover .tooltip { opacity:1; }
+
+/* ═══ CAMPAÑAS LINK ═══ */
+.module-link {
+  display:flex; align-items:center; gap:14px; padding:16px 20px;
+  background:var(--dark-2); border:1px solid var(--border); border-radius:var(--radius);
+  text-decoration:none; color:var(--text); transition:all .2s; margin-bottom:12px;
+}
+.module-link:hover { border-color:var(--border-2); background:var(--dark-3); transform:translateX(4px); }
+.ml-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.ml-info h3 { font-size:14px; font-weight:700; margin-bottom:3px; }
+.ml-info p { font-size:12px; color:var(--text-2); }
+.ml-arrow { margin-left:auto; font-size:18px; color:var(--text-3); }
+
+/* ═══ DETAIL PANEL ═══ */
+.detail-panel {
+  position:fixed; right:0; top:0; width:420px; height:100vh; background:var(--dark-2);
+  border-left:1px solid var(--border-2); z-index:300; transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1); overflow-y:auto; box-shadow:var(--shadow);
+}
+.detail-panel.open { transform:translateX(0); }
+.detail-header { padding:22px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.detail-body { padding:24px; }
+.detail-field { margin-bottom:18px; }
+.detail-field label { display:block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-3); margin-bottom:5px; }
+.detail-field p { font-size:13px; color:var(--text); line-height:1.6; }
+
+/* ═══ NOTIFICATION TOAST ═══ */
+.toast {
+  position:fixed; bottom:24px; right:24px; background:var(--dark-2); border:1px solid var(--border-2);
+  border-radius:var(--radius); padding:14px 18px; font-size:13px; color:var(--text);
+  box-shadow:var(--shadow); z-index:2000; transform:translateY(80px); opacity:0;
+  transition:all .3s cubic-bezier(.4,0,.2,1); max-width:320px;
+  display:flex; align-items:center; gap:10px;
+}
+.toast.show { transform:translateY(0); opacity:1; }
+.toast.success { border-left:3px solid var(--green); }
+.toast.error   { border-left:3px solid var(--red); }
+.toast.warning { border-left:3px solid var(--yellow); }
+
+/* ═══ PHASE 2: PARRILLA ═══ */
+.cal-cell-day {
+  min-height:100px; border-right:1px solid var(--border); border-bottom:1px solid var(--border);
+  padding:6px; position:relative; transition:background .15s; cursor:pointer;
+}
+.cal-cell-day:hover { background:var(--dark-3); }
+.cal-cell-day.other-month { opacity:.3; }
+.cal-cell-day.today { background:rgba(244,161,0,.06); }
+.cal-cell-day.today .day-num { color:var(--accent); font-weight:700; }
+.cal-cell-day:nth-child(7n) { border-right:none; }
+.day-num { font-size:11px; color:var(--text-3); margin-bottom:4px; font-family:var(--mono); }
+.cal-post-chip {
+  font-size:10px; font-weight:600; padding:2px 6px; border-radius:4px;
+  margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  cursor:pointer; display:block; line-height:1.4;
+}
+.chip-organico  { background:rgba(34,197,94,.15); color:var(--green); }
+.chip-meta      { background:rgba(59,130,246,.15); color:var(--blue); }
+.chip-google    { background:rgba(20,184,166,.15); color:var(--teal); }
+.chip-linkedin  { background:rgba(168,85,247,.15); color:var(--purple); }
+.chip-email     { background:rgba(244,161,0,.15); color:var(--accent); }
+.cal-add-btn {
+  position:absolute; bottom:4px; right:4px; width:18px; height:18px;
+  border-radius:4px; background:var(--dark-4); border:1px solid var(--border);
+  font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center;
+  color:var(--text-3); line-height:1;
+}
+.cal-cell-day:hover .cal-add-btn { display:flex; }
+
+/* Instagram-style post card */
+.post-card {
+  background:var(--dark-2); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; transition:all .2s; cursor:pointer;
+}
+.post-card:hover { border-color:var(--border-2); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+.post-card-img {
+  width:100%; aspect-ratio:1; background:var(--dark-3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:32px; position:relative; overflow:hidden;
+}
+.post-card-img img { width:100%; height:100%; object-fit:cover; }
+.post-card-img .no-img { opacity:.3; }
+.post-card-body { padding:12px; }
+.post-card-meta { display:flex; align-items:center; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+.post-card-copy { font-size:12px; color:var(--text-2); line-height:1.5; }
+.post-card-copy strong { color:var(--text); }
+.post-status-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px; border-top:1px solid var(--border); background:var(--dark-3);
+}
+
+/* Status colors */
+.s-pendiente  { background:rgba(107,114,128,.15); color:var(--text-3); }
+.s-lista      { background:rgba(59,130,246,.15); color:var(--blue); }
+.s-diseno     { background:rgba(168,85,247,.15); color:var(--purple); }
+.s-falta-info { background:rgba(239,68,68,.15); color:var(--red); }
+.s-revision   { background:rgba(234,179,8,.15); color:var(--yellow); }
+.s-programado { background:rgba(20,184,166,.15); color:var(--teal); }
+.s-publicado  { background:rgba(34,197,94,.15); color:var(--green); }
+
+/* ═══ PHASE 2: MARCA PERSONAL ═══ */
+.marca-card {
+  background:var(--dark-2); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; transition:all .2s;
+}
+.marca-card:hover { border-color:var(--border-2); }
+.marca-card-header {
+  padding:16px 18px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.gerente-pill {
+  display:flex; align-items:center; gap:8px;
+}
+.gerente-ava {
+  width:36px; height:36px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-size:13px; font-weight:700; flex-shrink:0;
+}
+.marca-tipo-tag { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.marca-body { padding:16px 18px; }
+.marca-titulo { font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px; line-height:1.4; }
+.marca-content { font-size:12px; color:var(--text-2); line-height:1.6; max-height:80px; overflow:hidden; position:relative; }
+.marca-content::after { content:''; position:absolute; bottom:0; left:0; right:0; height:30px; background:linear-gradient(transparent,var(--dark-2)); }
+.marca-footer { padding:10px 18px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+
+/* LinkedIn Preview (in modal) */
+#li-preview { font-size:13px; color:#e0e0e0; }
+.li-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.li-ava { width:44px; height:44px; border-radius:50%; background:#2a5298; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:#fff; flex-shrink:0; }
+.li-name { font-weight:700; font-size:14px; color:#fff; }
+.li-cargo { font-size:11px; color:#9ba5b0; }
+.li-time { font-size:11px; color:#9ba5b0; }
+.li-body { font-size:13px; line-height:1.65; color:#cdd3da; margin-bottom:10px; }
+.li-body h2 { font-size:15px; color:#fff; margin:12px 0 6px; }
+.li-body h3 { font-size:13px; color:#e0e0e0; margin:10px 0 4px; }
+.li-image { width:100%; background:#12213a; border-radius:6px; margin:8px 0; min-height:80px; display:flex; align-items:center; justify-content:center; font-size:11px; color:#5a6878; border:1px dashed #2a3a4a; }
+.li-hashtags { font-size:12px; color:#4a9eff; margin-top:8px; }
+.li-actions { display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid #2a3a4a; }
+.li-action { font-size:11px; color:#9ba5b0; display:flex; align-items:center; gap:4px; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--dark-4); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text-3); }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeInUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.animate-in { animation:fadeInUp .3s ease forwards; }
+.stagger > * { opacity:0; animation:fadeInUp .3s ease forwards; }
+.stagger > *:nth-child(1){animation-delay:.05s}
+.stagger > *:nth-child(2){animation-delay:.1s}
+.stagger > *:nth-child(3){animation-delay:.15s}
+.stagger > *:nth-child(4){animation-delay:.2s}
+.stagger > *:nth-child(5){animation-delay:.25s}
+.stagger > *:nth-child(6){animation-delay:.3s}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">L</div>
+    <div class="logo-text">
+      <h1>LOFTON</h1>
+      <span>Command Center</span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-label">General</div>
+      <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">⚡</span> Dashboard
+        <span class="nav-badge" id="badge-vencidas">0</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Módulos</div>
+      <a class="nav-item" href="index.html" target="_blank">
+        <span class="nav-icon">📊</span> Campañas
+        <span style="margin-left:auto;font-size:10px;color:var(--text-3)">↗</span>
+      </a>
+      <div class="nav-item" data-page="diseno" onclick="showPage('diseno',this)">
+        <span class="nav-icon">🎨</span> Solicitudes Diseño
+        <span class="nav-badge warn" id="badge-diseno">0</span>
+      </div>
+      <div class="nav-item" data-page="parrilla" onclick="showPage('parrilla',this)">
+        <span class="nav-icon">📅</span> Parrilla de Contenido
+      </div>
+      <div class="nav-item" data-page="marca" onclick="showPage('marca',this)">
+        <span class="nav-icon">👤</span> Marca Personal
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div><span class="status-dot"></span>Sistema activo</div>
+    <div id="footer-date" style="color:var(--text-3)"></div>
+    <div style="margin-top:6px;font-size:10px;color:var(--text-3)">v2.0 · Bosco Agency</div>
+  </div>
+</aside>
+
+<!-- ═══════════ TOPBAR ═══════════ -->
+<div class="main">
+<div class="topbar">
+  <div class="topbar-title" id="topbar-title">Dashboard General</div>
+  <div class="topbar-date" id="topbar-date"></div>
+  <div class="topbar-user">
+    <div class="user-avatar">MA</div>
+    <span class="user-name">Manuel Antu&ntilde;a</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     PAGE: DASHBOARD
+═══════════════════════════ -->
+<div id="page-dashboard" class="page active" style="padding:28px">
+
+  <!-- KPI Row -->
+  <div class="grid-4 stagger" id="kpi-row">
+    <div class="card stat-card stat-accent-red">
+      <div class="card-header"><div class="card-title">Vencidas</div><span class="stat-icon">🔴</span></div>
+      <div class="card-body"><div class="card-value" id="kpi-vencidas">0</div><div class="card-sub">Requieren atención inmediata</div></div>
+    </div>
+    <div class="card stat-card stat-accent-yellow">
+      <div class="card-header"><div class="card-title">En riesgo hoy</div><span class="stat-icon">🟡</span></div>
+      <div class="card-body"><div class="card-value" id="kpi-riesgo">0</div><div class="card-sub">Vencen en las próximas 24h</div></div>
+    </div>
+    <div class="card stat-card stat-accent-green">
+      <div class="card-header"><div class="card-title">En tiempo</div><span class="stat-icon">🟢</span></div>
+      <div class="card-body"><div class="card-value" id="kpi-ok">0</div><div class="card-sub">Solicitudes activas al día</div></div>
+    </div>
+    <div class="card stat-card stat-accent-blue">
+      <div class="card-header"><div class="card-title">Total activas</div><span class="stat-icon">📋</span></div>
+      <div class="card-body"><div class="card-value" id="kpi-total">0</div><div class="card-sub">Solicitudes de diseño abiertas</div></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Semáforo de tareas -->
+    <div class="card">
+      <div class="card-header" style="margin-bottom:16px">
+        <div class="card-title">Semáforo de solicitudes</div>
+        <div class="tabs" style="margin-bottom:0">
+          <button class="tab-btn active" onclick="filterSem('todas',this)">Todas</button>
+          <button class="tab-btn" onclick="filterSem('vencida',this)">Vencidas</button>
+          <button class="tab-btn" onclick="filterSem('riesgo',this)">Riesgo</button>
+          <button class="tab-btn" onclick="filterSem('ok',this)">OK</button>
+        </div>
+      </div>
+      <div class="card-body" style="padding-top:0">
+        <div id="task-list-sem"></div>
+      </div>
+    </div>
+
+    <!-- Carga por persona + upcoming -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Carga de trabajo</div></div>
+        <div class="workload-card" id="workload-section">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Campañas activas</div></div>
+        <div class="card-body">
+          <a class="module-link" href="index.html" target="_blank">
+            <div class="ml-icon" style="background:var(--blue-dim)">📊</div>
+            <div class="ml-info">
+              <h3>Dashboard de Campañas 2026</h3>
+              <p>Meta Ads · Google Ads · Keywords · KPIs</p>
+            </div>
+            <span class="ml-arrow">→</span>
+          </a>
+          <div style="font-size:12px;color:var(--text-3);padding:4px 0">
+            🔵 Meta Ads · $120,000 MXN · 22 campañas<br>
+            🟢 Google Ads · $135,000 MXN · 9 grupos<br>
+            🟡 Reserva estratégica · $45,000 MXN disponibles
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-dashboard -->
+
+<!-- ═══════════════════════════
+     PAGE: SOLICITUDES DISEÑO
+═══════════════════════════ -->
+<div id="page-diseno" class="page" style="padding:28px">
+  <div class="section-head">
+    <h2>🎨 Solicitudes de Diseño</h2>
+    <p>Gestión de briefs creativos · Oriana puede editar fechas y estatus</p>
+  </div>
+
+  <div id="urgente-banner" class="urgente-banner">
+    <span class="pulse">🚨</span>
+    <span id="urgente-text">Hay solicitudes urgentes sin atender</span>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn btn-primary" onclick="openModal()">+ Nueva solicitud</button>
+    <div class="filter-bar">
+      <select class="filter-select" id="filter-prio" onchange="renderDesignTable()">
+        <option value="">Todas las prioridades</option>
+        <option value="Urgente">🔴 Urgente</option>
+        <option value="Alta">🟡 Alta</option>
+        <option value="Media">🔵 Media</option>
+        <option value="Baja">⚪ Baja</option>
+      </select>
+      <select class="filter-select" id="filter-status" onchange="renderDesignTable()">
+        <option value="">Todos los estatus</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="En proceso">En proceso</option>
+        <option value="En revisión">En revisión</option>
+        <option value="Entregado">Entregado</option>
+      </select>
+      <select class="filter-select" id="filter-area" onchange="renderDesignTable()">
+        <option value="">Todas las áreas</option>
+        <option value="Meta Ads">Meta Ads</option>
+        <option value="Google Ads">Google Ads</option>
+        <option value="LinkedIn">LinkedIn</option>
+        <option value="Parrilla Orgánica">Parrilla Orgánica</option>
+        <option value="Brand">Brand</option>
+      </select>
+      <input class="filter-input" id="filter-search" placeholder="Buscar..." oninput="renderDesignTable()" style="width:160px">
+    </div>
+    <span class="count-label" id="design-count">0 solicitudes</span>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap" style="border:none">
+      <table id="design-table">
+        <thead>
+          <tr>
+            <th>Prioridad</th>
+            <th>Solicitud</th>
+            <th>Tipo</th>
+            <th>Área / Canal</th>
+            <th>Solicitada</th>
+            <th>Entrega</th>
+            <th>Estatus</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="design-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- /page-diseno -->
+
+<!-- ═══════════════════════════
+     PAGE: PARRILLA DE CONTENIDO
+═══════════════════════════ -->
+<div id="page-parrilla" class="page" style="padding:28px">
+  <div class="section-head" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <h2>📅 Parrilla de Contenido</h2>
+      <p>Calendario editorial mensual · Orgánico + Meta Ads + Google Ads</p>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="tabs" style="margin:0">
+        <button class="tab-btn active" onclick="setParrillaView('calendario',this)">📅 Calendario</button>
+        <button class="tab-btn" onclick="setParrillaView('grid',this)">⊞ Grid</button>
+      </div>
+      <button class="btn btn-primary" onclick="openPostModal()">+ Nuevo post</button>
+    </div>
+  </div>
+
+  <!-- Month nav -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+    <button class="btn btn-sm" onclick="changeMonth(-1)">← Ant</button>
+    <div style="font-size:16px;font-weight:700;color:var(--text);min-width:160px;text-align:center" id="cal-month-label"></div>
+    <button class="btn btn-sm" onclick="changeMonth(1)">Sig →</button>
+    <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap" id="parrilla-filters">
+      <select class="filter-select" id="pf-area" onchange="renderParrilla()">
+        <option value="">Todas las áreas</option>
+        <option>Meta Ads</option><option>Google Ads</option>
+        <option>Orgánico</option><option>LinkedIn</option><option>Email</option>
+      </select>
+      <select class="filter-select" id="pf-status" onchange="renderParrilla()">
+        <option value="">Todos los estatus</option>
+        <option>Pendiente de conceptualización</option>
+        <option>Lista para diseño</option>
+        <option>En diseño</option>
+        <option>Falta info cliente</option>
+        <option>En revisión</option>
+        <option>Programado</option>
+        <option>Publicado</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- CALENDAR VIEW -->
+  <div id="parrilla-calendar-view">
+    <div class="card" style="overflow:hidden">
+      <!-- Day headers -->
+      <div id="cal-day-headers" style="display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border)">
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Lun</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Mar</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Mié</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Jue</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Vie</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Sáb</div>
+        <div style="padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Dom</div>
+      </div>
+      <div id="cal-grid-cells" style="display:grid;grid-template-columns:repeat(7,1fr)"></div>
+    </div>
+  </div>
+
+  <!-- GRID VIEW -->
+  <div id="parrilla-grid-view" style="display:none">
+    <div id="post-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px"></div>
+    <div id="post-grid-empty" class="empty-state" style="display:none">
+      <div class="empty-icon">📭</div>
+      <p>No hay posts para este mes.<br>Crea el primero con el botón "+ Nuevo post".</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     PAGE: MARCA PERSONAL
+═══════════════════════════ -->
+<div id="page-marca" class="page" style="padding:28px">
+  <div class="section-head" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <h2>👤 Marca Personal — LinkedIn</h2>
+      <p>Contenido para gerentes · Artículos · Posts · Previsualización LinkedIn</p>
+    </div>
+    <button class="btn btn-primary" onclick="openMarcaModal()">+ Nuevo contenido</button>
+  </div>
+
+  <!-- Gerentes pills -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="gerente-tabs">
+    <button class="btn active" id="gtab-todos" onclick="filterMarca('todos',this)" style="font-size:12px">Todos</button>
+  </div>
+
+  <div class="grid-2" id="marca-grid">
+    <!-- Populated by JS -->
+  </div>
+  <div id="marca-empty" class="empty-state" style="display:none">
+    <div class="empty-icon">✍️</div>
+    <p>No hay contenido aún. Crea el primero con "+ Nuevo contenido".</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MODAL: NUEVO POST (PARRILLA)
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="post-modal-overlay" onclick="closePostModalOnOverlay(event)">
+  <div class="modal" style="width:620px">
+    <div class="modal-header">
+      <div class="modal-title" id="post-modal-title">Nuevo post</div>
+      <div class="modal-close" onclick="closePostModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="post-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Área / Canal *</label>
+          <select class="form-select" id="pf-canal-input">
+            <option>Orgánico</option><option>Meta Ads</option>
+            <option>Google Ads</option><option>LinkedIn</option><option>Email</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Departamento / Servicio *</label>
+          <select class="form-select" id="pf-dept">
+            <option>Auditoría</option><option>Fiscal</option><option>Nómina</option>
+            <option>Laboral</option><option>Corporativo</option><option>Contabilidad</option><option>General / Brand</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha de publicación *</label>
+          <input class="form-input" id="pf-fecha" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de contenido</label>
+          <select class="form-select" id="pf-tipo">
+            <option>Post imagen</option><option>Carrusel</option><option>Reel / Video</option>
+            <option>Story</option><option>Artículo</option><option>Infografía</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Copy in (gancho / headline) *</label>
+        <textarea class="form-textarea" id="pf-copy-in" placeholder="Primera línea que ve el usuario antes de 'ver más'..." style="min-height:60px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Copy out (cuerpo del post)</label>
+        <textarea class="form-textarea" id="pf-copy-out" placeholder="Desarrollo del mensaje, argumentos, CTA..." style="min-height:90px"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link de OneDrive (creativo)</label>
+        <input class="form-input" id="pf-onedrive" type="url" placeholder="https://1drv.ms/...">
+        <div class="form-hint">Al guardar el link, se mostrará en el preview del post</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Estatus</label>
+        <select class="form-select" id="pf-status-input">
+          <option>Pendiente de conceptualización</option>
+          <option>Lista para diseño</option>
+          <option>En diseño</option>
+          <option>Falta info cliente</option>
+          <option>En revisión</option>
+          <option>Programado</option>
+          <option>Publicado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closePostModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePost()">Guardar post</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MODAL: NUEVO CONTENIDO MARCA PERSONAL
+══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="marca-modal-overlay" onclick="closeMarcaModalOnOverlay(event)">
+  <div class="modal" style="width:680px;max-height:92vh">
+    <div class="modal-header">
+      <div class="modal-title" id="marca-modal-title">Nuevo contenido LinkedIn</div>
+      <div class="modal-close" onclick="closeMarcaModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="marca-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Gerente / Autor *</label>
+          <input class="form-input" id="mc-gerente" placeholder="Nombre del gerente">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cargo</label>
+          <input class="form-input" id="mc-cargo" placeholder="Director General, Socio Fiscal...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo *</label>
+          <select class="form-select" id="mc-tipo">
+            <option>Post texto</option>
+            <option>Post con imagen / carrusel</option>
+            <option>Artículo (blog)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Área temática</label>
+          <select class="form-select" id="mc-area">
+            <option>Fiscal</option><option>Auditoría</option><option>Laboral</option>
+            <option>Corporativo</option><option>Nómina</option><option>Liderazgo</option><option>General</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Título / Headline *</label>
+        <input class="form-input" id="mc-titulo" placeholder="Ej: 3 señales de que tu empresa necesita un gobierno corporativo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contenido *</label>
+        <div id="mc-editor-toolbar" style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">
+          <button type="button" class="btn btn-sm" onclick="execFmt('bold')" title="Negrita"><b>B</b></button>
+          <button type="button" class="btn btn-sm" onclick="execFmt('italic')" title="Itálica"><i>I</i></button>
+          <button type="button" class="btn btn-sm" onclick="insertHeading('h2')" title="H2">H2</button>
+          <button type="button" class="btn btn-sm" onclick="insertHeading('h3')" title="H3">H3</button>
+          <button type="button" class="btn btn-sm" onclick="execFmt('insertUnorderedList')" title="Lista">• Lista</button>
+          <button type="button" class="btn btn-sm" onclick="execFmt('insertOrderedList')" title="Numerada">1. Lista</button>
+          <button type="button" class="btn btn-sm" onclick="insertHR()" title="Separador">— HR</button>
+        </div>
+        <div id="mc-editor" contenteditable="true" style="min-height:180px;background:var(--dark-3);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.7;color:var(--text);outline:none;transition:border .15s" oninput="updateLIPreview()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border-2)'"></div>
+        <div class="form-hint" id="mc-char-count">0 caracteres</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hashtags</label>
+        <input class="form-input" id="mc-hashtags" placeholder="#Fiscal #SAT #GobiernoCorporativo" oninput="updateLIPreview()">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Link imagen / OneDrive</label>
+          <input class="form-input" id="mc-link" type="url" placeholder="https://1drv.ms/..." oninput="updateLIPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estatus</label>
+          <select class="form-select" id="mc-status">
+            <option>Borrador</option><option>En revisión</option>
+            <option>Aprobado</option><option>Publicado</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- LinkedIn Preview -->
+      <div style="margin-top:8px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:8px">Preview LinkedIn</div>
+        <div id="li-preview" style="background:#1a1a2e;border:1px solid #2a2a4a;border-radius:10px;padding:16px;font-family:'DM Sans',sans-serif;max-width:100%">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeMarcaModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveMarca()">Guardar contenido</button>
+    </div>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div class="modal-overlay" id="post-detail-overlay" onclick="this.classList.remove('open')">
+  <div class="modal" style="width:520px">
+    <div class="modal-header">
+      <div class="modal-title" id="pd-title">Post</div>
+      <div class="modal-close" onclick="document.getElementById('post-detail-overlay').classList.remove('open')">✕</div>
+    </div>
+    <div class="modal-body" id="pd-body"></div>
+    <div class="modal-footer" id="pd-footer"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══════════════════════════
+     MODAL: NUEVA SOLICITUD
+═══════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title-text">Nueva solicitud de diseño</div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+
+      <div id="urgente-warning" style="display:none;background:var(--red-dim);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--red)">
+        🚨 Esta solicitud se marcará como URGENTE. Se enviará una alerta inmediata al administrador.
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prioridad *</label>
+          <select class="form-select" id="f-prio" onchange="checkUrgente()">
+            <option value="Media">🔵 Media</option>
+            <option value="Alta">🟡 Alta</option>
+            <option value="Urgente">🔴 Urgente</option>
+            <option value="Baja">⚪ Baja</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de diseño *</label>
+          <select class="form-select" id="f-tipo">
+            <option>Post estático</option>
+            <option>Carrusel</option>
+            <option>Reel / Video</option>
+            <option>Banner Google Display</option>
+            <option>Story</option>
+            <option>Presentación</option>
+            <option>Infografía</option>
+            <option>Artículo LinkedIn</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descripción de la solicitud *</label>
+        <textarea class="form-textarea" id="f-desc" placeholder="Ej: Carrusel para campaña de Dictamen Fiscal — 5 slides con beneficios clave. Copy ya aprobado en brief adjunto."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Área / Servicio *</label>
+          <select class="form-select" id="f-area">
+            <option>Meta Ads</option>
+            <option>Google Ads</option>
+            <option>LinkedIn</option>
+            <option>Parrilla Orgánica</option>
+            <option>Brand</option>
+            <option>Email Marketing</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Canal de ejecución</label>
+          <select class="form-select" id="f-canal">
+            <option>Facebook + Instagram</option>
+            <option>Instagram Stories</option>
+            <option>Google Display</option>
+            <option>LinkedIn</option>
+            <option>Email</option>
+            <option>Múltiples canales</option>
+            <option>Interno</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Formato / Dimensiones</label>
+          <select class="form-select" id="f-formato">
+            <option>1080×1080 (Feed cuadrado)</option>
+            <option>1080×1350 (Feed vertical)</option>
+            <option>1080×1920 (Story / Reel)</option>
+            <option>1200×628 (Facebook link)</option>
+            <option>300×250 (Banner Display)</option>
+            <option>728×90 (Leaderboard)</option>
+            <option>1920×1080 (Horizontal)</option>
+            <option>Múltiples formatos</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Solicitante</label>
+          <select class="form-select" id="f-solicitante">
+            <option>Manuel</option>
+            <option>Karen</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha de solicitud</label>
+          <input class="form-input" id="f-fecha-sol" type="date" readonly style="opacity:.6">
+          <div class="form-hint">Automática — hoy</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de entrega</label>
+          <input class="form-input" id="f-fecha-ent" type="date">
+          <div class="form-hint">Pre-calculada +2 días hábiles. Oriana puede editar.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Link brief / referencia (OneDrive)</label>
+        <input class="form-input" id="f-link" type="url" placeholder="https://1drv.ms/...">
+        <div class="form-hint">Link de OneDrive con el brief o archivos de referencia</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notas adicionales</label>
+        <textarea class="form-textarea" id="f-notas" placeholder="Paleta de colores, referencias, restricciones, etc." style="min-height:60px"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveRequest()">Guardar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     DETAIL PANEL
+═══════════════════════════ -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <div style="font-size:16px;font-weight:700" id="dp-title">Detalle</div>
+    <div class="modal-close" onclick="closeDetail()">✕</div>
+  </div>
+  <div class="detail-body" id="dp-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✓</span>
+  <span id="toast-msg">Guardado</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════
+const DB_KEY = 'lofton_design_requests_v1';
+
+function getRequests() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || []; }
+  catch(e) { return []; }
+}
+function saveRequests(data) {
+  localStorage.setItem(DB_KEY, JSON.stringify(data));
+}
+
+// Seed demo data if empty
+function seedDemoData() {
+  const existing = getRequests();
+  if (existing.length > 0) return;
+  // Real solicitudes from Excel
+  saveRequests([{"id":"req_real_0","prio":"Media","tipo":"Pantalla on-site","desc":"Prevención sarampión: Recuerda mantener tu esquema de vacunación actualizado para prevenir el sarampión.","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-11","fechaEnt":"2026-02-11","status":"Entregado","link":"","notas":"Que prevalezca el color verde"},{"id":"req_real_1","prio":"Media","tipo":"Pantalla on-site","desc":"Venta equipos cómputo - Donación fundación ancianos: En Lofton, a partir del 16 de febrero darles un segundo uso a los equipos también suma.\nTú te llevas una computadora.\nY también llevamos sonrisas a los abuelos.","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-12","fechaEnt":"2026-02-12","status":"Entregado","link":"","notas":"Que contenga imágenes de abuelitos, computadoras. Lo recaudado va a fundación para ancianos."},{"id":"req_real_2","prio":"Media","tipo":"Pantalla on-site","desc":"Aniversarios Lofton - Febrero: Reconocemos su trayectoria en Lofton.\nCésar Corona | 3 años | 20/02/2023\nRoberto Sánchez | 2 años | 19/02/2024\nGracias por ser parte del equipo","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-12","fechaEnt":"2026-02-12","status":"Entregado","link":"","notas":"Que prevalezca el color verde"},{"id":"req_real_3","prio":"Media","tipo":"Pantalla on-site","desc":"Meta alcanzada - Venta equipos cómputo: ¡META ALCANZADA!\nGracias a ustedes logramos la venta total de los equipos de cómputo.\nTodo lo recaudado será destinado a la compra de artículos de primera necesidad y compartir una convivencia con los","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-19","fechaEnt":"2026-02-19","status":"Entregado","link":"","notas":"Comunicación tipo poster, con imágenes alusivas"},{"id":"req_real_4","prio":"Media","tipo":"Pantalla on-site","desc":"Diagramas adaptados a pantallas on-site","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-19","fechaEnt":"2026-02-19","status":"Entregado","link":"","notas":"Adaptar estos diagramas a pantallas on-site"},{"id":"req_real_5","prio":"Baja","tipo":"Pantalla on-site","desc":"Fondo para teams: Base color verde, que no sea desagradable a la vista.","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-20","fechaEnt":"2026-02-20","status":"Entregado","link":"","notas":""},{"id":"req_real_6","prio":"Alta","tipo":"Post estático","desc":"Comunicado clientes","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"","fechaEnt":"","status":"Pendiente","link":"","notas":"Comunicación tipo poster, con imágenes alusivas"},{"id":"req_real_7","prio":"Baja","tipo":"Pantalla on-site","desc":"Fondo de pantalla","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"","fechaEnt":"","status":"Pendiente","link":"","notas":"Por definir fecha"},{"id":"req_real_8","prio":"Baja","tipo":"Post estático","desc":"Plantilla comunicados internos","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"","fechaEnt":"","status":"Pendiente","link":"","notas":"Por definir fecha"},{"id":"req_real_9","prio":"Alta","tipo":"Post estático","desc":"Tarjetas de presentación","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"","fechaEnt":"","status":"Pendiente","link":"","notas":"Por definir fecha"},{"id":"req_real_10","prio":"Media","tipo":"Pantalla on-site","desc":"Cumpleañeros Marzo: Cumpleañeros Marzo:\nIsmael Aguilar 9, Karen Velázquez 14, Abraham Gómez 16, Daniel Orozco 23, Rocío Ocampo 26, Brenda Díaz 27","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-27","fechaEnt":"2026-02-27","status":"Entregado","link":"","notas":""},{"id":"req_real_11","prio":"Media","tipo":"Pantalla on-site","desc":"Aniversarios Lofton - Marzo: Reconocemos su trayectoria en Lofton.\nGabriela Flores 7 años, Manuel Páez 5 años, Ana Silvia López 4 años, Rodrigo Topete 4 años, Lizbeth Pérez 2 años, Antonio González 2 años, Alexander Alcalá 1 año,","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-27","fechaEnt":"2026-02-27","status":"Entregado","link":"","notas":""},{"id":"req_real_12","prio":"Media","tipo":"Pantalla on-site","desc":"Jornada de vacunación - fotos: Cuidarnos es parte de trabajar mejor juntos.\nGracias por participar en la jornada de vacunación.","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-02-27","fechaEnt":"2026-02-27","status":"Entregado","link":"","notas":"Fotos de la jornada de vacunación en el despacho"},{"id":"req_real_13","prio":"Media","tipo":"Pantalla on-site","desc":"8 de marzo - Presencia que transforma: En Lofton reconocemos el liderazgo, la capacidad y la contribución estratégica en cada área.\nEl 55% de puestos de Encargadas y Gerentes están ocupados por mujeres.\n8 de marzo | Presencia que transform","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-05","fechaEnt":"2026-03-05","status":"Entregado","link":"","notas":"Imagen alusiva al 8 de marzo"},{"id":"req_real_14","prio":"Baja","tipo":"Pantalla on-site","desc":"Diseño Tazas Corporativas","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"","fechaEnt":"","status":"Pendiente","link":"","notas":"Pendiente fecha"},{"id":"req_real_15","prio":"Media","tipo":"Pantalla on-site","desc":"Cumpleañeros Abril: Cumpleañeros Abril:\nDiana Rodríguez 3 | Aide Velazquez 10 | Edgar Reveles 13\nJosé Aguilar 15 | Valeria Salazar 15 | Ivan Castilla 25","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-26","fechaEnt":"2026-03-27","status":"Entregado","link":"","notas":""},{"id":"req_real_16","prio":"Media","tipo":"Pantalla on-site","desc":"Aniversarios Lofton Abril: Reconocemos su trayectoria en Lofton.\nMónica Ortíz, 11 años, 28/04/15\nEric Flores, 8 años, 16/04/18\nJovanna Chombo, 8 años, 24/04/18\nGracias por ser parte del equipo.","area":"Comunicación interna","canal":"Comunicación interna","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-26","fechaEnt":"2026-03-27","status":"Entregado","link":"","notas":""},{"id":"req_real_17","prio":"Media","tipo":"Pantalla on-site","desc":"Promoción LinkedIn: Mantente al día con lo que compartimos y síguenos en Linkedin\n\nAnálisis de nuestros especialistas, criterios y puntos clave que impactan a nuestros clientes.","area":"Comunicación interna","canal":"Interno","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-26","fechaEnt":"2026-03-27","status":"Entregado","link":"","notas":"código qr en carpeta pantallas on site"},{"id":"req_real_18","prio":"Media","tipo":"Pantalla on-site","desc":"Promoción Instagram: Conoce el lado más cercano de Lofton y síguenos en Instagram","area":"Comunicación interna","canal":"Interno","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-26","fechaEnt":"2026-03-27","status":"Entregado","link":"","notas":"código qr en carpeta pantallas on site"},{"id":"req_real_19","prio":"Media","tipo":"Pantalla on-site","desc":"Promoción Recompensas Lofton: Participar tiene sus recompensas y se disfrutan\nNuestro ganador del viaje todo pagado a Cancún ya vivió esta experiencia\nTú puedes ser el siguiente","area":"Comunicación interna","canal":"Interno","formato":"1080×1080 (Feed cuadrado)","solicitante":"Manuel","fechaSol":"2026-03-30","fechaEnt":"","status":"Entregado","link":"","notas":"fotos del viaje en carpeta Assets, no sé si dejar una sola, o poner las tres como en una especie de tira fotográfica o collage"}]);
+  return;
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  const past = (n) => { const d=new Date(today); d.setDate(d.getDate()-n); return fmt(d); };
+  const future = (n) => { const d=new Date(today); d.setDate(d.getDate()+n); return fmt(d); };
+
+  const demo = [
+    {id:'req-001',prio:'Urgente',tipo:'Carrusel',desc:'Carrusel Dictamen Fiscal 2026 — 6 slides con fechas límite y beneficios clave de Lofton',area:'Meta Ads',canal:'Facebook + Instagram',formato:'1080×1080 (Feed cuadrado)',solicitante:'Manuel',fechaSol:past(3),fechaEnt:past(1),status:'En proceso',link:'https://1drv.ms/demo',notas:'Usar paleta corporativa Lofton. Incluir badge "15 de mayo"'},
+    {id:'req-002',prio:'Alta',tipo:'Post estático',desc:'Imagen para campaña Always On Brand — mensaje certeza y control',area:'Meta Ads',canal:'Facebook + Instagram',formato:'1080×1350 (Feed vertical)',solicitante:'Karen',fechaSol:past(2),fechaEnt:future(1),status:'Pendiente',link:'',notas:''},
+    {id:'req-003',prio:'Media',tipo:'Banner Google Display',desc:'Set de banners para remarketing general — 4 tamaños estándar',area:'Google Ads',canal:'Google Display',formato:'Múltiples formatos',solicitante:'Manuel',fechaSol:past(1),fechaEnt:future(3),status:'Pendiente',link:'https://1drv.ms/demo2',notas:'300x250, 728x90, 160x600, 320x50'},
+    {id:'req-004',prio:'Media',tipo:'Reel / Video',desc:'Reel 30s para campaña STPS — enfoque "¿sabías que?" con dato impactante',area:'Meta Ads',canal:'Facebook + Instagram',formato:'1080×1920 (Story / Reel)',solicitante:'Karen',fechaSol:past(5),fechaEnt:future(5),status:'En revisión',link:'',notas:'Script aprobado por Manuel el lunes'},
+    {id:'req-005',prio:'Baja',tipo:'Artículo LinkedIn',desc:'Diseño de portada para artículo sobre Gobierno Corporativo',area:'LinkedIn',canal:'LinkedIn',formato:'1200×628 (Facebook link)',solicitante:'Manuel',fechaSol:past(1),fechaEnt:future(7),status:'Pendiente',link:'',notas:''},
+    {id:'req-006',prio:'Alta',tipo:'Post estático',desc:'Story urgente para recordatorio PTU — Mayo',area:'Parrilla Orgánica',canal:'Instagram Stories',formato:'1080×1920 (Story / Reel)',solicitante:'Karen',fechaSol:past(4),fechaEnt:past(2),status:'Entregado',link:'https://1drv.ms/demo3',notas:'Entregado y programado'},
+  ];
+  saveRequests(demo);
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard General',diseno:'Solicitudes de Diseño',parrilla:'Parrilla de Contenido',marca:'Marca Personal'};
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+  if (name==='diseno') renderDesignTable();
+}
+
+// ═══════════════════════════════════════════
+// DATES
+// ═══════════════════════════════════════════
+function today() { return new Date().toISOString().split('T')[0]; }
+function addWorkDays(dateStr, days) {
+  const d = new Date(dateStr);
+  let added = 0;
+  while(added < days) {
+    d.setDate(d.getDate()+1);
+    if(d.getDay()!==0 && d.getDay()!==6) added++;
+  }
+  return d.toISOString().split('T')[0];
+}
+function formatDate(str) {
+  if(!str) return '—';
+  const [y,m,d] = str.split('-');
+  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+}
+function taskStatus(req) {
+  const t = today();
+  if(req.status==='Entregado') return 'ok';
+  if(req.fechaEnt < t) return 'vencida';
+  if(req.fechaEnt === t) return 'riesgo';
+  const tomorrow = addWorkDays(t,1);
+  if(req.fechaEnt <= tomorrow) return 'riesgo';
+  return 'ok';
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+function renderDashboard() {
+  const reqs = getRequests().filter(r => r.status !== 'Entregado');
+  let vencidas=0, riesgo=0, ok=0;
+  reqs.forEach(r => {
+    const s = taskStatus(r);
+    if(s==='vencida') vencidas++;
+    else if(s==='riesgo') riesgo++;
+    else ok++;
+  });
+
+  document.getElementById('kpi-vencidas').textContent = vencidas;
+  document.getElementById('kpi-riesgo').textContent = riesgo;
+  document.getElementById('kpi-ok').textContent = ok;
+  document.getElementById('kpi-total').textContent = reqs.length;
+  document.getElementById('badge-vencidas').textContent = vencidas;
+  document.getElementById('badge-vencidas').style.display = vencidas>0?'':'none';
+
+  // Task list semáforo
+  renderSemList('todas');
+
+  // Workload
+  const allReqs = getRequests();
+  const byOriana = allReqs.filter(r=>r.status!=='Entregado').length;
+  const byManuel = allReqs.filter(r=>r.solicitante==='Manuel'&&r.status!=='Entregado').length;
+  const byKaren  = allReqs.filter(r=>r.solicitante==='Karen'&&r.status!=='Entregado').length;
+  const max = Math.max(byOriana,byManuel,byKaren,1);
+  document.getElementById('workload-section').innerHTML = `
+    <div class="person-row">
+      <div class="person-avatar pa-manuel">MA</div>
+      <div class="person-info">
+        <div class="person-name">Manuel Antu&ntilde;a <span style="font-size:10px;color:var(--text-3);font-weight:400">Admin</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-blue" style="width:${byManuel/max*100}%"></div></div>
+        <div class="progress-count">${byManuel} solicitudes activas</div>
+      </div>
+    </div>
+    <div class="person-row">
+      <div class="person-avatar pa-oriana">OR</div>
+      <div class="person-info">
+        <div class="person-name">Oriana <span style="font-size:10px;color:var(--text-3);font-weight:400">Dise&ntilde;o</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-purple" style="width:${byOriana/max*100}%"></div></div>
+        <div class="progress-count">${byOriana} para ejecutar</div>
+      </div>
+    </div>
+    <div class="person-row">
+      <div class="person-avatar pa-karen">KA</div>
+      <div class="person-info">
+        <div class="person-name">Karen <span style="font-size:10px;color:var(--text-3);font-weight:400">Marketing</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-teal" style="width:${byKaren/max*100}%"></div></div>
+        <div class="progress-count">${byKaren} solicitudes enviadas</div>
+      </div>
+    </div>
+  `;
+
+  // Design badge
+  const pendDesign = getRequests().filter(r=>r.status!=='Entregado').length;
+  document.getElementById('badge-diseno').textContent = pendDesign;
+  document.getElementById('badge-diseno').style.display = pendDesign>0?'':'none';
+}
+
+let currentSemFilter = 'todas';
+function filterSem(f, btn) {
+  currentSemFilter = f;
+  document.querySelectorAll('.tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderSemList(f);
+}
+function renderSemList(f) {
+  const reqs = getRequests().filter(r=>r.status!=='Entregado');
+  const prioOrder = {Urgente:0,Alta:1,Media:2,Baja:3};
+  reqs.sort((a,b)=>(prioOrder[a.prio]||9)-(prioOrder[b.prio]||9));
+  const filtered = f==='todas' ? reqs : reqs.filter(r=>taskStatus(r)===f);
+  const el = document.getElementById('task-list-sem');
+  if(filtered.length===0){
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">${f==='vencida'?'✅':'📭'}</div><p>${f==='vencida'?'Sin tareas vencidas':'Sin tareas en esta categoría'}</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(r=>{
+    const s = taskStatus(r);
+    const sClass = s==='vencida'?'vencida':s==='riesgo'?'riesgo':'ok';
+    const sdot = s==='vencida'?`<span class="sem-dot sem-red"></span>`:s==='riesgo'?`<span class="sem-dot sem-yellow"></span>`:`<span class="sem-dot sem-green"></span>`;
+    const pOwn = r.solicitante==='Manuel'?'own-manuel':r.solicitante==='Karen'?'own-karen':'own-oriana';
+    return `<div class="task-item ${sClass}" onclick="openDetail('${r.id}')">
+      ${sdot}
+      <div class="task-label">${r.tipo} — ${r.desc.substring(0,55)}${r.desc.length>55?'…':''}</div>
+      <span class="task-owner ${pOwn}">${r.solicitante}</span>
+      <div class="task-meta">${s==='vencida'?'Venció':'Entrega'} ${formatDate(r.fechaEnt)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// DESIGN REQUESTS TABLE
+// ═══════════════════════════════════════════
+const STATUS_COLORS = {
+  'Pendiente':'b-yellow','En proceso':'b-blue','En revisión':'b-purple','Entregado':'b-green'
+};
+const PRIO_DOT = {
+  'Urgente':'prio-urgente','Alta':'prio-alta','Media':'prio-media','Baja':'prio-baja'
+};
+
+function renderDesignTable() {
+  const prio   = document.getElementById('filter-prio').value;
+  const status = document.getElementById('filter-status').value;
+  const area   = document.getElementById('filter-area').value;
+  const q      = document.getElementById('filter-search').value.toLowerCase();
+
+  let reqs = getRequests().filter(r => {
+    return (!prio   || r.prio===prio)
+        && (!status || r.status===status)
+        && (!area   || r.area===area)
+        && (!q      || r.desc.toLowerCase().includes(q)||r.tipo.toLowerCase().includes(q)||r.area.toLowerCase().includes(q));
+  });
+
+  const prioOrder = {Urgente:0,Alta:1,Media:2,Baja:3};
+  reqs.sort((a,b)=>(prioOrder[a.prio]||9)-(prioOrder[b.prio]||9)||(a.fechaEnt>b.fechaEnt?1:-1));
+
+  const tbody = document.getElementById('design-tbody');
+  if(reqs.length===0){
+    tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🔍</div><p>Sin resultados. Ajusta los filtros.</p></div></td></tr>`;
+    document.getElementById('design-count').textContent='0 solicitudes';
+    return;
+  }
+
+  tbody.innerHTML = reqs.map(r=>{
+    const ts = taskStatus(r);
+    const rowBg = ts==='vencida'?'background:rgba(239,68,68,.04)':ts==='riesgo'?'background:rgba(234,179,8,.04)':'';
+    const dateStyle = ts==='vencida'?'color:var(--red);font-weight:600':ts==='riesgo'?'color:var(--yellow);font-weight:600':'';
+    const sc = STATUS_COLORS[r.status]||'b-blue';
+    return `<tr style="${rowBg}" onclick="openDetail('${r.id}')" style="cursor:pointer">
+      <td>
+        <span class="prio-dot ${PRIO_DOT[r.prio]||'prio-baja'}"></span>
+        <span style="font-size:12px;font-weight:600">${r.prio}</span>
+      </td>
+      <td>
+        <div class="td-bold" style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.desc.substring(0,50)}${r.desc.length>50?'…':''}</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px">${r.solicitante}</div>
+      </td>
+      <td style="font-size:12px">${r.tipo}</td>
+      <td>
+        <div style="font-size:12px">${r.area}</div>
+        <div style="font-size:10px;color:var(--text-3)">${r.canal}</div>
+      </td>
+      <td class="td-mono">${formatDate(r.fechaSol)}</td>
+      <td class="td-mono" style="${dateStyle}">${formatDate(r.fechaEnt)}</td>
+      <td><span class="badge ${sc}">${r.status}</span></td>
+      <td onclick="event.stopPropagation()">
+        <div class="td-actions">
+          <select class="filter-select" style="padding:4px 8px;font-size:11px;width:auto" onchange="updateStatus('${r.id}',this.value)">
+            <option ${r.status==='Pendiente'?'selected':''}>Pendiente</option>
+            <option ${r.status==='En proceso'?'selected':''}>En proceso</option>
+            <option ${r.status==='En revisión'?'selected':''}>En revisión</option>
+            <option ${r.status==='Entregado'?'selected':''}>Entregado</option>
+          </select>
+          <button class="btn btn-sm" onclick="editRequest('${r.id}')" title="Editar">✏️</button>
+          <button class="btn btn-sm" onclick="deleteRequest('${r.id}')" title="Eliminar" style="color:var(--red)">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('design-count').textContent=`${reqs.length} solicitud${reqs.length!==1?'es':''}`;
+
+  // Urgente banner
+  const urgentes = getRequests().filter(r=>r.prio==='Urgente'&&r.status!=='Entregado');
+  const banner = document.getElementById('urgente-banner');
+  if(urgentes.length>0){
+    banner.classList.add('show');
+    document.getElementById('urgente-text').textContent=`🚨 ${urgentes.length} solicitud${urgentes.length!==1?'es':''} urgente${urgentes.length!==1?'s':''} — Oriana debe revisar inmediatamente.`;
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function updateStatus(id, newStatus) {
+  const reqs = getRequests();
+  const idx = reqs.findIndex(r=>r.id===id);
+  if(idx>=0){ reqs[idx].status=newStatus; saveRequests(reqs); }
+  renderDesignTable();
+  renderDashboard();
+  showToast(`Estatus actualizado: ${newStatus}`, 'success');
+}
+
+function deleteRequest(id) {
+  if(!confirm('¿Eliminar esta solicitud?')) return;
+  const reqs = getRequests().filter(r=>r.id!==id);
+  saveRequests(reqs);
+  renderDesignTable();
+  renderDashboard();
+  showToast('Solicitud eliminada','warning');
+}
+
+// ═══════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════
+function openModal(id) {
+  const overlay = document.getElementById('modal-overlay');
+  const t = today();
+  document.getElementById('f-fecha-sol').value = t;
+  document.getElementById('f-fecha-ent').value = addWorkDays(t,2);
+  document.getElementById('edit-id').value = '';
+  document.getElementById('modal-title-text').textContent = 'Nueva solicitud de diseño';
+  // Reset fields
+  ['f-prio','f-tipo','f-area','f-canal','f-formato','f-solicitante'].forEach(id=>{
+    document.getElementById(id).selectedIndex=0;
+  });
+  ['f-desc','f-link','f-notas'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('urgente-warning').style.display='none';
+  overlay.classList.add('open');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOnOverlay(e) { if(e.target===e.currentTarget) closeModal(); }
+
+function checkUrgente() {
+  const isU = document.getElementById('f-prio').value==='Urgente';
+  document.getElementById('urgente-warning').style.display = isU?'block':'none';
+}
+
+function editRequest(id) {
+  const req = getRequests().find(r=>r.id===id);
+  if(!req) return;
+  document.getElementById('edit-id').value=id;
+  document.getElementById('modal-title-text').textContent='Editar solicitud';
+  document.getElementById('f-prio').value=req.prio;
+  document.getElementById('f-tipo').value=req.tipo;
+  document.getElementById('f-desc').value=req.desc;
+  document.getElementById('f-area').value=req.area;
+  document.getElementById('f-canal').value=req.canal;
+  document.getElementById('f-formato').value=req.formato;
+  document.getElementById('f-solicitante').value=req.solicitante;
+  document.getElementById('f-fecha-sol').value=req.fechaSol;
+  document.getElementById('f-fecha-ent').value=req.fechaEnt;
+  document.getElementById('f-link').value=req.link||'';
+  document.getElementById('f-notas').value=req.notas||'';
+  checkUrgente();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function saveRequest() {
+  const desc = document.getElementById('f-desc').value.trim();
+  if(!desc){ showToast('La descripción es requerida','error'); return; }
+  const reqs = getRequests();
+  const editId = document.getElementById('edit-id').value;
+  const req = {
+    id: editId || 'req-'+Date.now(),
+    prio: document.getElementById('f-prio').value,
+    tipo: document.getElementById('f-tipo').value,
+    desc,
+    area: document.getElementById('f-area').value,
+    canal: document.getElementById('f-canal').value,
+    formato: document.getElementById('f-formato').value,
+    solicitante: document.getElementById('f-solicitante').value,
+    fechaSol: document.getElementById('f-fecha-sol').value,
+    fechaEnt: document.getElementById('f-fecha-ent').value,
+    status: editId ? (reqs.find(r=>r.id===editId)||{}).status||'Pendiente' : 'Pendiente',
+    link: document.getElementById('f-link').value.trim(),
+    notas: document.getElementById('f-notas').value.trim(),
+  };
+  if(editId) {
+    const idx = reqs.findIndex(r=>r.id===editId);
+    if(idx>=0) reqs[idx]=req; else reqs.push(req);
+  } else {
+    reqs.push(req);
+  }
+  saveRequests(reqs);
+  closeModal();
+  renderDesignTable();
+  renderDashboard();
+  showToast(editId?'Solicitud actualizada':'Solicitud creada','success');
+  if(req.prio==='Urgente'&&!editId) triggerUrgenteAlert(req);
+}
+
+function triggerUrgenteAlert(req) {
+  setTimeout(()=>showToast('🚨 Alerta urgente activada — Notificando a Oriana','warning'),800);
+}
+
+// ═══════════════════════════════════════════
+// DETAIL PANEL
+// ═══════════════════════════════════════════
+function openDetail(id) {
+  const req = getRequests().find(r=>r.id===id);
+  if(!req) return;
+  const ts = taskStatus(req);
+  const tsLabel = ts==='vencida'?'<span class="badge b-red">Vencida</span>':ts==='riesgo'?'<span class="badge b-yellow">En riesgo</span>':'<span class="badge b-green">En tiempo</span>';
+  const sc = STATUS_COLORS[req.status]||'b-blue';
+
+  document.getElementById('dp-title').textContent=req.tipo;
+  document.getElementById('dp-body').innerHTML=`
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      <span class="badge ${PRIO_DOT[req.prio]==='prio-urgente'?'b-red':PRIO_DOT[req.prio]==='prio-alta'?'b-yellow':PRIO_DOT[req.prio]==='prio-media'?'b-blue':'b-teal'}">${req.prio}</span>
+      <span class="badge ${sc}">${req.status}</span>
+      ${tsLabel}
+    </div>
+    <div class="detail-field"><label>Descripción</label><p>${req.desc}</p></div>
+    <div class="detail-field"><label>Área / Canal</label><p>${req.area} · ${req.canal}</p></div>
+    <div class="detail-field"><label>Formato</label><p>${req.formato}</p></div>
+    <div class="detail-field"><label>Solicitante</label><p>${req.solicitante}</p></div>
+    <div class="detail-field"><label>Fechas</label><p>Solicitud: ${formatDate(req.fechaSol)}<br>Entrega: <strong>${formatDate(req.fechaEnt)}</strong></p></div>
+    ${req.link?`<div class="detail-field"><label>Brief / OneDrive</label><p><a href="${req.link}" target="_blank" style="color:var(--accent)">${req.link.substring(0,45)}…</a></p></div>`:''}
+    ${req.notas?`<div class="detail-field"><label>Notas</label><p>${req.notas}</p></div>`:''}
+    <hr class="divider">
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" style="flex:1" onclick="editRequest('${req.id}');closeDetail()">✏️ Editar</button>
+      <button class="btn" style="flex:1" onclick="deleteRequest('${req.id}');closeDetail()" style="color:var(--red)">✕ Eliminar</button>
+    </div>
+  `;
+  document.getElementById('detail-panel').classList.add('open');
+}
+function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg, type='success') {
+  const t=document.getElementById('toast');
+  const icons={success:'✓',error:'✕',warning:'⚠'};
+  t.className=`toast ${type} show`;
+  document.getElementById('toast-icon').textContent=icons[type]||'ℹ';
+  document.getElementById('toast-msg').textContent=msg;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+
+// ═══════════════════════════════════════════
+// PHASE 2 — PARRILLA DE CONTENIDO
+// ═══════════════════════════════════════════
+const POSTS_KEY  = 'lofton_posts_v1';
+const MARCA_KEY  = 'lofton_marca_v1';
+let calYear  = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let parrillaView = 'calendario';
+let marcaFilter  = 'todos';
+
+function getPosts()  { try { return JSON.parse(localStorage.getItem(POSTS_KEY))||[]; } catch(e){return[];} }
+function savePosts(d){ localStorage.setItem(POSTS_KEY, JSON.stringify(d)); }
+function getMarca()  { try { return JSON.parse(localStorage.getItem(MARCA_KEY))||[]; } catch(e){return[];} }
+function saveMarca2(d){ localStorage.setItem(MARCA_KEY, JSON.stringify(d)); }
+
+// ── SEED DEMO DATA ──
+function seedPosts() {
+  if(getPosts().length>0) return;
+  savePosts([{"id":"p_Feb_2026_0","canal":"Orgánico","dept":"Fiscal","fecha":"2026-02-11","tipo":"Artículo","copyIn":"Dictamen Contribuciones Locales CDMX","copyOut":"Muchas empresas abordan el dictamen de contribuciones locales en CDMX cuando el calendario ya está encima.\n\nPocas dimensionan que no es solo un trámite, sino un proceso que exige conciliaciones, evidencia y coordinación entre áreas.\nEn el blog explicamos tiempos, puntos críticos y cómo evitar que se convierta en un proceso reactivo cada año.\nTe dejamos el enlace aquí 👇\nhttps://loftonsc.com/auditoria/dictamen-de-contribuciones-locales-cdmx-tiempos-y-puntos-criticos-a-considerar-2026/","link":"","status":"Publicado","tema":"Dictamen Contribuciones Locales CDMX"},{"id":"p_Feb_2026_1","canal":"Orgánico","dept":"Fiscal","fecha":"2026-02-12","tipo":"Carrusel","copyIn":"S1: Plan Maestro SAT 2026 - Focos rojos que elevan tu riesgo de auditoría\nS2: El SAT publicó criterios para programar auditorías con enfoque por riesgo.\nS3: Criterios que suelen detonar auditorías: Simulación y esquemas, Omisiones e inconsistencias, Indicadores de riesgo\nS4: La fiscalización se muev","copyOut":"El Plan Maestro SAT 2026 deja algo claro: la fiscalización ya no es aleatoria.\n\nLas auditorías se están programando con criterios de riesgo cada vez más objetivos, comparables y basados en datos.\n\n¿Tus deducciones tienen materialidad, evidencia y razón de negocio documentada?\n¿Nómina y retenciones están enteradas y conciliadas al 100%?\n\n#PlanMaestroSAT #RiesgoFiscal #AuditoríasSAT","link":"","status":"Publicado","tema":"Plan Maestro SAT 2026 (Focos rojos)"},{"id":"p_Feb_2026_2","canal":"Orgánico","dept":"Fiscal","fecha":"2026-02-13","tipo":"Carrusel","copyIn":"S1: 2026 te abre una ventana para regularizarlos\nS2: El SAT mantiene vigente el Programa de Regularización Fiscal 2026\nS3: Hasta 100% de disminución en multas, recargos y gastos de ejecución\nS4: Dirigido a personas físicas y empresas cuyos ingresos 2024 no excedieron 300M\nS5: Contribuyentes con cont","copyOut":"El SAT endurece la fiscalización en 2026, pero también mantiene una ventana para regularizar adeudos fiscales del 2024 y anteriores.\n\nEl Programa de Regularización Fiscal 2026 permite, en ciertos casos, disminuir multas, recargos y gastos de ejecución.\n\n#RegularizaciónFiscal #RiesgoFiscal #CumplimientoFiscal","link":"","status":"Publicado","tema":"Estímulo fiscal 2026"},{"id":"p_Feb_2026_3","canal":"Orgánico","dept":"Fiscal","fecha":"2026-02-16","tipo":"Carrusel","copyIn":"S1: La Declaración Anual no es una obligación aislada. Es el punto donde se conectan otros datos clave\nS2: Las cifras se reflejan en otros frentes de la empresa\nS3: Reparto de utilidades (PTU) - La base sale de la Declaración Anual\nS4: Aprobación de estados financieros - Deben ser consistentes con l","copyOut":"El 31 de marzo vence el plazo para que las empresas presenten su Declaración Anual.\n\nPero el verdadero riesgo está en no entender lo que detona después.\n\nLa Declaración Anual conecta directamente con la PTU, los dictámenes y posibles revisiones.\n\n#DeclaraciónAnual #CierreFiscal #Cumplimiento","link":"","status":"Publicado","tema":"Declaración Anual"},{"id":"p_Feb_2026_4","canal":"Orgánico","dept":"Auditoría","fecha":"2026-02-18","tipo":"Artículo","copyIn":"Texto para banner: Dictamen Fiscal 2026: ejecútalo con control, no bajo presión.\nRevisión técnica previa, validación integral y plan de envío en SIPRED.\n\nTexto para storie: Dictamen Fiscal 2026. ¿Tu empresa debe presentarlo? ¿Está preparada para lo que implica?","copyOut":"El dictamen fiscal no es solo una obligación anual. Es un ejercicio que expone la consistencia fiscal de una empresa.\n\nhttps://loftonsc.com/auditoria/dictamen-fiscal-2026-fechas-criterios-y-puntos-criticos-que-no-debes-ignorar/","link":"","status":"Publicado","tema":"Dictamen fiscal"},{"id":"p_Feb_2026_5","canal":"Orgánico","dept":"Corporativo","fecha":"2026-02-20","tipo":"Post estático","copyIn":"Título: Después de la Declaración Anual, falta un paso\nSubtítulo: El Acta de Asamblea para la aprobación de estados financieros.\nBullets: Aprobación de estados financieros, Acuerdos sobre resultados del ejercicio, Nombramientos y ratificaciones\nCierre: El cierre también se documenta. No lo dejes par","copyOut":"El cierre fiscal-contable no termina con la Declaración Anual.\n\nPara cerrar correctamente el ejercicio, es necesario celebrar una Asamblea Ordinaria Anual.\n\nCerrar bien no es solo cumplir. Es dejar evidencia clara, ordenada y defendible.\n\n#GobiernoCorporativo #Cumplimiento #CierreFiscal","link":"","status":"Publicado","tema":"Actas de asamblea"},{"id":"p_Feb_2026_6","canal":"Orgánico","dept":"General","fecha":"2026-02-19","tipo":"Carrusel","copyIn":"Erik Lozano, Socio Nóminas y Laboral: Las obligaciones laborales no son iguales para todas las empresas.\nEstefanía Rodríguez, Gerente de Contabilidad: Los impuestos son consecuencia de tus finanzas, no el origen.\nMónica Ortíz, Gerente de Contabilidad: La materialidad contable te permite enfocarte en","copyOut":"Un criterio oportuno puede marcar la diferencia entre prevenir un riesgo o enfrentar una contingencia.\n\nReunimos recomendaciones de nuestros especialistas, basadas en situaciones reales.\n\nPrevenir es estratégico.\n\n¿Cuál de estos consejos requiere hoy tu atención?","link":"","status":"Publicado","tema":"Consejos de especialistas"},{"id":"p_Feb_2026_7","canal":"Orgánico","dept":"General","fecha":"2026-02-19","tipo":"Story","copyIn":"Story 1: Firma de Servicios Empresariales - Prevenir riesgos, Certeza y control, Información clave\nStory 2: Auditoría - estados financieros, IMSS e Infonavit, Revisiones preventivas\nStory 3: Fiscal-Contable - Asesoría, Defensa, Contabilidad Financiera\nStory 4: Legal Corporativo - Gobierno Corporativ","copyOut":"","link":"","status":"Publicado","tema":"Highlight Servicios"},{"id":"p_Feb_2026_8","canal":"Orgánico","dept":"General","fecha":"2026-02-26","tipo":"Story","copyIn":"Story 1: La fiscalización en México es cada vez más profunda y técnica. Cruces de información e IA.\nStory 2: Las empresas deben adoptar un enfoque preventivo.\nStory 3: La prevención ya no es opcional.","copyOut":"","link":"","status":"Publicado","tema":"Highlight Alerta Fiscal"},{"id":"p_Feb_2026_9","canal":"Orgánico","dept":"General","fecha":"2026-02-23","tipo":"Story","copyIn":"Story 1: Más de 27 años acompañando empresas. Control, certeza, claridad.\nStory 2: Manufactura, Servicios, Comercio, Grupos empresariales.\nStory 3: Criterio para anticipar riesgos y decidir con certeza.","copyOut":"","link":"","status":"Publicado","tema":"Highlight Experiencia"},{"id":"p_Feb_2026_10","canal":"Orgánico","dept":"General","fecha":"2026-03-02","tipo":"Story","copyIn":"Story 1: La experiencia se demuestra en escenarios reales, con resultados reales.","copyOut":"","link":"","status":"Publicado","tema":"Highlight Casos de éxito"},{"id":"p_Feb_2026_11","canal":"Orgánico","dept":"General","fecha":"2026-02-24","tipo":"Story","copyIn":"Story 1: Planear con anticipación tus obligaciones reduce riesgos y fortalece el control.","copyOut":"","link":"","status":"Publicado","tema":"Highlight Agenda 2026"},{"id":"p_Feb_2026_12","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-02-24","tipo":"Post estático","copyIn":"Título: El reparto de utilidades no inicia en mayo.\nSubtítulo: Inicia después de presentar tu Declaración Anual.\nBullets: Ahí se conectan obligaciones fiscales y patronales.\nCierre: ¿Tu empresa ya lo está anticipando… o empezará a resolverlo cuando el calendario esté encima?","copyOut":"El reparto de utilidades no empieza en mayo.\n\nEmpieza cuando presentas tu declaración anual. Entrega de información, Integración de comisión, Proyecto de reparto, Planeación de dispersión, Timbrado CFDI.\n\n#PTU #RepartoDeUtilidades #Nómina","link":"","status":"Publicado","tema":"Reparto de utilidades (PTU)"},{"id":"p_Feb_2026_13","canal":"Orgánico","dept":"Auditoría","fecha":"2026-02-27","tipo":"Artículo","copyIn":"Texto para banner: Dictamen IMSS 2026: obligación para algunos, herramienta de control para otros. El 30 de abril es la fecha límite.\n\nCopy in post: El 30 de abril es la fecha límite para presentar el Aviso de Dictamen IMSS. ¿Tu empresa ya decidió qué va a hacer?\n\nTexto para storie: El 30 de abril e","copyOut":"","link":"","status":"Publicado","tema":"Dictamen IMSS"},{"id":"p_Feb_2026_14","canal":"Orgánico","dept":"Fiscal","fecha":"2026-02-26","tipo":"Artículo","copyIn":"Texto para banner: Plan Maestro SAT 2026: La agenda de fiscalización del año. Los criterios de auditoría ya son públicos. Evalúa tu riesgo antes de que lo haga la autoridad.\n\nTexto para storie: Plan Maestro SAT 2026. El SAT ya definió cómo va a fiscalizar. ¿Has evaluado tu nivel de exposición?","copyOut":"La fiscalización del SAT para 2026 ya está en marcha.\nEl Plan Maestro dejó claro qué conductas y perfiles están bajo la lupa este año.\n👉 https://loftonsc.com/fiscal/plan-maestro-sat-2026-criterios-de-auditoria-y-senales-de-riesgo-que-debes-revisar-hoy/\n#SAT #Fiscalización #CumplimientoFiscal","link":"","status":"Publicado","tema":"Plan Maestro SAT 2026 (Análisis profundo)"},{"id":"p_Mar_2026_20","canal":"LinkedIn","dept":"Auditoría","fecha":"2026-03-03","tipo":"Artículo","copyIn":"Dictamen IMSS","copyOut":"El 30 de abril es la fecha límite para presentar el Aviso de Dictamen IMSS.\n\nLas empresas obligadas ya deberían estar preparándose.\nLas que no lo están, aún pueden tomar una decisión estratégica: dictaminarse como herramienta de control y prevención.\n\nhttps://loftonsc.com/auditoria/dictamen-imss-2026-obligacion-plazos-y-criterios-para-prevenir/\n\n#DictamenIMSS #Auditoría #ObligacionesPatronales","link":"","status":"Publicado","tema":"Dictamen IMSS"},{"id":"p_Mar_2026_21","canal":"LinkedIn","dept":"Nómina / Laboral","fecha":"2026-03-06","tipo":"Post estático","copyIn":"Reducción de la jornada laboral en México. De 48 a 40 horas semanales de forma gradual.\nUn cambio en la forma de organizar el trabajo que las empresas deberán anticipar.","copyOut":"Este martes se publicó en el DOF la reforma constitucional que inicia la transición de la jornada laboral de 48 a 40 horas semanales.\n\nCalendario: 48h en 2026, 46h en 2027, 44h en 2028, 42h en 2029, 40h en 2030.\n\nLa reforma entró en vigor el 4 de marzo, y el Congreso tendrá 90 días para modificar la LFT.","link":"","status":"Publicado","tema":"Reducción de la jornada laboral en México"},{"id":"p_Mar_2026_22","canal":"LinkedIn","dept":"Auditoría","fecha":"2026-03-10","tipo":"Post estático","copyIn":"Dictamen Infonavit ¿Obligación o herramienta preventiva?\nPermite: Detectar inconsistencias antes de una revisión, Corregir diferencias oportunamente, Reducir riesgos de determinaciones posteriores.","copyOut":"El Dictamen Infonavit es una revisión realizada por contador público autorizado.\n\nDebido evaluar cualquier empresa con crecimiento acelerado, diferencias en amortizaciones, o que busque anticipar revisiones.\n\nEl aviso debe enviarse a más tardar el 30 de abril.\n\n#DictamenInfonavit #ObligacionesPatronales #Auditoría","link":"","status":"Publicado","tema":"Dictamen Infonavit"},{"id":"p_Mar_2026_23","canal":"Orgánico","dept":"Fiscal","fecha":"2026-03-12","tipo":"Carrusel","copyIn":"S1: Señales que pueden detonar una auditoría del SAT\nS2: Diferencias entre CFDI, contabilidad y declaraciones; Depósitos sin trazabilidad; Deducciones sin materialidad\nS3: Congruencia financiera y fiscal; Relación nómina-ingresos-carga fiscal; Operaciones con partes relacionadas\nS4: La pregunta no e","copyOut":"Las empresas creen que cumplir es suficiente. No siempre lo es.\n\nEl SAT ha fortalecido sus procesos de fiscalización con análisis de datos, cruces e inconsistencias detectadas electrónicamente.\n\n¿Tu información está alineada y documentada?\n\n#RiesgoFiscal #CumplimientoFiscal #Empresas","link":"","status":"Publicado","tema":"Auditorías SAT"},{"id":"p_Mar_2026_24","canal":"Orgánico","dept":"General","fecha":"2026-03-12","tipo":"Carrusel","copyIn":"Fotos de la conferencia que impartirá Enrique, se publicarán desde su perfil y se reposteará desde el perfil de Lofton.","copyOut":"Para Enrique: Ayer tuve la oportunidad de regresar a la EBC para impartir una charla con estudiantes sobre los errores más comunes al iniciar una carrera profesional.\n\nPara IG Lofton: Nuestro Director General, Enrique Garduño, compartió con estudiantes de la EBC una charla sobre el primer empleo formal.","link":"","status":"Publicado","tema":"Conferencia EBC - Enrique Garduño"},{"id":"p_Mar_2026_25","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-03-13","tipo":"Artículo","copyIn":"Copy para banner: No es solo contabilidad, es control fiscal. CUCA y CUFIN desactualizadas pueden elevar el ISR en dividendos y complicar reducciones de capital.\n\nCopy para storie: CUCA y CUFIN. Sin actualización y soporte, se vuelven riesgo fiscal.","copyOut":"","link":"","status":"Publicado","tema":"CUCA y CUFIN"},{"id":"p_Mar_2026_26","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-03-17","tipo":"Carrusel","copyIn":"S1: REPSE 2026. 3 acciones que pueden detonar una inspección de la STPS.\nS2: No realizar la renovación del REPSE. La renovación es cada 3 años.\nS3: Denuncias en SIQAL. 861 quejas en materia de subcontratación y REPSE.\nS4: Licitaciones con el Gobierno. Se revisará a prestadores REPSE que liciten.\nS5:","copyOut":"La STPS no baja la guardia con las inspecciones REPSE.\n\n¿Tu REPSE está vigente?\n¿Puedes armar un expediente de soporte en 24-48 horas?\n¿Tu documentación demuestra cumplimiento de forma inmediata?\n\nEn Lofton te apoyamos con un diagnóstico preventivo REPSE.","link":"","status":"Publicado","tema":"REPSE / Inspecciones STPS"},{"id":"p_Mar_2026_27","canal":"Orgánico","dept":"Corporativo","fecha":"","tipo":"Post estático","copyIn":"Gobierno corporativo","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Gobierno corporativo"},{"id":"p_Mar_2026_28","canal":"Orgánico","dept":"Fiscal","fecha":"","tipo":"Post estático","copyIn":"Cartas invitación SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cartas invitación SAT"},{"id":"p_Mar_2026_29","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"","tipo":"Artículo","copyIn":"PTU","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"PTU"},{"id":"p_Mar_2026_30","canal":"Orgánico","dept":"Fiscal","fecha":"","tipo":"Reel","copyIn":"Fiscalización inteligente y focalizada: Cruces de información SAT con otras instituciones, IA, Revisiones técnicas. La prevención ya no es opcional.","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Fiscalización / Prevención"},{"id":"p_Mar_2026_31","canal":"Orgánico","dept":"Corporativo","fecha":"","tipo":"Reel","copyIn":"Gobierno corporativo","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Gobierno corporativo"},{"id":"p_Mar_2026_32","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"","tipo":"Artículo","copyIn":"Inspecciones laborales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspecciones laborales"},{"id":"p_Mar_2026_33","canal":"Orgánico","dept":"Auditoría","fecha":"","tipo":"Post estático","copyIn":"Cumplimiento","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cumplimiento"},{"id":"p_Mar_2026_34","canal":"Orgánico","dept":"Fiscal","fecha":"","tipo":"Post estático","copyIn":"Dictamen Edomex","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dictamen Edomex"},{"id":"p_Mar_2026_35","canal":"Orgánico","dept":"Fiscal","fecha":"","tipo":"Artículo","copyIn":"Dictamen Edomex","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dictamen Edomex"},{"id":"p_Mar_2026_36","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"","tipo":"Artículo","copyIn":"Nómina","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Nómina"},{"id":"p_Mar_2026_37","canal":"Orgánico","dept":"Fiscal","fecha":"","tipo":"Post estático","copyIn":"Fiscalización","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Fiscalización"},{"id":"p_Mar_2026_38","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"","tipo":"Artículo","copyIn":"Nómina / Fiscalización","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Nómina / Fiscalización"},{"id":"p_Mar_2026_39","canal":"Orgánico","dept":"General","fecha":"","tipo":"Video","copyIn":"Marca personal Enrique","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Marca personal Enrique"},{"id":"p_Mar_2026_40","canal":"Orgánico","dept":"General","fecha":"","tipo":"Video","copyIn":"Marca personal Enrique","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Marca personal Enrique"},{"id":"p_Abr_2026_41","canal":"Orgánico","dept":"Auditoría","fecha":"2026-04-01","tipo":"Post estático","copyIn":"Obligaciones clave que siguen para las empresas\nDespués de la declaración anual.\n\n• Aviso de dictamen IMSS e INFONAVIT (30 de abril)\n• Asamblea anual de accionistas\n• Dictamen fiscal (15 de mayo)\n• Declaración informativa local (Local File) (15 de mayo)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Obligaciones clave que siguen para las empresas después de la DA"},{"id":"p_Abr_2026_42","canal":"Orgánico","dept":"Auditoría","fecha":"2026-04-03","tipo":"Blog","copyIn":"Después de la declaración anual ¿Qué sigue para las empresas?","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Después de la declaración anual ¿Qué sigue para las empresas?"},{"id":"p_Abr_2026_43","canal":"Orgánico","dept":"Auditoría","fecha":"2026-04-06","tipo":"Blog","copyIn":"Dictamen ISERPT EdoMex","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dictamen ISERPT EdoMex"},{"id":"p_Abr_2026_44","canal":"Orgánico","dept":"Auditoría","fecha":"2026-04-08","tipo":"Blog","copyIn":"¿El SAT solo te puede cobrar los últimos 5 años? Lo que debes saber sobre caducidad fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"¿El SAT solo te puede cobrar los últimos 5 años? Lo que debes saber sobre caducidad fiscal"},{"id":"p_Abr_2026_45","canal":"Orgánico","dept":"Auditoría","fecha":"2026-04-13","tipo":"Carrusel","copyIn":"Actividad Fundación CB","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Actividad Fundación CB"},{"id":"p_Abr_2026_46","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-04-13","tipo":"Blog","copyIn":"¿Qué hacer si recibes una carta invitación del SAT?","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"¿Qué hacer si recibes una carta invitación del SAT?"},{"id":"p_Abr_2026_47","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-04-16","tipo":"Blog","copyIn":"Inspecciones STPS 2026: qué revisan, cómo se preparan las empresas que las pasan sin problema","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspecciones STPS 2026: qué revisan, cómo se preparan las empresas que las pasan sin problema"},{"id":"p_Abr_2026_48","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-04-20","tipo":"Carrusel","copyIn":"Acompañamiento en auditorías SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Acompañamiento en auditorías SAT"},{"id":"p_Abr_2026_49","canal":"Orgánico","dept":"Corporativo","fecha":"2026-04-21","tipo":"Post estático","copyIn":"REPSE 2026: tenerlo no es suficiente si no puedes demostrar el cumplimiento","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"REPSE 2026: tenerlo no es suficiente si no puedes demostrar el cumplimiento"},{"id":"p_Abr_2026_50","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-04-23","tipo":"Carrusel","copyIn":"Materialidad 2026: el concepto que puede ser tu mejor defensa o tu peor descuido ante el SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Materialidad 2026: el concepto que puede ser tu mejor defensa o tu peor descuido ante el SAT"},{"id":"p_Abr_2026_51","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-04-27","tipo":"Post estático","copyIn":"¿Qué es el coeficiente de utilidad y cómo afecta los impuestos de tu empresa?","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"¿Qué es el coeficiente de utilidad y cómo afecta los impuestos de tu empresa?"},{"id":"p_Abr_2026_52","canal":"Orgánico","dept":"Corporativo","fecha":"2026-04-28","tipo":"Blog","copyIn":"Gestión de Nómina","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Gestión de Nómina"},{"id":"p_May_2026_53","canal":"Orgánico","dept":"Auditoría","fecha":"2026-05-01","tipo":"Carrusel","copyIn":"Dict. Fiscal cierre (15 may)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. Fiscal cierre (15 may)"},{"id":"p_May_2026_54","canal":"Orgánico","dept":"Auditoría","fecha":"2026-05-04","tipo":"Post estático","copyIn":"Dict. CDMX cierre (31 may)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. CDMX cierre (31 may)"},{"id":"p_May_2026_55","canal":"Orgánico","dept":"Auditoría","fecha":"2026-05-06","tipo":"Post estático","copyIn":"Dict. IMSS — Prep","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. IMSS — Prep"},{"id":"p_May_2026_56","canal":"Orgánico","dept":"Auditoría","fecha":"2026-05-08","tipo":"Carrusel","copyIn":"DIOPR remate (15 may)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"DIOPR remate (15 may)"},{"id":"p_May_2026_57","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-05-11","tipo":"Post estático","copyIn":"Prevención créditos fiscales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Prevención créditos fiscales"},{"id":"p_May_2026_58","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-05-13","tipo":"Artículo","copyIn":"CUCA & CUFIN (dividendos)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"CUCA & CUFIN (dividendos)"},{"id":"p_May_2026_59","canal":"Orgánico","dept":"Corporativo","fecha":"2026-05-18","tipo":"Carrusel","copyIn":"Gobernanza corporativa","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Gobernanza corporativa"},{"id":"p_May_2026_60","canal":"Orgánico","dept":"Corporativo","fecha":"2026-05-19","tipo":"Post estático","copyIn":"Constitución empresas","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Constitución empresas"},{"id":"p_May_2026_61","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-05-21","tipo":"Carrusel","copyIn":"Prevención laboral","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Prevención laboral"},{"id":"p_May_2026_62","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-05-25","tipo":"Post estático","copyIn":"PTU pago (mayo)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"PTU pago (mayo)"},{"id":"p_May_2026_63","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-05-26","tipo":"Post estático","copyIn":"ICSOE-SISUB (17 may)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"ICSOE-SISUB (17 may)"},{"id":"p_May_2026_64","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-05-29","tipo":"Post estático","copyIn":"Litigio laboral — Prev","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Litigio laboral — Prev"},{"id":"p_Jun_2026_65","canal":"Orgánico","dept":"Auditoría","fecha":"2026-06-01","tipo":"Carrusel","copyIn":"Detección riesgo fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Detección riesgo fiscal"},{"id":"p_Jun_2026_66","canal":"Orgánico","dept":"Auditoría","fecha":"2026-06-03","tipo":"Post estático","copyIn":"Aviso EdoMex (31 jul) — Prep","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Aviso EdoMex (31 jul) — Prep"},{"id":"p_Jun_2026_67","canal":"Orgánico","dept":"Auditoría","fecha":"2026-06-05","tipo":"Post estático","copyIn":"Dict. IMSS — Prep","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. IMSS — Prep"},{"id":"p_Jun_2026_68","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-06-08","tipo":"Carrusel","copyIn":"Cartas invitación SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cartas invitación SAT"},{"id":"p_Jun_2026_69","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-06-10","tipo":"Artículo","copyIn":"Coeficiente utilidad","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Coeficiente utilidad"},{"id":"p_Jun_2026_70","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-06-12","tipo":"Post estático","copyIn":"CUCA & CUFIN","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"CUCA & CUFIN"},{"id":"p_Jun_2026_71","canal":"Orgánico","dept":"Corporativo","fecha":"2026-06-15","tipo":"Carrusel","copyIn":"Materialidad 2026","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Materialidad 2026"},{"id":"p_Jun_2026_72","canal":"Orgánico","dept":"Corporativo","fecha":"2026-06-17","tipo":"Post estático","copyIn":"Contratos mercantiles","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos mercantiles"},{"id":"p_Jun_2026_73","canal":"Orgánico","dept":"Corporativo","fecha":"2026-06-19","tipo":"Post estático","copyIn":"Benef. controlador","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Benef. controlador"},{"id":"p_Jun_2026_74","canal":"Orgánico","dept":"Corporativo","fecha":"2026-06-22","tipo":"Post estático","copyIn":"Reestructuración","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Reestructuración"},{"id":"p_Jun_2026_75","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-06-24","tipo":"Post estático","copyIn":"Cumplimiento individual","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cumplimiento individual"},{"id":"p_Jun_2026_76","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-06-26","tipo":"Post estático","copyIn":"Demandas laborales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Demandas laborales"},{"id":"p_Jun_2026_77","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-06-29","tipo":"Post estático","copyIn":"Inspección PTU","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspección PTU"},{"id":"p_Jul_2026_78","canal":"Orgánico","dept":"Auditoría","fecha":"2026-07-01","tipo":"Carrusel","copyIn":"Detección riesgo fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Detección riesgo fiscal"},{"id":"p_Jul_2026_79","canal":"Orgánico","dept":"Auditoría","fecha":"2026-07-03","tipo":"Post estático","copyIn":"Aviso EdoMex","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Aviso EdoMex"},{"id":"p_Jul_2026_80","canal":"Orgánico","dept":"Auditoría","fecha":"2026-07-06","tipo":"Post estático","copyIn":"Dict. IMSS — Prep","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. IMSS — Prep"},{"id":"p_Jul_2026_81","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-07-07","tipo":"Post estático","copyIn":"Cartas invitación SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cartas invitación SAT"},{"id":"p_Jul_2026_82","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-07-09","tipo":"Post estático","copyIn":"Coeficiente utilidad","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Coeficiente utilidad"},{"id":"p_Jul_2026_83","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-07-13","tipo":"Artículo","copyIn":"Contabilidad integral","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contabilidad integral"},{"id":"p_Jul_2026_84","canal":"Orgánico","dept":"Corporativo","fecha":"2026-07-14","tipo":"Carrusel","copyIn":"Blindaje legal asamblea","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Blindaje legal asamblea"},{"id":"p_Jul_2026_85","canal":"Orgánico","dept":"Corporativo","fecha":"2026-07-16","tipo":"Post estático","copyIn":"Contratos mercantiles","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos mercantiles"},{"id":"p_Jul_2026_86","canal":"Orgánico","dept":"Corporativo","fecha":"2026-07-20","tipo":"Post estático","copyIn":"Benef. controlador","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Benef. controlador"},{"id":"p_Jul_2026_87","canal":"Orgánico","dept":"Corporativo","fecha":"2026-07-20","tipo":"Post estático","copyIn":"IP / Intangibles","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"IP / Intangibles"},{"id":"p_Jul_2026_88","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-07-23","tipo":"Carrusel","copyIn":"Cumplimiento colectivo","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cumplimiento colectivo"},{"id":"p_Jul_2026_89","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-07-27","tipo":"Post estático","copyIn":"Nómina eficiente — Pico 2","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Nómina eficiente — Pico 2"},{"id":"p_Jul_2026_90","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-07-27","tipo":"Post estático","copyIn":"Defensa laboral","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Defensa laboral"},{"id":"p_Jul_2026_91","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-07-29","tipo":"Post estático","copyIn":"Inspección PTU — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspección PTU — Cierre"},{"id":"p_Ago_2026_92","canal":"Orgánico","dept":"Auditoría","fecha":"2026-08-03","tipo":"Carrusel","copyIn":"Detección riesgo fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Detección riesgo fiscal"},{"id":"p_Ago_2026_93","canal":"Orgánico","dept":"Auditoría","fecha":"2026-08-04","tipo":"Carrusel","copyIn":"Dict. EdoMex (30 ago)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. EdoMex (30 ago)"},{"id":"p_Ago_2026_94","canal":"Orgánico","dept":"Auditoría","fecha":"2026-08-07","tipo":"Post estático","copyIn":"Dict. IMSS — Prep","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. IMSS — Prep"},{"id":"p_Ago_2026_95","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-08-10","tipo":"Carrusel","copyIn":"Vigilancia profunda SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Vigilancia profunda SAT"},{"id":"p_Ago_2026_96","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-08-13","tipo":"Post estático","copyIn":"Contabilidad integral","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contabilidad integral"},{"id":"p_Ago_2026_97","canal":"Orgánico","dept":"Corporativo","fecha":"2026-08-17","tipo":"Carrusel","copyIn":"Fecha cierta: activos jurídicos","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Fecha cierta: activos jurídicos"},{"id":"p_Ago_2026_98","canal":"Orgánico","dept":"Corporativo","fecha":"2026-08-19","tipo":"Post estático","copyIn":"Contratos mercantiles","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos mercantiles"},{"id":"p_Ago_2026_99","canal":"Orgánico","dept":"Corporativo","fecha":"2026-08-24","tipo":"Artículo","copyIn":"Blindaje patrimonial","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Blindaje patrimonial"},{"id":"p_Ago_2026_100","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-08-25","tipo":"Carrusel","copyIn":"Inspecciones STPS — Pico 2","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspecciones STPS — Pico 2"},{"id":"p_Ago_2026_101","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-08-28","tipo":"Post estático","copyIn":"Cumplimiento IMSS-INFONAVIT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cumplimiento IMSS-INFONAVIT"},{"id":"p_Sep_2026_102","canal":"Orgánico","dept":"Auditoría","fecha":"2026-09-01","tipo":"Post estático","copyIn":"Empuje dictamen sig. año","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje dictamen sig. año"},{"id":"p_Sep_2026_103","canal":"Orgánico","dept":"Auditoría","fecha":"2026-09-03","tipo":"Carrusel","copyIn":"Dict. IMSS — Cierre (30 sep)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Dict. IMSS — Cierre (30 sep)"},{"id":"p_Sep_2026_104","canal":"Orgánico","dept":"Auditoría","fecha":"2026-09-07","tipo":"Post estático","copyIn":"Límite Dict. INFONAVIT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Límite Dict. INFONAVIT"},{"id":"p_Sep_2026_105","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-09-07","tipo":"Post estático","copyIn":"Vigilancia profunda SAT","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Vigilancia profunda SAT"},{"id":"p_Sep_2026_106","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-09-09","tipo":"Carrusel","copyIn":"Defensa fiscal — 2do pico","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Defensa fiscal — 2do pico"},{"id":"p_Sep_2026_107","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-09-11","tipo":"Post estático","copyIn":"CUCA & CUFIN — Planeación","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"CUCA & CUFIN — Planeación"},{"id":"p_Sep_2026_108","canal":"Orgánico","dept":"Corporativo","fecha":"2026-09-14","tipo":"Carrusel","copyIn":"Compliance corporativo","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Compliance corporativo"},{"id":"p_Sep_2026_109","canal":"Orgánico","dept":"Corporativo","fecha":"2026-09-16","tipo":"Post estático","copyIn":"Contratos mercantiles","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos mercantiles"},{"id":"p_Sep_2026_110","canal":"Orgánico","dept":"Corporativo","fecha":"2026-09-18","tipo":"Post estático","copyIn":"Benef. controlador — 2do pico","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Benef. controlador — 2do pico"},{"id":"p_Sep_2026_111","canal":"Orgánico","dept":"Corporativo","fecha":"2026-09-21","tipo":"Post estático","copyIn":"Blindaje patrimonial — 2do","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Blindaje patrimonial — 2do"},{"id":"p_Sep_2026_112","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-09-22","tipo":"Carrusel","copyIn":"Inspecciones STPS — Pico 2","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspecciones STPS — Pico 2"},{"id":"p_Sep_2026_113","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-09-24","tipo":"Post estático","copyIn":"Cierre sin contingencias","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cierre sin contingencias"},{"id":"p_Sep_2026_114","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-09-28","tipo":"Post estático","copyIn":"ICSOE-SISUB (17 sep)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"ICSOE-SISUB (17 sep)"},{"id":"p_Sep_2026_115","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-09-28","tipo":"Post estático","copyIn":"Litigio — 2do pico","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Litigio — 2do pico"},{"id":"p_Oct_2026_116","canal":"Orgánico","dept":"Auditoría","fecha":"2026-10-01","tipo":"Carrusel","copyIn":"Empuje dictamen sig. año","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje dictamen sig. año"},{"id":"p_Oct_2026_117","canal":"Orgánico","dept":"Auditoría","fecha":"2026-10-05","tipo":"Post estático","copyIn":"Empuje contrib. locales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje contrib. locales"},{"id":"p_Oct_2026_118","canal":"Orgánico","dept":"Auditoría","fecha":"2026-10-05","tipo":"Post estático","copyIn":"Empuje IMSS sig. año","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje IMSS sig. año"},{"id":"p_Oct_2026_119","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-10-08","tipo":"Carrusel","copyIn":"Regularización SAT (límite oct)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Regularización SAT (límite oct)"},{"id":"p_Oct_2026_120","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-10-12","tipo":"Artículo","copyIn":"Cierre fiscal + Planeación","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cierre fiscal + Planeación"},{"id":"p_Oct_2026_121","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-10-12","tipo":"Post estático","copyIn":"Inventarios / Contabilidad","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inventarios / Contabilidad"},{"id":"p_Oct_2026_122","canal":"Orgánico","dept":"Corporativo","fecha":"2026-10-15","tipo":"Carrusel","copyIn":"Resp. penal administradores","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Resp. penal administradores"},{"id":"p_Oct_2026_123","canal":"Orgánico","dept":"Corporativo","fecha":"2026-10-19","tipo":"Post estático","copyIn":"Grupos empresariales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Grupos empresariales"},{"id":"p_Oct_2026_124","canal":"Orgánico","dept":"Corporativo","fecha":"2026-10-20","tipo":"Post estático","copyIn":"Benef. controlador","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Benef. controlador"},{"id":"p_Oct_2026_125","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-10-22","tipo":"Carrusel","copyIn":"Inspecciones STPS — Cierre 2","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inspecciones STPS — Cierre 2"},{"id":"p_Oct_2026_126","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-10-26","tipo":"Post estático","copyIn":"Blindaje laboral — 2do","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Blindaje laboral — 2do"},{"id":"p_Oct_2026_127","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-10-27","tipo":"Post estático","copyIn":"Reactivación nómina — 3er","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Reactivación nómina — 3er"},{"id":"p_Oct_2026_128","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-10-29","tipo":"Post estático","copyIn":"Litigio laboral","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Litigio laboral"},{"id":"p_Nov_2026_129","canal":"Orgánico","dept":"Auditoría","fecha":"2026-11-02","tipo":"Carrusel","copyIn":"Empuje dictamen sig. año","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje dictamen sig. año"},{"id":"p_Nov_2026_130","canal":"Orgánico","dept":"Auditoría","fecha":"2026-11-03","tipo":"Post estático","copyIn":"Empuje contrib. locales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje contrib. locales"},{"id":"p_Nov_2026_131","canal":"Orgánico","dept":"Auditoría","fecha":"2026-11-05","tipo":"Post estático","copyIn":"Empuje IMSS sig. año","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje IMSS sig. año"},{"id":"p_Nov_2026_132","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-11-09","tipo":"Carrusel","copyIn":"Cierre fiscal + consultas","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cierre fiscal + consultas"},{"id":"p_Nov_2026_133","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-11-10","tipo":"Post estático","copyIn":"Defensa fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Defensa fiscal"},{"id":"p_Nov_2026_134","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-11-12","tipo":"Artículo","copyIn":"CFDI retenc. extranjero","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"CFDI retenc. extranjero"},{"id":"p_Nov_2026_135","canal":"Orgánico","dept":"Corporativo","fecha":"2026-11-16","tipo":"Carrusel","copyIn":"Due Diligence + gobernanza","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Due Diligence + gobernanza"},{"id":"p_Nov_2026_136","canal":"Orgánico","dept":"Corporativo","fecha":"2026-11-17","tipo":"Post estático","copyIn":"Contratos — 2do pico","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos — 2do pico"},{"id":"p_Nov_2026_137","canal":"Orgánico","dept":"Corporativo","fecha":"2026-11-19","tipo":"Post estático","copyIn":"Benef. controlador — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Benef. controlador — Cierre"},{"id":"p_Nov_2026_138","canal":"Orgánico","dept":"Corporativo","fecha":"2026-11-23","tipo":"Post estático","copyIn":"Fam. empresariales","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Fam. empresariales"},{"id":"p_Nov_2026_139","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-11-24","tipo":"Carrusel","copyIn":"Rescisión sin afectaciones","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Rescisión sin afectaciones"},{"id":"p_Nov_2026_140","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-11-26","tipo":"Post estático","copyIn":"Litigio laboral — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Litigio laboral — Cierre"},{"id":"p_Nov_2026_141","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-11-30","tipo":"Post estático","copyIn":"Aguinaldo — Prep cálculo","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Aguinaldo — Prep cálculo"},{"id":"p_Dic_2026_142","canal":"Orgánico","dept":"Auditoría","fecha":"2026-12-01","tipo":"Carrusel","copyIn":"Empuje dictamen sig. año — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Empuje dictamen sig. año — Cierre"},{"id":"p_Dic_2026_143","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-12-07","tipo":"Carrusel","copyIn":"Cierre fiscal — Remate","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Cierre fiscal — Remate"},{"id":"p_Dic_2026_144","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-12-09","tipo":"Post estático","copyIn":"Inventarios","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Inventarios"},{"id":"p_Dic_2026_145","canal":"Orgánico","dept":"Contabilidad","fecha":"2026-12-14","tipo":"Post estático","copyIn":"Defensa fiscal","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Defensa fiscal"},{"id":"p_Dic_2026_146","canal":"Orgánico","dept":"Corporativo","fecha":"2026-12-18","tipo":"Post estático","copyIn":"Contratos — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Contratos — Cierre"},{"id":"p_Dic_2026_147","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-12-23","tipo":"Carrusel","copyIn":"Blindaje laboral — Cierre","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Blindaje laboral — Cierre"},{"id":"p_Dic_2026_148","canal":"Orgánico","dept":"Nómina / Laboral","fecha":"2026-12-28","tipo":"Post estático","copyIn":"Pago aguinaldo (20 dic)","copyOut":"","link":"","status":"Pendiente de conceptualización","tema":"Pago aguinaldo (20 dic)"}]);
+}
+
+function seedMarca() {
+  if(getMarca().length>0) return;
+  saveMarca2([{"id":"m1","gerente":"Enrique Garduño","cargo":"Director General — LOFTON Servicios Integrales","tipo":"Post con imagen / carrusel","area":"Liderazgo","titulo":"Los errores que cometen los jóvenes al buscar su primer empleo formal","contenido":"<p>Hace unos días tuve la oportunidad de regresar a la EBC para hablar con estudiantes sobre algo que rara vez se discute en el aula: lo que pasa en los primeros meses del primer empleo formal.</p><p>Tres cosas que casi nadie te dice:</p><p><strong>1. La actitud importa más que el promedio.</strong><br>He visto personas con notas mediocres superar a brillantes estudiantes porque entienden que el trabajo en equipo no es opcional.</p><p><strong>2. Preguntar no es señal de ignorancia.</strong><br>Es señal de que quieres hacerlo bien. El que no pregunta, comete errores que cuestan tiempo y dinero.</p><p><strong>3. El primer empleo define hábitos, no solo el CV.</strong><br>Lo que aprendes — o dejas de aprender — en los primeros 6 meses te va a acompañar muchos años.</p><p>Gracias a los alumnos de la EBC por la energía y las preguntas.</p>","hashtags":"#LiderazgoJoven #PrimerEmpleo #EBC #TalentoMéxico #Lofton","link":"","status":"Publicado"},{"id":"m2","gerente":"Erik Lozano","cargo":"Socio — Nóminas y Laboral","tipo":"Post texto","area":"Laboral","titulo":"Las obligaciones laborales no son iguales para todas las empresas","contenido":"<p>Un error que veo repetirse con frecuencia: empresas que aplican el mismo esquema de cumplimiento laboral sin importar su giro, tamaño o forma de contratar.</p><p>La realidad es que las obligaciones varían. Y confundirlas puede costarte una inspección, una multa o una demanda.</p><p>Algunas diferencias clave:</p><p><strong>REPSE vs esquemas sin subcontratación</strong> — no todos los servicios especializados requieren REPSE, pero los que sí lo requieren deben tenerlo vigente y con evidencia de cumplimiento.</p><p><strong>NOM-035 aplicada por tamaño</strong> — las obligaciones no son las mismas para una empresa de 15 personas que para una de 200.</p><p><strong>PTU con o sin trabajadores sindicalizados</strong> — el cálculo cambia, los plazos también.</p><p>Antes de que llegue la inspección, vale una revisión. Prevenir siempre es más económico que defender.</p>","hashtags":"#ComplianceLab oral #REPSE #STPS #BlindajeLab oral #Nómina","link":"","status":"Publicado"},{"id":"m3","gerente":"Karla Hernández","cargo":"Gerente Fiscal","tipo":"Post texto","area":"Fiscal","titulo":"No subestimes los comunicados y cartas invitación del SAT","contenido":"<p>Una carta invitación del SAT no es una auditoría. Pero tratarla como si fuera irrelevante es uno de los errores más caros que puede cometer una empresa.</p><p>¿Por qué importa?</p><p>Porque es la señal de que el SAT ya identificó algo en tu información. Un cruce de CFDI, una diferencia entre declaraciones, una deducción que no tiene documentación suficiente.</p><p>Y la respuesta que des — o la falta de respuesta — define si el proceso escala o se cierra.</p><p>Lo que hay que hacer de inmediato:</p><p>✅ Identificar el concepto específico que menciona la carta<br>✅ Reunir documentación de soporte antes de responder<br>✅ Evaluar si existe una contingencia real<br>✅ Definir estrategia con un especialista fiscal antes de los plazos</p><p>2026 es un año de fiscalización técnica y basada en datos. La carta invitación es el primer paso de ese proceso.</p>","hashtags":"#SAT #CartaInvitación #DefensaFiscal #RiesgoFiscal #CumplimientoFiscal","link":"","status":"En revisión"},{"id":"m4","gerente":"Ismael Aguilar","cargo":"Gerente de Auditoría","tipo":"Post texto","area":"Auditoría","titulo":"Ojo con los recargos en 2026: suben a 2.07% mensual","contenido":"<p>Un dato que muchas empresas aún no tienen en el radar: la tasa de recargos por mora para 2026 es de 2.07% mensual.</p><p>Eso significa que un adeudo fiscal que no se atiende a tiempo acumula intereses más rápido que en años anteriores.</p><p>¿Por qué esto importa ahora?</p><p>Porque estamos en temporada de cierre de declaraciones, dictámenes y correcciones. Las empresas que detectaron diferencias fiscales en 2025 tienen una ventana para regularizarlas antes de que los recargos y multas hagan la deuda inmanejable.</p><p>El Programa de Regularización Fiscal 2026 aún está vigente para ejercicios anteriores. Vale revisarlo antes de que cierre.</p><p>Un diagnóstico preventivo hoy puede ahorrarte una contingencia difícil de controlar mañana.</p>","hashtags":"#Recargos2026 #SAT #AuditoríaPreventiva #CumplimientoFiscal #Lofton","link":"","status":"Borrador"},{"id":"m5","gerente":"Mónica Ortíz","cargo":"Gerente de Contabilidad","tipo":"Artículo (blog)","area":"Contabilidad","titulo":"La materialidad contable: por qué te permite enfocarte en lo que realmente importa","contenido":"<h2>¿Qué es la materialidad contable?</h2><p>En términos simples, es el umbral que determina si una cifra o un error en los estados financieros puede cambiar la decisión de un usuario de esa información.</p><p>No todo error contable es igual. No toda diferencia es significativa. La materialidad ayuda a distinguir entre lo que requiere atención inmediata y lo que puede manejarse como ajuste ordinario.</p><h2>Por qué importa en 2026</h2><p>El SAT ha incorporado el concepto de materialidad fiscal para evaluar si las deducciones y operaciones de una empresa tienen sustancia económica real. Un gasto que no puede demostrarse como material — con contratos, entregas, flujos y evidencia — puede ser rechazado en una auditoría.</p><h2>Dos aplicaciones prácticas</h2><p><strong>En contabilidad financiera:</strong> Permite priorizar la revisión de saldos y transacciones de mayor impacto, optimizando el tiempo del equipo contable sin sacrificar la calidad del cierre.</p><p><strong>En cumplimiento fiscal:</strong> Ayuda a construir un expediente de soporte robusto para las operaciones que representan mayor riesgo de revisión.</p><h2>Conclusión</h2><p>La materialidad no es un tecnicismo. Es una herramienta de gestión. Las empresas que la aplican correctamente toman mejores decisiones y enfrentan auditorías con mayor solidez.</p>","hashtags":"#MaterialidadContable #Contabilidad #CumplimientoFiscal #AuditoríaPreventiva","link":"","status":"Aprobado"}]);
+}
+
+// ── PARRILLA VIEWS ──
+function setParrillaView(v, btn) {
+  parrillaView = v;
+  document.querySelectorAll('#page-parrilla .tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('parrilla-calendar-view').style.display = v==='calendario' ? '' : 'none';
+  document.getElementById('parrilla-grid-view').style.display    = v==='grid'       ? '' : 'none';
+  renderParrilla();
+}
+
+function changeMonth(dir) {
+  calMonth += dir;
+  if(calMonth>11){ calMonth=0; calYear++; }
+  if(calMonth<0) { calMonth=11; calYear--; }
+  renderParrilla();
+}
+
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function getFilteredPosts() {
+  const area   = document.getElementById('pf-area')?.value   || '';
+  const status = document.getElementById('pf-status')?.value || '';
+  return getPosts().filter(p => {
+    const pDate = new Date(p.fecha+'T12:00:00');
+    const sameMonth = pDate.getFullYear()===calYear && pDate.getMonth()===calMonth;
+    return sameMonth
+      && (!area   || p.canal===area)
+      && (!status || p.status===status);
+  });
+}
+
+function canalChipClass(canal) {
+  const map = {'Orgánico':'chip-organico','Meta Ads':'chip-meta','Google Ads':'chip-google','LinkedIn':'chip-linkedin','Email':'chip-email'};
+  return map[canal]||'chip-organico';
+}
+function statusClass(s) {
+  const map = {'Pendiente de conceptualización':'s-pendiente','Lista para diseño':'s-lista','En diseño':'s-diseno','Falta info cliente':'s-falta-info','En revisión':'s-revision','Programado':'s-programado','Publicado':'s-publicado','Aprobado':'s-programado','Borrador':'s-pendiente'};
+  return map[s]||'s-pendiente';
+}
+
+function renderParrilla() {
+  const label = document.getElementById('cal-month-label');
+  if(label) label.textContent = `${MESES[calMonth]} ${calYear}`;
+  if(parrillaView==='calendario') renderCalendarView();
+  else renderGridView();
+}
+
+function renderCalendarView() {
+  const grid = document.getElementById('cal-grid-cells');
+  if(!grid) return;
+  const posts = getFilteredPosts();
+  const postsByDay = {};
+  posts.forEach(p => {
+    const day = parseInt(p.fecha.split('-')[2]);
+    if(!postsByDay[day]) postsByDay[day]=[];
+    postsByDay[day].push(p);
+  });
+
+  const firstDay = new Date(calYear, calMonth, 1);
+  let startDow = firstDay.getDay(); // 0=Sun
+  startDow = startDow===0?6:startDow-1; // Mon-based
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  let html = '';
+  let totalCells = Math.ceil((startDow+daysInMonth)/7)*7;
+
+  for(let i=0; i<totalCells; i++) {
+    let dayNum, isCurrentMonth=true;
+    if(i<startDow) { dayNum=daysInPrev-startDow+i+1; isCurrentMonth=false; }
+    else if(i>=startDow+daysInMonth) { dayNum=i-startDow-daysInMonth+1; isCurrentMonth=false; }
+    else { dayNum=i-startDow+1; }
+
+    const dateStr = isCurrentMonth
+      ? `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(dayNum).padStart(2,'0')}`
+      : '';
+    const isToday = dateStr===todayStr;
+    const dayPosts = (isCurrentMonth && postsByDay[dayNum]) || [];
+
+    html += `<div class="cal-cell-day${isCurrentMonth?'':'  other-month'}${isToday?' today':''}" onclick="handleDayClick('${dateStr}',${dayNum},${isCurrentMonth})">
+      <div class="day-num">${dayNum}</div>
+      ${dayPosts.slice(0,3).map(p=>`
+        <span class="cal-post-chip ${canalChipClass(p.canal)}" onclick="event.stopPropagation();openPostDetail('${p.id}')" title="${p.copyIn}">${p.tipo.split(' ')[0]} · ${p.dept}</span>
+      `).join('')}
+      ${dayPosts.length>3?`<span style="font-size:9px;color:var(--text-3);padding-left:2px">+${dayPosts.length-3} más</span>`:''}
+      ${isCurrentMonth?`<div class="cal-add-btn" onclick="event.stopPropagation();quickAddPost('${dateStr}')">+</div>`:''}
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function renderGridView() {
+  const posts = getFilteredPosts();
+  const grid  = document.getElementById('post-grid');
+  const empty = document.getElementById('post-grid-empty');
+  if(!grid) return;
+  if(posts.length===0){ grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  posts.sort((a,b)=>a.fecha>b.fecha?1:-1);
+  grid.innerHTML = posts.map(p => {
+    const sc = statusClass(p.status);
+    const cc = canalChipClass(p.canal);
+    const imgBlock = p.link
+      ? `<div class="post-card-img"><img src="${p.link}" onerror="this.parentElement.innerHTML='<span class=\\'no-img\\'>🖼️</span>'" alt="Creative"></div>`
+      : `<div class="post-card-img"><span class="no-img">📷</span></div>`;
+    return `<div class="post-card" onclick="openPostDetail('${p.id}')">
+      ${imgBlock}
+      <div class="post-card-body">
+        <div class="post-card-meta">
+          <span class="badge ${cc}" style="font-size:10px">${p.canal}</span>
+          <span class="badge b-teal" style="font-size:10px">${p.dept}</span>
+          <span style="font-size:10px;color:var(--text-3);margin-left:auto;font-family:var(--mono)">${formatDate(p.fecha)}</span>
+        </div>
+        <div class="post-card-copy"><strong>${p.copyIn.substring(0,60)}${p.copyIn.length>60?'…':''}</strong></div>
+        ${p.copyOut?`<div class="post-card-copy" style="margin-top:4px">${p.copyOut.substring(0,80)}…</div>`:''}
+      </div>
+      <div class="post-status-bar">
+        <span class="badge ${sc}" style="font-size:10px">${p.status}</span>
+        <span style="font-size:10px;color:var(--text-3)">${p.tipo}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function handleDayClick(dateStr, dayNum, isCurrent) {
+  if(!isCurrent) return;
+  const posts = getPosts().filter(p=>p.fecha===dateStr);
+  if(posts.length===0) { quickAddPost(dateStr); return; }
+  if(posts.length===1) { openPostDetail(posts[0].id); return; }
+  // Multiple posts — show mini list
+  openPostDetail(posts[0].id);
+}
+
+function quickAddPost(dateStr) {
+  openPostModal();
+  setTimeout(()=>{ document.getElementById('pf-fecha').value=dateStr; },50);
+}
+
+function openPostDetail(id) {
+  const p = getPosts().find(x=>x.id===id);
+  if(!p) return;
+  const sc = statusClass(p.status);
+  const cc = canalChipClass(p.canal);
+  document.getElementById('pd-title').textContent = p.tipo+' · '+p.dept;
+  document.getElementById('pd-body').innerHTML = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+      <span class="badge ${cc}">${p.canal}</span>
+      <span class="badge ${sc}">${p.status}</span>
+      <span class="badge b-teal">${formatDate(p.fecha)}</span>
+    </div>
+    <div class="detail-field"><label>Copy in (gancho)</label><p style="font-style:italic;color:var(--accent)">${p.copyIn}</p></div>
+    ${p.copyOut?`<div class="detail-field"><label>Copy out</label><p>${p.copyOut}</p></div>`:''}
+    ${p.link?`<div class="detail-field"><label>OneDrive / Creativo</label><p><a href="${p.link}" target="_blank" style="color:var(--accent);word-break:break-all">${p.link}</a></p></div>`:''}
+    <div style="margin-top:8px">
+      <label class="form-label">Actualizar estatus</label>
+      <select class="form-select" id="pd-status-sel" style="margin-top:4px">
+        ${['Pendiente de conceptualización','Lista para diseño','En diseño','Falta info cliente','En revisión','Programado','Publicado'].map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+  `;
+  document.getElementById('pd-footer').innerHTML = `
+    <button class="btn" onclick="editPost('${p.id}')">✏️ Editar</button>
+    <button class="btn" onclick="updatePostStatus('${p.id}')" style="color:var(--green)">✓ Guardar estatus</button>
+    <button class="btn" onclick="deletePost('${p.id}')" style="color:var(--red)">✕ Eliminar</button>
+  `;
+  document.getElementById('post-detail-overlay').classList.add('open');
+}
+
+function updatePostStatus(id) {
+  const sel = document.getElementById('pd-status-sel').value;
+  const posts = getPosts();
+  const idx = posts.findIndex(p=>p.id===id);
+  if(idx>=0) { posts[idx].status=sel; savePosts(posts); }
+  document.getElementById('post-detail-overlay').classList.remove('open');
+  renderParrilla();
+  showToast('Estatus actualizado','success');
+}
+
+function deletePost(id) {
+  if(!confirm('¿Eliminar este post?')) return;
+  savePosts(getPosts().filter(p=>p.id!==id));
+  document.getElementById('post-detail-overlay').classList.remove('open');
+  renderParrilla();
+  showToast('Post eliminado','warning');
+}
+
+function editPost(id) {
+  const p = getPosts().find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('post-detail-overlay').classList.remove('open');
+  openPostModal(id);
+  setTimeout(()=>{
+    document.getElementById('pf-canal-input').value  = p.canal;
+    document.getElementById('pf-dept').value         = p.dept;
+    document.getElementById('pf-fecha').value        = p.fecha;
+    document.getElementById('pf-tipo').value         = p.tipo;
+    document.getElementById('pf-copy-in').value      = p.copyIn;
+    document.getElementById('pf-copy-out').value     = p.copyOut||'';
+    document.getElementById('pf-onedrive').value     = p.link||'';
+    document.getElementById('pf-status-input').value = p.status;
+  },60);
+}
+
+function openPostModal(editId) {
+  document.getElementById('post-edit-id').value = editId||'';
+  document.getElementById('post-modal-title').textContent = editId?'Editar post':'Nuevo post';
+  if(!editId){
+    document.getElementById('pf-fecha').value = today();
+    ['pf-copy-in','pf-copy-out','pf-onedrive'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('pf-canal-input').selectedIndex=0;
+    document.getElementById('pf-dept').selectedIndex=0;
+    document.getElementById('pf-tipo').selectedIndex=0;
+    document.getElementById('pf-status-input').selectedIndex=0;
+  }
+  document.getElementById('post-modal-overlay').classList.add('open');
+}
+function closePostModal(){ document.getElementById('post-modal-overlay').classList.remove('open'); }
+function closePostModalOnOverlay(e){ if(e.target===e.currentTarget) closePostModal(); }
+
+function savePost() {
+  const copyIn = document.getElementById('pf-copy-in').value.trim();
+  if(!copyIn){ showToast('El copy in es requerido','error'); return; }
+  const posts = getPosts();
+  const editId = document.getElementById('post-edit-id').value;
+  const post = {
+    id: editId||'p'+Date.now(),
+    canal:  document.getElementById('pf-canal-input').value,
+    dept:   document.getElementById('pf-dept').value,
+    fecha:  document.getElementById('pf-fecha').value,
+    tipo:   document.getElementById('pf-tipo').value,
+    copyIn, copyOut: document.getElementById('pf-copy-out').value.trim(),
+    link:   document.getElementById('pf-onedrive').value.trim(),
+    status: document.getElementById('pf-status-input').value,
+  };
+  if(editId){ const i=posts.findIndex(p=>p.id===editId); if(i>=0)posts[i]=post; else posts.push(post); }
+  else posts.push(post);
+  savePosts(posts);
+  closePostModal();
+  renderParrilla();
+  showToast(editId?'Post actualizado':'Post agregado a la parrilla','success');
+}
+
+// ═══════════════════════════════════════════
+// PHASE 2 — MARCA PERSONAL
+// ═══════════════════════════════════════════
+const GERENTE_COLORS = ['pa-manuel','pa-oriana','pa-karen'];
+const GERENTE_PALETTES = [
+  {bg:'var(--blue-dim)',color:'var(--blue)',border:'var(--blue)'},
+  {bg:'var(--purple-dim)',color:'var(--purple)',border:'var(--purple)'},
+  {bg:'var(--teal-dim)',color:'var(--teal)',border:'var(--teal)'},
+  {bg:'rgba(244,161,0,.12)',color:'var(--accent)',border:'var(--accent)'},
+  {bg:'rgba(239,68,68,.12)',color:'var(--red)',border:'var(--red)'},
+];
+
+function gerenteIndex(name) {
+  const all = [...new Set(getMarca().map(m=>m.gerente))];
+  const i = all.indexOf(name);
+  return i>=0?i:0;
+}
+function gerentePalette(name) { return GERENTE_PALETTES[gerenteIndex(name)%GERENTE_PALETTES.length]; }
+function gerenteInitials(name) { return name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(); }
+
+function renderMarca() {
+  const items = getMarca();
+  const grid  = document.getElementById('marca-grid');
+  const empty = document.getElementById('marca-empty');
+  if(!grid) return;
+
+  // Build gerente tabs
+  const gerentes = [...new Set(items.map(m=>m.gerente))];
+  const tabsEl = document.getElementById('gerente-tabs');
+  tabsEl.innerHTML = `<button class="btn${marcaFilter==='todos'?' active':''}" id="gtab-todos" onclick="filterMarca('todos',this)" style="font-size:12px">Todos</button>`
+    + gerentes.map(g=>{
+      const pal = gerentePalette(g);
+      return `<button class="btn${marcaFilter===g?' active':''}" onclick="filterMarca('${g}',this)" style="font-size:12px;border-color:${pal.border};color:${pal.color}">${gerenteInitials(g)} ${g.split(' ')[0]}</button>`;
+    }).join('');
+
+  const filtered = marcaFilter==='todos' ? items : items.filter(m=>m.gerente===marcaFilter);
+  if(filtered.length===0){ grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+
+  const TIPO_COLORS = {'Post texto':'b-blue','Post con imagen / carrusel':'b-purple','Artículo (blog)':'b-accent'};
+  const STATUS_C = {'Borrador':'b-yellow','En revisión':'b-purple','Aprobado':'b-teal','Publicado':'b-green'};
+
+  grid.innerHTML = filtered.map(m=>{
+    const pal = gerentePalette(m.gerente);
+    const tc  = TIPO_COLORS[m.tipo]||'b-blue';
+    const sc  = STATUS_C[m.status]||'b-yellow';
+    const stripHtml = s => s.replace(/<[^>]+>/g,'').substring(0,120)+'…';
+    return `<div class="marca-card animate-in" onclick="openMarcaDetail('${m.id}')">
+      <div class="marca-card-header">
+        <div class="gerente-pill">
+          <div class="gerente-ava" style="background:${pal.bg};color:${pal.color};border:1px solid ${pal.border}">${gerenteInitials(m.gerente)}</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text)">${m.gerente}</div>
+            <div style="font-size:11px;color:var(--text-3)">${m.cargo}</div>
+          </div>
+        </div>
+        <span class="badge ${tc}" style="font-size:10px">${m.tipo==='Artículo (blog)'?'Artículo':m.tipo==='Post con imagen / carrusel'?'Post + img':'Post texto'}</span>
+      </div>
+      <div class="marca-body">
+        <div class="marca-titulo">${m.titulo}</div>
+        <div class="marca-content">${stripHtml(m.contenido)}</div>
+      </div>
+      <div class="marca-footer">
+        <span class="badge ${sc}" style="font-size:10px">${m.status}</span>
+        <div style="display:flex;gap:6px">
+          <span class="badge b-blue" style="font-size:10px">${m.area}</span>
+          <button class="btn btn-sm" onclick="event.stopPropagation();editMarca('${m.id}')" style="padding:2px 8px;font-size:11px">✏️</button>
+          <button class="btn btn-sm" onclick="event.stopPropagation();deleteMarca('${m.id}')" style="padding:2px 8px;font-size:11px;color:var(--red)">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterMarca(g, btn) {
+  marcaFilter = g;
+  renderMarca();
+}
+
+function openMarcaDetail(id) {
+  const m = getMarca().find(x=>x.id===id);
+  if(!m) return;
+  // Open edit modal for full view
+  editMarca(id);
+}
+
+function openMarcaModal(editId) {
+  document.getElementById('marca-edit-id').value = editId||'';
+  document.getElementById('marca-modal-title').textContent = editId?'Editar contenido':'Nuevo contenido LinkedIn';
+  if(!editId){
+    ['mc-gerente','mc-cargo','mc-titulo','mc-hashtags','mc-link'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('mc-editor').innerHTML='';
+    document.getElementById('mc-tipo').selectedIndex=0;
+    document.getElementById('mc-area').selectedIndex=0;
+    document.getElementById('mc-status').selectedIndex=0;
+  }
+  updateLIPreview();
+  document.getElementById('marca-modal-overlay').classList.add('open');
+}
+function closeMarcaModal(){ document.getElementById('marca-modal-overlay').classList.remove('open'); }
+function closeMarcaModalOnOverlay(e){ if(e.target===e.currentTarget) closeMarcaModal(); }
+
+function editMarca(id) {
+  const m = getMarca().find(x=>x.id===id);
+  if(!m) return;
+  openMarcaModal(id);
+  setTimeout(()=>{
+    document.getElementById('mc-gerente').value   = m.gerente;
+    document.getElementById('mc-cargo').value     = m.cargo;
+    document.getElementById('mc-tipo').value      = m.tipo;
+    document.getElementById('mc-area').value      = m.area;
+    document.getElementById('mc-titulo').value    = m.titulo;
+    document.getElementById('mc-editor').innerHTML= m.contenido;
+    document.getElementById('mc-hashtags').value  = m.hashtags||'';
+    document.getElementById('mc-link').value      = m.link||'';
+    document.getElementById('mc-status').value    = m.status;
+    updateLIPreview();
+  },60);
+}
+
+function deleteMarca(id) {
+  if(!confirm('¿Eliminar este contenido?')) return;
+  saveMarca2(getMarca().filter(m=>m.id!==id));
+  renderMarca();
+  showToast('Contenido eliminado','warning');
+}
+
+function saveMarca() {
+  const gerente = document.getElementById('mc-gerente').value.trim();
+  const titulo  = document.getElementById('mc-titulo').value.trim();
+  const contenido = document.getElementById('mc-editor').innerHTML.trim();
+  if(!gerente||!titulo){ showToast('Gerente y título son requeridos','error'); return; }
+  const items  = getMarca();
+  const editId = document.getElementById('marca-edit-id').value;
+  const item = {
+    id: editId||'m'+Date.now(),
+    gerente, cargo: document.getElementById('mc-cargo').value.trim(),
+    tipo:    document.getElementById('mc-tipo').value,
+    area:    document.getElementById('mc-area').value,
+    titulo, contenido,
+    hashtags: document.getElementById('mc-hashtags').value.trim(),
+    link:     document.getElementById('mc-link').value.trim(),
+    status:   document.getElementById('mc-status').value,
+  };
+  if(editId){ const i=items.findIndex(m=>m.id===editId); if(i>=0)items[i]=item; else items.push(item); }
+  else items.push(item);
+  saveMarca2(items);
+  closeMarcaModal();
+  renderMarca();
+  showToast(editId?'Contenido actualizado':'Contenido guardado','success');
+}
+
+// ── RICH TEXT EDITOR ──
+function execFmt(cmd){ document.getElementById('mc-editor').focus(); document.execCommand(cmd,false,null); updateLIPreview(); }
+function insertHeading(tag){ document.getElementById('mc-editor').focus(); document.execCommand('formatBlock',false,tag); updateLIPreview(); }
+function insertHR(){ document.getElementById('mc-editor').focus(); document.execCommand('insertHorizontalRule',false,null); updateLIPreview(); }
+
+// ── LINKEDIN PREVIEW ──
+function updateLIPreview() {
+  const gerente  = document.getElementById('mc-gerente')?.value||'Gerente LOFTON';
+  const cargo    = document.getElementById('mc-cargo')?.value||'Director — LOFTON Servicios Integrales';
+  const titulo   = document.getElementById('mc-titulo')?.value||'';
+  const contenido= document.getElementById('mc-editor')?.innerHTML||'';
+  const hashtags = document.getElementById('mc-hashtags')?.value||'';
+  const link     = document.getElementById('mc-link')?.value||'';
+  const tipo     = document.getElementById('mc-tipo')?.value||'Post texto';
+  const initials = gerenteInitials(gerente||'GL');
+  const charCount= contenido.replace(/<[^>]+>/g,'').length;
+  if(document.getElementById('mc-char-count')) document.getElementById('mc-char-count').textContent = `${charCount} caracteres`;
+
+  const preview = document.getElementById('li-preview');
+  if(!preview) return;
+
+  const isArticle = tipo==='Artículo (blog)';
+  preview.innerHTML = `
+    <div class="li-header">
+      <div class="li-ava">${initials}</div>
+      <div>
+        <div class="li-name">${gerente||'Nombre del gerente'}</div>
+        <div class="li-cargo">${cargo}</div>
+        <div class="li-time">Ahora · 🌐</div>
+      </div>
+    </div>
+    ${isArticle&&titulo?`<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3">${titulo}</div>`:''}
+    <div class="li-body">${contenido||'<span style="color:#4a5568;font-style:italic">El contenido aparecerá aquí mientras escribes...</span>'}</div>
+    ${link?`<div class="li-image">🖼️ Imagen adjunta desde OneDrive</div>`:''}
+    ${hashtags?`<div class="li-hashtags">${hashtags}</div>`:''}
+    <div class="li-actions">
+      <div class="li-action">👍 Me gusta</div>
+      <div class="li-action">💬 Comentar</div>
+      <div class="li-action">🔁 Compartir</div>
+      <div class="li-action">📩 Enviar</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════
+// UPDATED INIT
+// ═══════════════════════════════════════════
+window.onload = () => {
+  seedDemoData();
+  seedPosts();
+  seedMarca();
+  updateDateHeader();
+  setInterval(updateDateHeader, 60000);
+  renderDashboard();
+  renderParrilla();
+  renderMarca();
+};
+
+// patch showPage to trigger renders
+const _origShowPage = showPage;
+window.showPage = function(name, el) {
+  _origShowPage(name, el);
+  if(name==='parrilla') renderParrilla();
+  if(name==='marca')    renderMarca();
+};
+
+function updateDateHeader() {
+  const now = new Date();
+  const dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  document.getElementById('topbar-date').textContent=`${dias[now.getDay()]} ${now.getDate()} ${meses[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('footer-date').textContent=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+// (onload moved to Phase 2 init below)
+</script>
+</body>
+</html>
