@@ -506,11 +506,15 @@ td { padding:11px 14px; vertical-align:middle; }
         <span style="margin-left:auto;font-size:10px;color:var(--text-3)">↗</span>
       </a>
       <div class="nav-item" data-page="diseno" onclick="showPage('diseno',this)">
-        <span class="nav-icon">🎨</span> Solicitudes Diseño
+        <span class="nav-icon">🏢</span> Solicitudes Diseño
         <span class="nav-badge warn" id="badge-diseno">0</span>
       </div>
       <div class="nav-item" data-page="parrilla" onclick="showPage('parrilla',this)">
-        <span class="nav-icon">📅</span> Parrilla de Contenido
+        <span class="nav-icon">📱</span> Parrilla de Contenido
+      </div>
+      <div class="nav-item" data-page="campanas-artes" onclick="showPage('campanas-artes',this)">
+        <span class="nav-icon">🎯</span> Artes de Campaña
+        <span class="nav-badge" id="badge-artes" style="background:var(--accent);color:#000">0</span>
       </div>
       <div class="nav-item" data-page="marca" onclick="showPage('marca',this)">
         <span class="nav-icon">👤</span> Marca Personal
@@ -531,7 +535,7 @@ td { padding:11px 14px; vertical-align:middle; }
   <div class="topbar-date" id="topbar-date"></div>
   <div class="topbar-user">
     <div class="user-avatar">MA</div>
-    <span class="user-name">Manuel Antu&ntilde;a</span>
+    <span class="user-name">Manuel Antuna</span>
   </div>
 </div>
 
@@ -922,9 +926,14 @@ td { padding:11px 14px; vertical-align:middle; }
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeMarcaModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveMarca()">Guardar contenido</button>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn" style="background:linear-gradient(135deg,#1B3A6B,#C8922A);color:#fff;border:none;gap:6px" onclick="generarConMarcaIA()" id="btn-generar-ia">
+        ✨ Generar con IA
+      </button>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="closeMarcaModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveMarca()">Guardar contenido</button>
+      </div>
     </div>
   </div>
 </div>
@@ -938,6 +947,181 @@ td { padding:11px 14px; vertical-align:middle; }
     </div>
     <div class="modal-body" id="pd-body"></div>
     <div class="modal-footer" id="pd-footer"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     PAGE: ARTES DE CAMPAÑA
+═══════════════════════════ -->
+<div id="page-campanas-artes" class="page" style="padding:28px;display:none">
+  <div class="section-head" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <h2>🎯 Artes de Campaña — Meta Ads &amp; Google Ads</h2>
+      <p>Creativos pagados para pauta digital · El sistema detecta campañas activas por temporalidad</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" style="background:linear-gradient(135deg,#1B3A6B,#C8922A);color:#fff;border:none" onclick="generarParrillaDesdeTemporalidad()">🤖 Generar parrilla de artes IA</button>
+      <button class="btn btn-primary" onclick="openArtesModal()">+ Nueva arte</button>
+    </div>
+  </div>
+
+  <!-- Alerta de campañas activas por temporalidad -->
+  <div id="campanas-activas-alert" style="background:linear-gradient(135deg,rgba(27,58,107,.15),rgba(200,146,42,.1));border:1px solid var(--accent);border-radius:10px;padding:16px 20px;margin-bottom:20px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:8px">🗓️ Campañas activas este mes — Prioridades de arte</div>
+    <div id="campanas-activas-lista" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+
+  <!-- Filtros -->
+  <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center">
+    <select class="form-select" id="artes-filter-plataforma" onchange="renderArtesTable()" style="width:auto">
+      <option value="">Todas las plataformas</option>
+      <option value="Meta Ads">🔵 Meta Ads</option>
+      <option value="Google Ads">🟢 Google Ads</option>
+    </select>
+    <select class="form-select" id="artes-filter-status" onchange="renderArtesTable()" style="width:auto">
+      <option value="">Todos los estados</option>
+      <option>Brief enviado a Oriana</option>
+      <option>En diseño</option>
+      <option>En revisión</option>
+      <option>Aprobado</option>
+      <option>Publicado</option>
+    </select>
+    <select class="form-select" id="artes-filter-servicio" onchange="renderArtesTable()" style="width:auto">
+      <option value="">Todos los servicios</option>
+      <option>Auditoría / Dictamen</option><option>Fiscal</option><option>Nómina</option>
+      <option>Laboral</option><option>Corporativo</option><option>Contabilidad</option><option>Always On</option>
+    </select>
+    <span id="artes-count" style="font-size:12px;color:var(--text-3);margin-left:auto"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:var(--dark);color:#fff">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Campaña</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Plataforma</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Servicio</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Formato</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Fechas</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Estado</th>
+          <th style="padding:10px 14px;text-align:left;font-size:11px">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="artes-tbody">
+      </tbody>
+    </table>
+  </div>
+  <div id="artes-empty" class="empty-state" style="display:none;margin-top:40px">
+    <div class="empty-icon">🎨</div>
+    <p>No hay artes de campaña aún.<br>Usa "Generar parrilla IA" para que el sistema detecte las campañas activas, o crea una manualmente.</p>
+  </div>
+</div>
+
+<!-- MODAL: NUEVA ARTE DE CAMPAÑA -->
+<div class="modal-overlay" id="artes-modal-overlay" onclick="if(event.target===this)closeArtesModal()">
+  <div class="modal" style="width:680px;max-height:92vh">
+    <div class="modal-header">
+      <div class="modal-title" id="artes-modal-title">Nueva arte de campaña</div>
+      <div class="modal-close" onclick="closeArtesModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="arte-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Campaña *</label>
+          <input class="form-input" id="arte-campana" placeholder="Nombre de la campaña">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Plataforma *</label>
+          <select class="form-select" id="arte-plataforma">
+            <option>Meta Ads</option><option>Google Ads</option><option>Meta + Google</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Servicio *</label>
+          <select class="form-select" id="arte-servicio">
+            <option>Auditoría / Dictamen</option><option>Fiscal</option><option>Nómina</option>
+            <option>Laboral</option><option>Corporativo</option><option>Contabilidad</option><option>Always On</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Formato *</label>
+          <select class="form-select" id="arte-formato">
+            <option>Reel (1080×1920px)</option>
+            <option>Imagen estática (1200×628px)</option>
+            <option>Carrusel (1080×1080px)</option>
+            <option>Story Ad (1080×1920px)</option>
+            <option>Display Banner (300×250px)</option>
+            <option>Responsive Display (1200×628px)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha inicio</label>
+          <input type="date" class="form-input" id="arte-fecha-ini">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha fin</label>
+          <input type="date" class="form-input" id="arte-fecha-fin">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Headline principal</label>
+        <input class="form-input" id="arte-headline" placeholder="Ej: El dictamen fiscal tiene fecha límite: 15 de mayo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Body copy</label>
+        <textarea class="form-input" id="arte-body" rows="3" style="resize:vertical" placeholder="Cuerpo del anuncio..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">CTA</label>
+          <input class="form-input" id="arte-cta" placeholder="Agenda tu diagnóstico">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estado</label>
+          <select class="form-select" id="arte-status">
+            <option>Brief enviado a Oriana</option>
+            <option>En diseño</option>
+            <option>En revisión</option>
+            <option>Aprobado</option>
+            <option>Publicado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link OneDrive (creativo)</label>
+        <input type="url" class="form-input" id="arte-link" placeholder="https://1drv.ms/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas para Oriana</label>
+        <textarea class="form-input" id="arte-notas" rows="2" style="resize:vertical" placeholder="Referencias visuales, colores, restricciones..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeArtesModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveArte()">Guardar arte</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RESULTADO IA PARRILLA ARTES -->
+<div class="modal-overlay" id="ia-artes-modal" onclick="if(event.target===this)document.getElementById('ia-artes-modal').classList.remove('open')">
+  <div class="modal" style="width:760px;max-height:92vh">
+    <div class="modal-header">
+      <div class="modal-title">🤖 Parrilla de Artes generada por IA</div>
+      <div class="modal-close" onclick="document.getElementById('ia-artes-modal').classList.remove('open')">✕</div>
+    </div>
+    <div class="modal-body">
+      <div id="ia-artes-resultado" style="min-height:200px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('ia-artes-modal').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-primary" onclick="importarArtesIA()">Importar todas al sistema</button>
+    </div>
   </div>
 </div>
 
@@ -1992,10 +2176,357 @@ function updateDateHeader() {
   document.getElementById('footer-date').textContent=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 }
 
+
 // ═══════════════════════════════════════════
-// INIT
+// FIX: showPage debe incluir campanas-artes
 // ═══════════════════════════════════════════
-// (onload moved to Phase 2 init below)
+const _origShowPage = showPage;
+function showPage(name, el) {
+  // Hide all pages including new ones
+  document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-'+name);
+  if(pg) { pg.style.display = 'block'; pg.classList.add('active'); }
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard General',diseno:'🏢 Solicitudes de Diseño',parrilla:'📱 Parrilla de Contenido',marca:'👤 Marca Personal','campanas-artes':'🎯 Artes de Campaña'};
+  document.getElementById('topbar-title').textContent = titles[name]||name;
+  if(name==='campanas-artes') { renderCampanasActivas(); renderArtesTable(); }
+  if(name==='marca') renderMarca();
+}
+
+// ═══════════════════════════════════════════
+// ARTES DE CAMPAÑA — Data & Render
+// ═══════════════════════════════════════════
+const ARTES_KEY = 'lofton_artes_v1';
+let artesGeneradasIA = [];
+
+function getArtes() { try { return JSON.parse(localStorage.getItem(ARTES_KEY))||[]; } catch(e){return[];} }
+function saveArtes(d) { localStorage.setItem(ARTES_KEY, JSON.stringify(d)); }
+
+// Campañas activas por mes (datos del plan 2026)
+const CAMPANAS_PLAN = [
+  {campana:'Always On — Brand Awareness',plataforma:'Meta Ads',servicio:'Always On',meses:[1,2,3,4,5,6,7,8,9,10,11,12],headline:'Tu empresa merece certeza, no incertidumbre',cta:'Conoce más',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$30,000/año'},
+  {campana:'Always On — Remarketing',plataforma:'Meta Ads',servicio:'Always On',meses:[1,2,3,4,5,6,7,8,9,10,11,12],headline:'¿Ya revisaste los riesgos fiscales de tu empresa?',cta:'Agenda tu diagnóstico',formatos:['Imagen estática (1200×628px)','Carrusel (1080×1080px)'],budget:'$18,000/año'},
+  {campana:'Brand Campaign',plataforma:'Google Ads',servicio:'Always On',meses:[1,2,3,4,5,6,7,8,9,10,11,12],headline:'Lofton Servicios Integrales',cta:'Conoce más',formatos:['Responsive Display (1200×628px)'],budget:'$12,000/año'},
+  {campana:'Display Remarketing General',plataforma:'Google Ads',servicio:'Always On',meses:[1,2,3,4,5,6,7,8,9,10,11,12],headline:'Lofton: Tu Aliado Fiscal',cta:'Diagnóstico Sin Costo',formatos:['Display Banner (300×250px)'],budget:'$18,000/año'},
+  {campana:'Dictamen Fiscal — Captación',plataforma:'Meta Ads',servicio:'Auditoría / Dictamen',meses:[2,3],headline:'El dictamen fiscal tiene fecha límite: 15 de mayo',cta:'Solicita cotización',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$8,000'},
+  {campana:'Dictamen IMSS/INFONAVIT',plataforma:'Meta Ads',servicio:'Auditoría / Dictamen',meses:[2,3,4],headline:'Aviso de dictamen IMSS: límite 30 de abril',cta:'Agenda asesoría',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$5,000'},
+  {campana:'Auditoría — Search',plataforma:'Google Ads',servicio:'Auditoría / Dictamen',meses:[2,3,4,5,9,10,11],headline:'Dictamen Fiscal 2026',cta:'Solicita cotización',formatos:['Responsive Display (1200×628px)'],budget:'$20,000/año'},
+  {campana:'Nómina — Arranque de año',plataforma:'Meta Ads',servicio:'Nómina',meses:[2,3],headline:'¿Sigues calculando nómina en Excel?',cta:'Cotiza tu nómina',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)'],budget:'$4,000'},
+  {campana:'Nómina — Search',plataforma:'Google Ads',servicio:'Nómina',meses:[2,3,7,10,11],headline:'Nómina Sin Errores',cta:'Cotiza ahora',formatos:['Responsive Display (1200×628px)'],budget:'$12,000/año'},
+  {campana:'PTU / CUCA-CUFIN',plataforma:'Meta Ads',servicio:'Fiscal',meses:[2,3,4],headline:'¿Sabes cuánto PTU deberás repartir este año?',cta:'Solicita diagnóstico',formatos:['Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$3,000'},
+  {campana:'Defensa Fiscal',plataforma:'Meta + Google',servicio:'Fiscal',meses:[3,4,8,9],headline:'¿Te están auditando y no tienes estrategia?',cta:'Agenda tu caso',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$4,000'},
+  {campana:'Fiscal — Search',plataforma:'Google Ads',servicio:'Fiscal',meses:[3,4,5,6,8,9,10,11],headline:'¿Te Audita el SAT?',cta:'Agenda asesoría',formatos:['Responsive Display (1200×628px)'],budget:'$18,000/año'},
+  {campana:'Laboral — Search',plataforma:'Google Ads',servicio:'Laboral',meses:[3,4,5,6,8,9,10,11],headline:'Blindaje Laboral Integral',cta:'Solicita diagnóstico',formatos:['Responsive Display (1200×628px)'],budget:'$12,000/año'},
+  {campana:'Inspecciones STPS — Prevención',plataforma:'Meta Ads',servicio:'Laboral',meses:[5,6],headline:'¿Tu REPSE está al día? STPS puede visitarte sin aviso',cta:'Agenda tu revisión',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$5,000'},
+  {campana:'Blindaje Laboral — Prevención',plataforma:'Meta Ads',servicio:'Laboral',meses:[5,6],headline:'¿Pagas liquidaciones porque no sabes cómo dar de baja?',cta:'Solicita diagnóstico laboral',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$4,500'},
+  {campana:'Gobierno Corporativo',plataforma:'Meta Ads',servicio:'Corporativo',meses:[5,6,7,8,9,10],headline:'¿Quién controla realmente tu empresa?',cta:'Solicita diagnóstico corporativo',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$6,000'},
+  {campana:'Corporativo — Search',plataforma:'Google Ads',servicio:'Corporativo',meses:[5,6,7,8,9,10,11],headline:'Gobierno Corporativo',cta:'Solicita información',formatos:['Responsive Display (1200×628px)'],budget:'$8,400/año'},
+  {campana:'Nómina — Segundo pico',plataforma:'Meta Ads',servicio:'Nómina',meses:[7],headline:'Segundo semestre: momento ideal para profesionalizar tu nómina',cta:'Cotiza ahora',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)'],budget:'$3,500'},
+  {campana:'Inspecciones STPS — Segunda ola',plataforma:'Meta Ads',servicio:'Laboral',meses:[8,9],headline:'Las inspecciones STPS no avisan. ¿Estás preparado?',cta:'Agenda revisión',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$3,500'},
+  {campana:'Cierre Fiscal + Planeación',plataforma:'Meta + Google',servicio:'Fiscal',meses:[9,10,11],headline:'¿Cómo vas a cerrar fiscalmente el 2026?',cta:'Agenda planeación fiscal',formatos:['Reel (1080×1920px)','Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$7,000'},
+  {campana:'Aguinaldo — Cálculo correcto',plataforma:'Meta Ads',servicio:'Laboral',meses:[10,11],headline:'¿Sabes calcular correctamente el aguinaldo?',cta:'Calcula con nosotros',formatos:['Carrusel (1080×1080px)','Imagen estática (1200×628px)'],budget:'$2,500'},
+  {campana:'Declaración Anual — Captación',plataforma:'Meta Ads',servicio:'Fiscal',meses:[12],headline:'Declaración anual 2026: ¿ya tienes todo listo?',cta:'Agenda tu declaración',formatos:['Reel (1080×1920px)','Imagen estática (1200×628px)'],budget:'$3,500'},
+];
+
+function getCampanasActivasEsteMes() {
+  const mes = new Date().getMonth() + 1;
+  return CAMPANAS_PLAN.filter(c => c.meses.includes(mes));
+}
+
+function renderCampanasActivas() {
+  const activas = getCampanasActivasEsteMes();
+  const el = document.getElementById('campanas-activas-lista');
+  if(!el) return;
+  const meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const mesActual = new Date().getMonth()+1;
+  if(activas.length===0) { el.innerHTML = '<span style="color:var(--text-3);font-size:13px">No hay campañas programadas para este mes</span>'; return; }
+  el.innerHTML = activas.map(c => {
+    const pfColor = c.plataforma.includes('Meta') ? '#1877F2' : '#34A853';
+    return `<div style="background:var(--dark-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;cursor:pointer" onclick="preCargarArteDesde('${c.campana}')">
+      <div style="font-weight:700;color:var(--text);margin-bottom:3px">${c.campana}</div>
+      <div style="color:${pfColor};font-size:11px">${c.plataforma} · ${c.servicio}</div>
+      <div style="color:var(--text-3);font-size:10px;margin-top:2px">${c.formatos.join(' / ')}</div>
+    </div>`;
+  }).join('');
+}
+
+function preCargarArteDesde(nombreCampana) {
+  const camp = CAMPANAS_PLAN.find(c=>c.campana===nombreCampana);
+  if(!camp) return;
+  openArtesModal();
+  setTimeout(()=>{
+    document.getElementById('arte-campana').value = camp.campana;
+    document.getElementById('arte-plataforma').value = camp.plataforma.includes('Meta') && camp.plataforma.includes('Google') ? 'Meta + Google' : camp.plataforma;
+    document.getElementById('arte-servicio').value = camp.servicio;
+    document.getElementById('arte-formato').value = camp.formatos[0];
+    document.getElementById('arte-headline').value = camp.headline;
+    document.getElementById('arte-cta').value = camp.cta;
+    document.getElementById('arte-notas').value = `Budget: ${camp.budget} | Formatos requeridos: ${camp.formatos.join(', ')}`;
+  },100);
+}
+
+function renderArtesTable() {
+  const artes = getArtes();
+  const pfFilter = document.getElementById('artes-filter-plataforma')?.value||'';
+  const stFilter = document.getElementById('artes-filter-status')?.value||'';
+  const svFilter = document.getElementById('artes-filter-servicio')?.value||'';
+  const filtered = artes.filter(a =>
+    (!pfFilter || a.plataforma===pfFilter) &&
+    (!stFilter || a.status===stFilter) &&
+    (!svFilter || a.servicio===svFilter)
+  );
+  const tb = document.getElementById('artes-tbody');
+  const empty = document.getElementById('artes-empty');
+  document.getElementById('artes-count').textContent = `${filtered.length} artes`;
+  if(!tb) return;
+  if(filtered.length===0){ tb.innerHTML=''; if(empty)empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  const pfColor = p => p.includes('Meta')&&p.includes('Google') ? '#7c3aed' : p.includes('Meta') ? '#1877F2' : '#34A853';
+  const stColors = {'Brief enviado a Oriana':'#F4A100','En diseño':'#4A90D9','En revisión':'#8B5CF6','Aprobado':'#28A745','Publicado':'#1B3A6B'};
+  tb.innerHTML = filtered.map(a => `<tr style="border-bottom:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--dark-2)'" onmouseout="this.style.background=''">
+    <td style="padding:11px 14px;font-weight:600;color:var(--text)">${a.campana}</td>
+    <td style="padding:11px 14px"><span style="background:${pfColor(a.plataforma)}22;color:${pfColor(a.plataforma)};border:1px solid ${pfColor(a.plataforma)};padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">${a.plataforma}</span></td>
+    <td style="padding:11px 14px;font-size:12px;color:var(--text-2)">${a.servicio}</td>
+    <td style="padding:11px 14px;font-size:12px;color:var(--text-3)">${a.formato}</td>
+    <td style="padding:11px 14px;font-size:11px;color:var(--text-3)">${a.fechaIni||'—'} ${a.fechaFin?'→ '+a.fechaFin:''}</td>
+    <td style="padding:11px 14px"><span style="background:${stColors[a.status]||'#666'}22;color:${stColors[a.status]||'#999'};border:1px solid ${stColors[a.status]||'#444'};padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">${a.status}</span></td>
+    <td style="padding:11px 14px">
+      <div style="display:flex;gap:6px">
+        ${a.link?`<a href="${a.link}" target="_blank" class="btn" style="font-size:11px;padding:3px 8px">↗ Ver arte</a>`:''}
+        <button class="btn" style="font-size:11px;padding:3px 8px" onclick="editArte('${a.id}')">✏️</button>
+        <button class="btn" style="font-size:11px;padding:3px 8px;color:var(--red)" onclick="deleteArte('${a.id}')">✕</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function openArtesModal(editId) {
+  document.getElementById('artes-modal-title').textContent = editId ? 'Editar arte' : 'Nueva arte de campaña';
+  if(!editId) {
+    document.getElementById('arte-edit-id').value='';
+    ['arte-campana','arte-headline','arte-body','arte-cta','arte-notas','arte-link','arte-fecha-ini','arte-fecha-fin'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('arte-status').value='Brief enviado a Oriana';
+  }
+  document.getElementById('artes-modal-overlay').classList.add('open');
+}
+
+function closeArtesModal() { document.getElementById('artes-modal-overlay').classList.remove('open'); }
+
+function editArte(id) {
+  const a = getArtes().find(x=>x.id===id); if(!a) return;
+  openArtesModal(id);
+  setTimeout(()=>{
+    document.getElementById('arte-edit-id').value = a.id;
+    document.getElementById('arte-campana').value = a.campana;
+    document.getElementById('arte-plataforma').value = a.plataforma;
+    document.getElementById('arte-servicio').value = a.servicio;
+    document.getElementById('arte-formato').value = a.formato;
+    document.getElementById('arte-headline').value = a.headline||'';
+    document.getElementById('arte-body').value = a.body||'';
+    document.getElementById('arte-cta').value = a.cta||'';
+    document.getElementById('arte-status').value = a.status;
+    document.getElementById('arte-link').value = a.link||'';
+    document.getElementById('arte-notas').value = a.notas||'';
+    document.getElementById('arte-fecha-ini').value = a.fechaIni||'';
+    document.getElementById('arte-fecha-fin').value = a.fechaFin||'';
+  },100);
+}
+
+function deleteArte(id) {
+  if(!confirm('¿Eliminar esta arte?')) return;
+  const artes = getArtes().filter(a=>a.id!==id);
+  saveArtes(artes); renderArtesTable(); renderArtesBadge();
+}
+
+function saveArte() {
+  const campana = document.getElementById('arte-campana').value.trim();
+  if(!campana){ alert('El nombre de la campaña es obligatorio'); return; }
+  const editId = document.getElementById('arte-edit-id').value;
+  const artes = getArtes();
+  const item = {
+    id: editId||'a'+Date.now(),
+    campana,
+    plataforma: document.getElementById('arte-plataforma').value,
+    servicio: document.getElementById('arte-servicio').value,
+    formato: document.getElementById('arte-formato').value,
+    headline: document.getElementById('arte-headline').value.trim(),
+    body: document.getElementById('arte-body').value.trim(),
+    cta: document.getElementById('arte-cta').value.trim(),
+    status: document.getElementById('arte-status').value,
+    link: document.getElementById('arte-link').value.trim(),
+    notas: document.getElementById('arte-notas').value.trim(),
+    fechaIni: document.getElementById('arte-fecha-ini').value,
+    fechaFin: document.getElementById('arte-fecha-fin').value,
+    creado: editId ? (artes.find(a=>a.id===editId)?.creado||new Date().toISOString()) : new Date().toISOString(),
+  };
+  if(editId){ const i=artes.findIndex(a=>a.id===editId); if(i>=0)artes[i]=item; else artes.push(item); }
+  else artes.push(item);
+  saveArtes(artes);
+  closeArtesModal();
+  renderArtesTable();
+  renderArtesBadge();
+  showToast(editId?'Arte actualizada':'Arte guardada','success');
+}
+
+function renderArtesBadge() {
+  const pendientes = getArtes().filter(a=>!['Aprobado','Publicado'].includes(a.status)).length;
+  const b = document.getElementById('badge-artes');
+  if(b) { b.textContent=pendientes; b.style.display=pendientes?'flex':'none'; }
+}
+
+// ═══════════════════════════════════════════
+// IA: GENERAR PARRILLA DE ARTES POR TEMPORALIDAD
+// ═══════════════════════════════════════════
+async function generarParrillaDesdeTemporalidad() {
+  const activas = getCampanasActivasEsteMes();
+  const mes = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][new Date().getMonth()+1];
+  const modal = document.getElementById('ia-artes-modal');
+  const res = document.getElementById('ia-artes-resultado');
+  modal.classList.add('open');
+  res.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-3)"><div style="font-size:32px;margin-bottom:12px">🤖</div><div>Analizando temporalidades y generando briefs de artes...<br><small>Esto puede tardar 15-20 segundos</small></div></div>';
+
+  const campanasList = activas.map(c=>`- ${c.campana} (${c.plataforma}) | Servicio: ${c.servicio} | Formatos: ${c.formatos.join(', ')} | Headline actual: "${c.headline}" | CTA: ${c.cta} | Budget: ${c.budget}`).join('\n');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        system:`Eres el estratega digital senior de LOFTON Servicios Integrales (despacho mexicano multidisciplinario: auditoría, fiscal, nómina, laboral, corporativo, contabilidad). Mensaje maestro: "No vendemos servicios, vendemos certeza, control y protección." Colores de marca: navy #1B3A6B, gold #C8922A. Responde SOLO en JSON válido, sin texto adicional ni markdown.`,
+        messages:[{role:'user',content:`Genera un brief de artes de campaña para el mes de ${mes} 2026. Las siguientes campañas están activas según el plan:\n\n${campanasList}\n\nPara CADA campaña, genera un objeto con estos campos exactos:\n{\n  "campana": "nombre",\n  "plataforma": "Meta Ads|Google Ads|Meta + Google",\n  "servicio": "...",\n  "formato": "formato principal",\n  "headline": "headline optimizado para el mes actual máx 40 chars",\n  "body": "body copy máx 125 chars con ángulo urgencia/beneficio del mes",\n  "cta": "CTA",\n  "notasOriana": "instrucciones visuales para la diseñadora: colores, estilo, qué mostrar, texto a incluir en la imagen"\n}\n\nDevuelve un array JSON con todos los objetos. Adapta headlines y body al contexto actual (${mes} 2026) y las fechas límite fiscales relevantes.`}]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.map(b=>b.text||'').join('');
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if(!jsonMatch) throw new Error('No JSON array found');
+    artesGeneradasIA = JSON.parse(jsonMatch[0]);
+    renderResultadoIA(artesGeneradasIA);
+  } catch(err) {
+    res.innerHTML = `<div style="color:var(--red);padding:20px">❌ Error al generar: ${err.message}</div>`;
+  }
+}
+
+function renderResultadoIA(items) {
+  const res = document.getElementById('ia-artes-resultado');
+  const pfColor = p => p.includes('Meta')&&p.includes('Google') ? '#7c3aed' : p.includes('Meta') ? '#1877F2' : '#34A853';
+  res.innerHTML = `<div style="margin-bottom:12px;font-size:13px;color:var(--text-2)">Se generaron <strong>${items.length} artes</strong> basadas en las campañas activas del mes. Revísalas y usa "Importar todas" para agregarlas al sistema.</div>` +
+  items.map((a,i)=>`
+    <div style="background:var(--dark-2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="background:${pfColor(a.plataforma)}22;color:${pfColor(a.plataforma)};border:1px solid ${pfColor(a.plataforma)};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">${a.plataforma}</span>
+        <strong style="color:var(--text)">${a.campana}</strong>
+        <span style="font-size:11px;color:var(--text-3);margin-left:auto">${a.formato}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+        <div><span style="color:var(--text-3);text-transform:uppercase;font-size:10px;letter-spacing:.06em">Headline</span><br><strong style="color:var(--accent)">${a.headline}</strong></div>
+        <div><span style="color:var(--text-3);text-transform:uppercase;font-size:10px;letter-spacing:.06em">CTA</span><br><strong>${a.cta}</strong></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text-3);text-transform:uppercase;font-size:10px;letter-spacing:.06em">Body copy</span><br>${a.body}</div>
+        <div style="grid-column:1/-1;background:var(--dark-3);border-radius:6px;padding:8px 10px;border-left:3px solid var(--accent)"><span style="color:var(--accent);font-size:10px;font-weight:700;text-transform:uppercase">Brief para Oriana</span><br><span style="color:var(--text-2);font-size:12px">${a.notasOriana}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function importarArtesIA() {
+  if(!artesGeneradasIA.length) return;
+  const artes = getArtes();
+  artesGeneradasIA.forEach(a => {
+    artes.push({
+      id:'a'+Date.now()+Math.random().toString(36).substr(2,5),
+      campana:a.campana, plataforma:a.plataforma, servicio:a.servicio,
+      formato:a.formato, headline:a.headline, body:a.body, cta:a.cta,
+      status:'Brief enviado a Oriana', link:'', notas:a.notasOriana||'',
+      fechaIni:'', fechaFin:'', creado:new Date().toISOString()
+    });
+  });
+  saveArtes(artes);
+  document.getElementById('ia-artes-modal').classList.remove('open');
+  renderArtesTable();
+  renderArtesBadge();
+  showToast(`${artesGeneradasIA.length} artes importadas correctamente`,'success');
+  artesGeneradasIA = [];
+}
+
+// ═══════════════════════════════════════════
+// IA: GENERAR CONTENIDO MARCA PERSONAL
+// ═══════════════════════════════════════════
+async function generarConMarcaIA() {
+  const gerente = document.getElementById('mc-gerente').value.trim();
+  const cargo   = document.getElementById('mc-cargo').value.trim();
+  const titulo  = document.getElementById('mc-titulo').value.trim();
+  const area    = document.getElementById('mc-area').value;
+  const tipo    = document.getElementById('mc-tipo').value;
+
+  if(!gerente || !titulo) {
+    alert('Completa el nombre del gerente y el título antes de generar con IA');
+    return;
+  }
+
+  const btn = document.getElementById('btn-generar-ia');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generando...';
+
+  const GERENTES = {
+    'Enrique Garduño': {cargo:'Director General — LOFTON Servicios Integrales', voz:'liderazgo estratégico, visión de negocio, 30+ años de experiencia'},
+    'Erik Lozano': {cargo:'Socio — Nóminas y Laboral', voz:'especialista en compliance laboral, REPSE, STPS, nómina'},
+    'Karla Hernández': {cargo:'Gerente Fiscal', voz:'defensa fiscal, SAT, planeación tributaria, riesgo fiscal'},
+    'Ismael Aguilar': {cargo:'Gerente de Auditoría', voz:'dictamen fiscal, auditoría preventiva, IMSS, INFONAVIT'},
+    'Mónica Ortíz': {cargo:'Gerente de Contabilidad', voz:'contabilidad integral, CUCA, CUFIN, materialidad contable'},
+  };
+  const perfil = GERENTES[gerente] || {cargo: cargo||'Especialista — LOFTON', voz:'servicios profesionales empresariales'};
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`Eres un ghostwriter experto en LinkedIn B2B para profesionales de servicios fiscales, contables y legales en México. Escribes en primera persona, voz del ejecutivo, en español mexicano profesional pero cercano. Nunca suenas corporativo ni robótico. El tono es el de un especialista que comparte conocimiento real desde la trinchera. Empresa: LOFTON Servicios Integrales — "No vendemos servicios, vendemos certeza, control y protección." Responde SOLO con el contenido del post, sin introducción ni explicaciones.`,
+        messages:[{role:'user',content:`Escribe un post de LinkedIn en primera persona para:\n\nAutor: ${gerente}\nCargo: ${perfil.cargo}\nTono/Voz: ${perfil.voz}\nTema: ${titulo}\nÁrea: ${area}\nFormato: ${tipo}\n\n${tipo==='Artículo (blog)'?'Formato artículo largo (400-600 palabras), con H2 subtítulos en HTML (<h2>, <p>, <strong>). Incluye introducción, 2-3 secciones y conclusión accionable.':'Formato post LinkedIn (150-250 palabras). Sin subtítulos. Párrafos cortos. Termina con una pregunta que invite a comentar o con una reflexión impactante.'}\n\nIncluye 4-5 hashtags relevantes al final separados por línea.\n\nNo uses comillas al inicio ni al final. Escribe directamente el contenido.`}]
+      })
+    });
+    const data = await response.json();
+    let text = data.content?.map(b=>b.text||'').join('')||'';
+
+    // Separar hashtags del contenido
+    const hashtagMatch = text.match(/(#[\w\u00C0-\u024F]+[\s\n]*)+$/);
+    if(hashtagMatch) {
+      const hashtags = hashtagMatch[0].trim();
+      text = text.replace(hashtagMatch[0],'').trim();
+      document.getElementById('mc-hashtags').value = hashtags.replace(/\n/g,' ');
+    }
+
+    // Poner en el editor
+    const editor = document.getElementById('mc-editor');
+    // Convertir saltos de línea en párrafos si no tiene HTML
+    if(!text.includes('<')) {
+      text = text.split('\n\n').map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+    }
+    editor.innerHTML = text;
+    updateLIPreview();
+    showToast('Contenido generado con IA ✨','success');
+  } catch(err) {
+    showToast('Error al generar: '+err.message,'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✨ Generar con IA';
+  }
+}
+
+// ═══════════════════════════════════════════
+// INIT — Extender el onload existente
+// ═══════════════════════════════════════════
+const _origOnload = window.onload;
+window.onload = function() {
+  if(typeof _origOnload === 'function') _origOnload();
+  renderArtesBadge();
+  renderCampanasActivas();
+};
 </script>
 </body>
 </html>
