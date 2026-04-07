@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LOFTON — Dashboard Campañas Digitales 2026</title>
-<!-- Chart.js removido — gráficas con Canvas nativo -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
     --dark: #1B2A4A;
@@ -181,88 +181,6 @@
   /* ── NAV TAB PLATFORM COLORS ── */
   .nav-btn[data-tab="meta"].active { color:#1877F2; border-bottom-color:#1877F2; }
   .nav-btn[data-tab="google"].active { color:#34A853; border-bottom-color:#34A853; }
-  .nav-btn[data-tab="launch"].active { color:#F4A100; border-bottom-color:#F4A100; }
-
-  /* ── LAUNCH MODULE ── */
-  .launch-hero { background:linear-gradient(135deg,#1B2A4A 0%,#2E5090 60%,#1B2A4A 100%); border-radius:16px; padding:32px 36px; color:#fff; margin-bottom:24px; position:relative; overflow:hidden; }
-  .launch-hero::before { content:''; position:absolute; right:-40px; top:-40px; width:240px; height:240px; border-radius:50%; background:rgba(244,161,0,.08); }
-  .launch-hero::after { content:''; position:absolute; right:60px; bottom:-60px; width:160px; height:160px; border-radius:50%; background:rgba(244,161,0,.05); }
-  .launch-hero h2 { font-size:26px; font-weight:800; margin-bottom:6px; }
-  .launch-hero p { color:#94A3B8; font-size:14px; }
-  .api-status-bar { display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
-  .api-pill { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; }
-  .api-pill.ok { background:rgba(40,167,69,.2); border:1px solid #28A745; color:#6EE7B7; }
-  .api-pill.err { background:rgba(220,53,69,.2); border:1px solid #DC3545; color:#FCA5A5; }
-  .api-pill.checking { background:rgba(244,161,0,.15); border:1px solid #F4A100; color:#FCD34D; }
-  .api-dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
-
-  .launch-grid { display:grid; grid-template-columns:340px 1fr; gap:24px; align-items:start; }
-  @media(max-width:900px){ .launch-grid { grid-template-columns:1fr; } }
-
-  .launch-panel { background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--gray-border); overflow:hidden; }
-  .launch-panel-header { background:var(--dark); color:#fff; padding:16px 20px; font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px; }
-  .launch-panel-body { padding:20px; }
-
-  .form-group { margin-bottom:16px; }
-  .form-label { display:block; font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
-  .form-control { width:100%; padding:10px 14px; border:1.5px solid var(--gray-border); border-radius:8px; font-size:13px; background:#fff; color:var(--text); outline:none; transition:border .2s; }
-  .form-control:focus { border-color:var(--light-blue); box-shadow:0 0 0 3px rgba(74,144,217,.1); }
-  select.form-control { cursor:pointer; }
-  textarea.form-control { resize:vertical; min-height:80px; font-family:inherit; }
-
-  .btn-launch { width:100%; padding:14px; background:linear-gradient(135deg,#F4A100,#e8950a); border:none; border-radius:10px; color:#fff; font-size:14px; font-weight:800; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:10px; letter-spacing:.02em; }
-  .btn-launch:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(244,161,0,.4); }
-  .btn-launch:active { transform:translateY(0); }
-  .btn-launch:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
-  .btn-launch.meta { background:linear-gradient(135deg,#1877F2,#1565c0); }
-  .btn-launch.google { background:linear-gradient(135deg,#34A853,#2e7d32); }
-
-  .btn-secondary { width:100%; padding:10px; background:#fff; border:1.5px solid var(--gray-border); border-radius:8px; color:var(--text); font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; margin-bottom:10px; }
-  .btn-secondary:hover { border-color:var(--blue); color:var(--blue); background:#EFF6FF; }
-
-  .launch-log { background:#0F172A; border-radius:10px; padding:16px; font-family:'Courier New',monospace; font-size:12px; color:#94A3B8; min-height:180px; max-height:340px; overflow-y:auto; line-height:1.8; }
-  .log-line { display:block; }
-  .log-ok { color:#6EE7B7; }
-  .log-err { color:#FCA5A5; }
-  .log-info { color:#93C5FD; }
-  .log-warn { color:#FCD34D; }
-  .log-dim { color:#475569; }
-
-  .campaign-queue { display:flex; flex-direction:column; gap:10px; }
-  .queue-item { background:var(--gray-bg); border:1px solid var(--gray-border); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
-  .queue-item .qi-icon { font-size:22px; flex-shrink:0; }
-  .queue-item .qi-info { flex:1; }
-  .queue-item .qi-name { font-weight:700; font-size:13px; color:var(--dark); }
-  .queue-item .qi-meta { font-size:11px; color:var(--text-muted); margin-top:2px; }
-  .queue-item .qi-status { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; }
-  .qs-ready { background:#D1FAE5; color:#065F46; }
-  .qs-launched { background:#DBEAFE; color:#1E40AF; }
-  .qs-pending { background:#FEF3C7; color:#92400E; }
-  .qs-error { background:#FEE2E2; color:#991B1B; }
-
-  .divider-label { display:flex; align-items:center; gap:12px; margin:20px 0; }
-  .divider-label span { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; white-space:nowrap; }
-  .divider-label::before,.divider-label::after { content:''; flex:1; height:1px; background:var(--gray-border); }
-
-  .presets-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .preset-btn { padding:10px 12px; border:1.5px solid var(--gray-border); border-radius:8px; background:#fff; cursor:pointer; text-align:left; transition:all .2s; }
-  .preset-btn:hover { border-color:var(--accent); background:#FFFBF0; }
-  .preset-btn .pb-name { font-size:12px; font-weight:700; color:var(--dark); }
-  .preset-btn .pb-detail { font-size:10px; color:var(--text-muted); margin-top:2px; }
-  .preset-btn.pb-meta { border-left:3px solid #1877F2; }
-  .preset-btn.pb-google { border-left:3px solid #34A853; }
-
-  .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-
-  .result-banner { padding:16px 20px; border-radius:10px; margin-bottom:16px; display:none; }
-  .result-banner.show { display:flex; gap:12px; align-items:flex-start; }
-  .result-banner.success { background:#D1FAE5; border:1px solid #6EE7B7; color:#065F46; }
-  .result-banner.error { background:#FEE2E2; border:1px solid #FCA5A5; color:#991B1B; }
-  .result-banner.info { background:#DBEAFE; border:1px solid #93C5FD; color:#1E40AF; }
-  .rb-icon { font-size:20px; flex-shrink:0; }
-  .rb-text strong { display:block; font-size:14px; font-weight:800; margin-bottom:4px; }
-  .rb-text p { font-size:12px; opacity:.85; }
 </style>
 </head>
 <body>
@@ -287,7 +205,7 @@
   <button class="nav-btn" data-tab="keywords" onclick="showTab('keywords')"><span class="tab-icon">🔑</span> Keywords</button>
   <button class="nav-btn" data-tab="calendar" onclick="showTab('calendar')"><span class="tab-icon">📅</span> Calendario</button>
   <button class="nav-btn" data-tab="kpis" onclick="showTab('kpis')"><span class="tab-icon">🎯</span> KPIs & Benchmarks</button>
-  <button class="nav-btn" data-tab="launch" onclick="showTab('launch')" style="border-bottom-color:transparent"><span class="tab-icon">🚀</span> <span style="color:#F4A100;font-weight:800">Lanzar Campaña</span></button>
+  <button class="nav-btn" data-tab="budget" onclick="showTab('budget')"><span class="tab-icon">💰</span> Presupuesto por Área</button>
 </div>
 
 <!-- ═══════════════ OVERVIEW ═══════════════ -->
@@ -777,13 +695,8 @@ window.onload = () => {
 function showTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const page = document.getElementById('tab-'+tab);
-  if (page) page.classList.add('active');
-  const btn = document.querySelector('.nav-btn[data-tab="'+tab+'"]');
-  if (btn) btn.classList.add('active');
-  // Redraw charts when overview is shown
-  if (tab === 'overview') { setTimeout(()=>{ drawDonut(); drawMonthlyBar(); },50); }
-  if (tab === 'calendar') { setTimeout(()=>{ drawMonthlyDetail(); },50); }
+  document.getElementById('tab-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
 }
 
 // ── SERVICES TABLE ──
@@ -1024,773 +937,509 @@ function renderCalendar() {
   gridEl.innerHTML = html;
 }
 
-// ── CHARTS — Pure Canvas (no dependencies) ──
+// ── CHARTS ──
 function initCharts() {
-  drawDonut();
-  drawMonthlyBar();
-  drawMonthlyDetail();
-}
-
-function drawDonut() {
-  const canvas = document.getElementById('budgetDonut');
-  if (!canvas) return;
-  const parent = canvas.parentElement;
-  canvas.width = parent.offsetWidth || 400;
-  canvas.height = 260;
-  const ctx = canvas.getContext('2d');
-  const cx = canvas.width * 0.38, cy = 130, R = 90, r = 55;
-  const data = [135000, 120000, 30000, 15000];
-  const colors = ['#34A853','#1877F2','#F4A100','#FBBC05'];
-  const labels = ['Google Ads','Meta Ads','Reserva Opt.','Testing A/B'];
-  const total = data.reduce((a,b)=>a+b,0);
-  let angle = -Math.PI/2;
-  data.forEach((v,i) => {
-    const slice = (v/total)*Math.PI*2;
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R,angle,angle+slice);
-    ctx.closePath();
-    ctx.fillStyle = colors[i];
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,angle,angle+slice);
-    ctx.closePath();
-    ctx.fillStyle = '#fff';
-    ctx.fill();
-    angle += slice;
-  });
-  // Center text
-  ctx.fillStyle = '#1B2A4A';
-  ctx.font = 'bold 14px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.fillText('$300,000', cx, cy-4);
-  ctx.font = '11px Segoe UI';
-  ctx.fillStyle = '#6B7280';
-  ctx.fillText('MXN Total', cx, cy+14);
-  // Legend
-  const lx = canvas.width * 0.72, ly = 50;
-  labels.forEach((l,i) => {
-    const y = ly + i*42;
-    ctx.fillStyle = colors[i];
-    ctx.beginPath(); ctx.roundRect(lx, y, 14, 14, 3); ctx.fill();
-    ctx.fillStyle = '#1B2A4A';
-    ctx.font = 'bold 12px Segoe UI';
-    ctx.textAlign = 'left';
-    ctx.fillText(l, lx+20, y+11);
-    ctx.fillStyle = '#6B7280';
-    ctx.font = '11px Segoe UI';
-    const pct = Math.round(data[i]/total*100);
-    ctx.fillText('$'+data[i].toLocaleString()+' ('+pct+'%)', lx+20, y+25);
-  });
-}
-
-function drawMonthlyBar() {
-  const canvas = document.getElementById('monthlyBar');
-  if (!canvas) return;
-  const parent = canvas.parentElement;
-  canvas.width = parent.offsetWidth || 500;
-  canvas.height = 260;
-  const ctx = canvas.getContext('2d');
-  const pad = {top:40,right:20,bottom:40,left:65};
-  const W = canvas.width - pad.left - pad.right;
-  const H = canvas.height - pad.top - pad.bottom;
-  const allVals = [...MONTHLY_GOOGLE,...MONTHLY_META];
-  const maxVal = Math.max(...allVals) * 1.15;
-  const n = MONTHS.length;
-  const groupW = W/n;
-  const barW = groupW*0.35;
-  // Grid lines
-  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 1;
-  [0,.25,.5,.75,1].forEach(t => {
-    const y = pad.top + H*(1-t);
-    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+W,y); ctx.stroke();
-    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='right';
-    ctx.fillText('$'+(maxVal*t/1000).toFixed(0)+'k', pad.left-6, y+4);
-  });
-  // Bars
-  MONTHS.forEach((m,i) => {
-    const x = pad.left + i*groupW + groupW*0.1;
-    // Google
-    const gH = (MONTHLY_GOOGLE[i]/maxVal)*H;
-    ctx.fillStyle='#34A853';
-    ctx.fillRect(x, pad.top+H-gH, barW, gH);
-    // Meta
-    const mH = (MONTHLY_META[i]/maxVal)*H;
-    ctx.fillStyle='#1877F2';
-    ctx.fillRect(x+barW+2, pad.top+H-mH, barW, mH);
-    // Label
-    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
-    ctx.fillText(m, x+barW, pad.top+H+16);
-  });
-  // Legend
-  ctx.fillStyle='#34A853'; ctx.fillRect(pad.left,10,12,12);
-  ctx.fillStyle='#1B2A4A'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
-  ctx.fillText('Google Ads', pad.left+16, 21);
-  ctx.fillStyle='#1877F2'; ctx.fillRect(pad.left+100,10,12,12);
-  ctx.fillStyle='#1B2A4A'; ctx.fillText('Meta Ads', pad.left+116, 21);
-}
-
-function drawMonthlyDetail() {
-  const canvas = document.getElementById('monthlyDetail');
-  if (!canvas) return;
-  const parent = canvas.parentElement;
-  canvas.width = parent.offsetWidth || 600;
-  canvas.height = 300;
-  const ctx = canvas.getContext('2d');
-  const pad = {top:40,right:20,bottom:40,left:70};
-  const W = canvas.width - pad.left - pad.right;
-  const H = canvas.height - pad.top - pad.bottom;
-  const combined = MONTHLY_GOOGLE.map((v,i)=>v+MONTHLY_META[i]);
-  const maxVal = Math.max(...combined) * 1.15;
-  const n = MONTHS.length;
-  const barW = (W/n)*0.65;
-  // Grid
-  ctx.strokeStyle='#E2E8F0'; ctx.lineWidth=1;
-  [0,.25,.5,.75,1].forEach(t => {
-    const y = pad.top+H*(1-t);
-    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+W,y); ctx.stroke();
-    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='right';
-    ctx.fillText('$'+(maxVal*t/1000).toFixed(0)+'k', pad.left-6, y+4);
-  });
-  // Stacked bars
-  MONTHS.forEach((m,i) => {
-    const x = pad.left + i*(W/n) + (W/n-barW)/2;
-    const gH = (MONTHLY_GOOGLE[i]/maxVal)*H;
-    const mH = (MONTHLY_META[i]/maxVal)*H;
-    // Meta (bottom)
-    ctx.fillStyle='#1877F2';
-    ctx.fillRect(x, pad.top+H-mH, barW, mH);
-    // Google (top)
-    ctx.fillStyle='#34A853';
-    ctx.fillRect(x, pad.top+H-mH-gH, barW, gH);
-    // Month label
-    ctx.fillStyle='#6B7280'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
-    ctx.fillText(m, x+barW/2, pad.top+H+16);
-    // Total label
-    const total = MONTHLY_GOOGLE[i]+MONTHLY_META[i];
-    if (total > 5000) {
-      ctx.fillStyle='#1B2A4A'; ctx.font='bold 9px Segoe UI';
-      ctx.fillText('$'+(total/1000).toFixed(0)+'k', x+barW/2, pad.top+H-mH-gH-4);
+  // Budget Donut
+  new Chart(document.getElementById('budgetDonut'), {
+    type:'doughnut',
+    data:{
+      labels:['Google Ads','Meta Ads','Reserva Optimización','Testing A/B'],
+      datasets:[{
+        data:[135000,120000,30000,15000],
+        backgroundColor:['#34A853','#1877F2','#F4A100','#FBBC05'],
+        borderWidth:3,
+        borderColor:'#fff',
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'right',labels:{font:{size:12},padding:16}},
+        tooltip:{callbacks:{label:c=>' $'+c.parsed.toLocaleString()+' MXN'}}
+      },
+      cutout:'60%'
     }
   });
-  // Legend
-  ctx.fillStyle='#34A853'; ctx.fillRect(pad.left,12,12,12);
-  ctx.fillStyle='#1B2A4A'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
-  ctx.fillText('Google Ads', pad.left+16,23);
-  ctx.fillStyle='#1877F2'; ctx.fillRect(pad.left+110,12,12,12);
-  ctx.fillStyle='#1B2A4A'; ctx.fillText('Meta Ads', pad.left+126,23);
+
+  // Monthly Bar
+  new Chart(document.getElementById('monthlyBar'), {
+    type:'bar',
+    data:{
+      labels:MONTHS,
+      datasets:[
+        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A85320',borderColor:'#34A853',borderWidth:2,borderRadius:4},
+        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F220',borderColor:'#1877F2',borderWidth:2,borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:12}}}},
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+
+  // Monthly Detail
+  const combined = MONTHLY_GOOGLE.map((v,i)=>v+MONTHLY_META[i]);
+  new Chart(document.getElementById('monthlyDetail'), {
+    type:'bar',
+    data:{
+      labels:MONTHS,
+      datasets:[
+        {label:'Google Ads',data:MONTHLY_GOOGLE,backgroundColor:'#34A853',borderRadius:6,stack:'total'},
+        {label:'Meta Ads',data:MONTHLY_META,backgroundColor:'#1877F2',borderRadius:6,stack:'total'},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top'},
+        tooltip:{callbacks:{footer:items=>'Total: $'+items.reduce((a,b)=>a+b.parsed.y,0).toLocaleString()}}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'},stacked:true},
+        x:{grid:{display:false},stacked:true}
+      }
+    }
+  });
 }
 </script>
 
-<!-- ═══════════════ LAUNCH CENTER ═══════════════ -->
-<div id="tab-launch" class="page">
+<!-- ═══════════════ PRESUPUESTO POR ÁREA ═══════════════ -->
+<div id="tab-budget" class="page">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+    <div style="width:44px;height:44px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">💰</div>
+    <div>
+      <div class="section-title">Presupuesto Anual + Mensual por Área</div>
+      <div class="section-sub" style="margin-bottom:0">Datos reales por campaña · Para solicitud de pagos y control financiero</div>
+    </div>
+  </div>
+  <div style="height:4px;background:linear-gradient(90deg,#1877F2,#C8922A,#34A853);border-radius:2px;margin-bottom:20px"></div>
 
-  <div class="launch-hero">
-    <h2>🚀 Centro de Lanzamiento de Campañas</h2>
-    <p>Crea y lanza campañas directamente en Meta Ads y Google Ads desde este panel.</p>
-    <div class="api-status-bar">
-      <div class="api-pill checking" id="pill-meta"><span class="api-dot"></span> <span id="pill-meta-label">Meta Ads · Verificando…</span></div>
-      <div class="api-pill checking" id="pill-google"><span class="api-dot"></span> <span id="pill-google-label">Google Ads · Verificando…</span></div>
-      <div class="api-pill ok"><span class="api-dot"></span> Dashboard v2.0 · Activo</div>
+  <!-- SUMMARY CARDS -->
+  <div class="grid-4 mb24" id="budget-summary-cards"></div>
+
+  <!-- MONTHLY TOTAL CHART -->
+  <div class="grid-2 mb24">
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Inversión Real Mensual (Meta + Google)</div></div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="realMonthlyChart"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Presupuestado vs Gastado por Tipo</div></div>
+      <div class="card-body">
+        <div class="chart-box"><canvas id="vsGastadoChart"></canvas></div>
+      </div>
     </div>
   </div>
 
-  <div class="launch-grid">
-
-    <!-- LEFT: FORM PANEL -->
-    <div>
-      <div class="launch-panel mb24">
-        <div class="launch-panel-header">⚡ Campañas Preconfiguradas</div>
-        <div class="launch-panel-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Selecciona una campaña del plan 2026 para cargar su configuración automáticamente:</p>
-          <div class="presets-grid" id="presets-grid">
-            <!-- populated by JS -->
-          </div>
-        </div>
-      </div>
-
-      <div class="launch-panel">
-        <div class="launch-panel-header">📋 Configurar Campaña</div>
-        <div class="launch-panel-body">
-
-          <div id="result-banner" class="result-banner">
-            <div class="rb-icon" id="rb-icon">✅</div>
-            <div class="rb-text">
-              <strong id="rb-title">Éxito</strong>
-              <p id="rb-body"></p>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Plataforma</label>
-            <select class="form-control" id="lf-platform" onchange="onPlatformChange()">
-              <option value="meta">🔵 Meta Ads (Facebook + Instagram)</option>
-              <option value="google">🟢 Google Ads (Search + Display)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Nombre de Campaña</label>
-            <input type="text" class="form-control" id="lf-name" placeholder="Ej: Dictamen Fiscal T1 — Feb 2026">
-          </div>
-
-          <div class="form-group" id="fg-objective">
-            <label class="form-label">Objetivo de Campaña</label>
-            <select class="form-control" id="lf-objective">
-              <option value="OUTCOME_LEADS">Lead Generation</option>
-              <option value="OUTCOME_AWARENESS">Awareness</option>
-              <option value="OUTCOME_ENGAGEMENT">Engagement</option>
-              <option value="OUTCOME_TRAFFIC">Tráfico</option>
-            </select>
-          </div>
-
-          <div class="form-group" id="fg-gtype" style="display:none">
-            <label class="form-label">Tipo de Campaña Google</label>
-            <select class="form-control" id="lf-gtype">
-              <option value="SEARCH">Search</option>
-              <option value="DISPLAY">Display</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Presupuesto Diario (MXN)</label>
-            <input type="number" class="form-control" id="lf-budget" placeholder="500" min="100" step="50">
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px" id="budget-hint">≈ $15,000/mes · Recomendado para T2 según el plan</div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Fecha de Inicio</label>
-            <input type="date" class="form-control" id="lf-start">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fecha de Fin</label>
-            <input type="date" class="form-control" id="lf-end">
-          </div>
-
-          <div class="form-group" id="fg-headline">
-            <label class="form-label">Headline Principal</label>
-            <input type="text" class="form-control" id="lf-headline" placeholder="Ej: El dictamen fiscal tiene fecha límite" maxlength="40">
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px"><span id="hl-count">0</span>/40 caracteres</div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Body Copy / Descripción</label>
-            <textarea class="form-control" id="lf-body" placeholder="Mensaje principal del anuncio…" maxlength="125" oninput="updateBodyCount()"></textarea>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px"><span id="body-count">0</span>/125 caracteres</div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Servicio / Categoría</label>
-            <select class="form-control" id="lf-service">
-              <option>Auditoría / Dictamen</option>
-              <option>Fiscal / Defensa</option>
-              <option>Nómina</option>
-              <option>Laboral / STPS</option>
-              <option>Corporativo</option>
-              <option>Contabilidad</option>
-              <option>Always On / Brand</option>
-            </select>
-          </div>
-
-          <div class="divider-label"><span>Acción</span></div>
-
-          <button class="btn-secondary" onclick="previewCampaign()">👁 Vista Previa / Validar</button>
-          <button class="btn-launch" id="btn-launch-main" onclick="launchCampaign()">
-            <span id="launch-btn-text">🚀 Lanzar en Meta Ads</span>
-            <span id="launch-spinner" style="display:none" class="spinner"></span>
-          </button>
-
-        </div>
+  <!-- META ADS MONTHLY TABLE -->
+  <div class="section-title mb16" style="color:#1877F2;font-size:16px;">🔵 Meta Ads — Presupuesto Mensual Real por Campaña</div>
+  <div class="card mb24">
+    <div class="card-body" style="padding:16px">
+      <div class="table-wrap">
+        <table class="monthly-tbl" id="meta-monthly-tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left;background:#1877F2">Campaña</th>
+              <th style="background:#1877F2">Ene</th><th style="background:#1877F2">Feb</th><th style="background:#1877F2">Mar</th><th style="background:#1877F2">Abr</th><th style="background:#1877F2">May</th><th style="background:#1877F2">Jun</th>
+              <th style="background:#1877F2">Jul</th><th style="background:#1877F2">Ago</th><th style="background:#1877F2">Sep</th><th style="background:#1877F2">Oct</th><th style="background:#1877F2">Nov</th><th style="background:#1877F2">Dic</th>
+              <th style="background:#1877F2">TOTAL ANUAL</th>
+            </tr>
+          </thead>
+          <tbody id="meta-monthly-tbody"></tbody>
+        </table>
       </div>
     </div>
+  </div>
 
-    <!-- RIGHT: LOG + QUEUE -->
-    <div>
-      <div class="launch-panel mb24">
-        <div class="launch-panel-header">📡 Log de Actividad en Tiempo Real</div>
-        <div class="launch-panel-body" style="padding-bottom:20px">
-          <div class="launch-log" id="launch-log">
-            <span class="log-dim">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><br>
-            <span class="log-info">  LOFTON Dashboard v2.0 — Centro de Lanzamiento</span><br>
-            <span class="log-dim">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span><br>
-            <span class="log-dim">[INIT] Cargando credenciales API…</span><br>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn-secondary" style="margin-bottom:0" onclick="clearLog()">🗑 Limpiar Log</button>
-            <button class="btn-secondary" style="margin-bottom:0" onclick="checkApiStatus()">🔄 Re-verificar APIs</button>
-          </div>
-        </div>
+  <!-- GOOGLE ADS MONTHLY TABLE -->
+  <div class="section-title mb16" style="color:#34A853;font-size:16px;">🟢 Google Ads — Presupuesto Mensual Real por Campaña</div>
+  <div class="card mb24">
+    <div class="card-body" style="padding:16px">
+      <div class="table-wrap">
+        <table class="monthly-tbl" id="google-monthly-tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left;background:#34A853">Campaña</th>
+              <th style="background:#34A853">Ene</th><th style="background:#34A853">Feb</th><th style="background:#34A853">Mar</th><th style="background:#34A853">Abr</th><th style="background:#34A853">May</th><th style="background:#34A853">Jun</th>
+              <th style="background:#34A853">Jul</th><th style="background:#34A853">Ago</th><th style="background:#34A853">Sep</th><th style="background:#34A853">Oct</th><th style="background:#34A853">Nov</th><th style="background:#34A853">Dic</th>
+              <th style="background:#34A853">TOTAL ANUAL</th>
+            </tr>
+          </thead>
+          <tbody id="google-monthly-tbody"></tbody>
+        </table>
       </div>
+    </div>
+  </div>
 
-      <div class="launch-panel mb24">
-        <div class="launch-panel-header">📋 Cola de Campañas Lanzadas</div>
-        <div class="launch-panel-body">
-          <div class="campaign-queue" id="campaign-queue">
-            <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px">
-              Las campañas lanzadas aparecerán aquí.<br>
-              <span style="font-size:11px;opacity:.7">Esta sesión · No persiste al recargar</span>
-            </div>
-          </div>
-        </div>
+  <!-- PRESUPUESTADO VS GASTADO -->
+  <div class="section-title mb16" style="font-size:16px;">📊 Presupuestado vs Gastado — Por Tipo de Campaña</div>
+  <div class="tip"><strong>Instrucciones:</strong> Ingresa el gasto real acumulado por área para visualizar la comparativa. Los datos se guardan automáticamente en tu navegador.</div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <select class="filter-select" id="vs-month-select" onchange="renderVsGastado()">
+          <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+          <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+          <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+          <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+        </select>
+        <span style="font-size:12px;color:var(--text-muted)">Selecciona el mes de reporte</span>
+        <button onclick="clearGastado()" style="padding:6px 14px;border-radius:8px;border:1px solid var(--gray-border);background:#FEE2E2;color:#991B1B;font-size:12px;font-weight:700;cursor:pointer">🗑 Limpiar datos</button>
       </div>
+      <div id="vs-gastado-rows"></div>
+    </div>
+  </div>
 
-      <!-- NEXT RECOMMENDED -->
-      <div class="launch-panel">
-        <div class="launch-panel-header">📅 Próximas a Lanzar — Según Temporalidad</div>
-        <div class="launch-panel-body">
-          <div id="upcoming-campaigns"></div>
-        </div>
+  <!-- RESUMEN DE PAGOS -->
+  <div class="section-title mb16" style="font-size:16px;">🧾 Resumen de Pagos — Por Mes</div>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table class="monthly-tbl" id="pagos-tbl">
+          <thead>
+            <tr>
+              <th style="text-align:left">Mes</th>
+              <th>Meta Ads</th>
+              <th>Google Ads</th>
+              <th>Total a Pagar</th>
+              <th>Acumulado</th>
+            </tr>
+          </thead>
+          <tbody id="pagos-tbody"></tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-// LAUNCH CENTER — CONFIG & TOKENS
-// ═══════════════════════════════════════════════
-const API_CONFIG = {
-  meta: {
-    accessToken: 'EAAR3hhxln1YBRM3lXgbLxy1zgIxKSU4wuEPs8PhZAYbmFA5ZBHWEGriHIuhrsK8p6ZCN2mMl5KZBipkYYgVVPxEdziBgzV59tOxgTEUsCY5g6ZCOp9XHDuQZBxREIUXGGipfhN89SuZArTxjj00YFnx6XZBAzDsMAgzroonsJKCM0ZCZBWj7TgFG3NkvPiMgGPEmm3kOLZCiYTDqRGvoedWzJfe2Q5gIMCmtU8quQcjD2lFOoHR',
-    appId: '1257317792587606',
-    adAccountId: 'act_1633887623426186',
-    apiVersion: 'v19.0',
-  },
-  google: {
-    // Tokens verificados externamente — integración vía servidor proxy requerida
-    configured: true,
+// ════════════════════════════════
+// BUDGET TAB DATA
+// ════════════════════════════════
+const META_MONTHLY = [
+  {name:'Always On Brand',          vals:[2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500], tipo:'always'},
+  {name:'Always On Remarketing',    vals:[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500], tipo:'always'},
+  {name:'Dictamen Fiscal',          vals:[0,4000,4000,0,0,0,0,0,2500,2500,0,0], tipo:'temporal'},
+  {name:'Dictamen CDMX',            vals:[0,2000,2000,0,0,0,0,0,0,0,0,0], tipo:'temporal'},
+  {name:'Dictamen IMSS/INFONAVIT',  vals:[0,2500,2500,0,0,0,0,0,0,0,0,0], tipo:'temporal'},
+  {name:'Nómina',                   vals:[0,2000,2000,0,0,0,3500,0,0,0,0,0], tipo:'temporal'},
+  {name:'PTU / CUCA-CUFIN',         vals:[0,1500,1500,1000,0,0,0,0,0,0,0,0], tipo:'temporal'},
+  {name:'Inspecciones STPS',        vals:[0,0,0,0,2500,2500,0,1750,1750,0,0,0], tipo:'temporal'},
+  {name:'Blindaje Laboral',         vals:[0,0,0,0,2250,2250,0,0,2000,2000,0,0], tipo:'temporal'},
+  {name:'Gobierno Corporativo',     vals:[0,0,0,0,1000,1000,1000,1000,1000,1000,0,0], tipo:'temporal'},
+  {name:'Defensa Fiscal',           vals:[0,0,2000,2000,0,0,0,1500,1500,0,0,0], tipo:'temporal'},
+  {name:'Coeficiente de Utilidad',  vals:[0,0,0,1250,1250,0,0,0,0,0,0,0], tipo:'temporal'},
+  {name:'Contratos Mercantiles',    vals:[0,0,0,0,0,1750,1750,0,0,0,0,0], tipo:'temporal'},
+  {name:'Cierre Fiscal',            vals:[0,0,0,0,0,0,0,0,3500,3500,0,0], tipo:'temporal'},
+  {name:'Aguinaldo',                vals:[0,0,0,0,0,0,0,0,0,1250,1250,0], tipo:'temporal'},
+  {name:'Declaración Anual',        vals:[0,0,0,0,0,0,0,0,0,0,0,3500], tipo:'temporal'},
+];
+
+const GOOGLE_MONTHLY = [
+  {name:'Brand Search',          vals:[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000], tipo:'search'},
+  {name:'Auditoría Search',      vals:[0,2500,2500,2500,2500,0,0,0,2500,2500,2500,0], tipo:'search'},
+  {name:'Fiscal Search',         vals:[0,0,2000,2000,2000,2000,0,2000,2000,2000,2000,0], tipo:'search'},
+  {name:'Nómina Search',         vals:[0,1500,1500,0,0,0,1500,0,0,1500,1500,0], tipo:'search'},
+  {name:'Laboral Search',        vals:[0,0,1500,1500,1500,1500,0,1500,1500,1500,1500,0], tipo:'search'},
+  {name:'Corporativo Search',    vals:[0,0,0,0,1200,1200,1200,1200,1200,1200,1200,0], tipo:'search'},
+  {name:'Contabilidad Search',   vals:[0,0,0,0,0,0,800,0,0,800,800,0], tipo:'search'},
+  {name:'Display Remarketing',   vals:[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500], tipo:'display'},
+  {name:'Display Temporales',    vals:[0,1000,1000,1000,1000,0,0,0,1000,1000,1000,0], tipo:'display'},
+];
+
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+function calcMonthlyTotal(campaigns) {
+  return MESES.map((_,i) => campaigns.reduce((s,c) => s+c.vals[i],0));
+}
+
+const META_TOTALS = calcMonthlyTotal(META_MONTHLY);
+const GOOGLE_TOTALS = calcMonthlyTotal(GOOGLE_MONTHLY);
+const GRAND_TOTALS = META_TOTALS.map((v,i)=>v+GOOGLE_TOTALS[i]);
+
+// ── RENDER BUDGET SUMMARY CARDS ──
+function renderBudgetSummaryCards() {
+  const el = document.getElementById('budget-summary-cards');
+  const metaAnual = META_TOTALS.reduce((a,b)=>a+b,0);
+  const googleAnual = GOOGLE_TOTALS.reduce((a,b)=>a+b,0);
+  const totalAnual = metaAnual + googleAnual;
+  const reserva = 45000;
+
+  const maxMes = GRAND_TOTALS.indexOf(Math.max(...GRAND_TOTALS));
+
+  el.innerHTML = `
+    <div class="card"><div class="card-header"><div class="card-title">Total Campañas</div></div><div class="card-body">
+      <div class="card-value">$${totalAnual.toLocaleString()}</div>
+      <div class="card-sub">Meta + Google Ads · Campañas activas</div>
+      <div class="card-tag tag-blue">Sin reserva estratégica</div>
+    </div></div>
+    <div class="card card-meta"><div class="card-header"><div class="card-title">🔵 Meta Ads</div></div><div class="card-body">
+      <div class="card-value" style="color:#1877F2">$${metaAnual.toLocaleString()}</div>
+      <div class="card-sub">${META_MONTHLY.length} campañas · 16 activaciones</div>
+      <div class="card-tag tag-blue">16 campañas</div>
+    </div></div>
+    <div class="card card-google"><div class="card-header"><div class="card-title">🟢 Google Ads</div></div><div class="card-body">
+      <div class="card-value" style="color:#34A853">$${googleAnual.toLocaleString()}</div>
+      <div class="card-sub">9 campañas · Search + Display</div>
+      <div class="card-tag tag-green">9 campañas</div>
+    </div></div>
+    <div class="card"><div class="card-header"><div class="card-title">Mes Pico</div></div><div class="card-body">
+      <div class="card-value">$${Math.max(...GRAND_TOTALS).toLocaleString()}</div>
+      <div class="card-sub">${MESES[maxMes]} — Mayor inversión del año</div>
+      <div class="card-tag tag-orange">Peak mensual</div>
+    </div></div>
+  `;
+}
+
+// ── RENDER MONTHLY TABLE ──
+function renderMonthlyTable(campaigns, tbodyId, color) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+  
+  // Section rows
+  let currentSection = '';
+  
+  campaigns.forEach(c => {
+    const total = c.vals.reduce((a,b)=>a+b,0);
+    const cells = c.vals.map(v => v===0
+      ? `<td style="color:#CBD5E1;font-size:11px">—</td>`
+      : `<td style="font-weight:700;color:${color}">$${v.toLocaleString()}</td>`
+    ).join('');
+    tbody.innerHTML += `<tr>
+      <td style="font-weight:600;font-size:12px;white-space:nowrap">${c.name}</td>
+      ${cells}
+      <td style="font-weight:800;color:${color}">$${total.toLocaleString()}</td>
+    </tr>`;
+  });
+
+  // Total row
+  const totals = MESES.map((_,i) => campaigns.reduce((s,c)=>s+c.vals[i],0));
+  const grandTotal = totals.reduce((a,b)=>a+b,0);
+  tbody.innerHTML += `<tr class="monthly-total">
+    <td style="text-align:left;font-weight:800">TOTAL MENSUAL</td>
+    ${totals.map(v=>`<td style="font-weight:800;color:${color}">$${v.toLocaleString()}</td>`).join('')}
+    <td style="font-weight:800;color:${color};font-size:15px">$${grandTotal.toLocaleString()}</td>
+  </tr>`;
+}
+
+// ── RENDER VS GASTADO ──
+function renderVsGastado() {
+  const mi = parseInt(document.getElementById('vs-month-select').value);
+  const mes = MESES[mi];
+  const saved = JSON.parse(localStorage.getItem('lofton-gastado') || '{}');
+  
+  const categories = [
+    {key:'meta-always', label:'Meta — Always On', presup: META_MONTHLY.filter(c=>c.tipo==='always').reduce((s,c)=>s+c.vals[mi],0), color:'#1877F2'},
+    {key:'meta-temporal', label:'Meta — Campañas Temporales', presup: META_MONTHLY.filter(c=>c.tipo==='temporal').reduce((s,c)=>s+c.vals[mi],0), color:'#4A90D9'},
+    {key:'google-search', label:'Google — Search', presup: GOOGLE_MONTHLY.filter(c=>c.tipo==='search').reduce((s,c)=>s+c.vals[mi],0), color:'#34A853'},
+    {key:'google-display', label:'Google — Display', presup: GOOGLE_MONTHLY.filter(c=>c.tipo==='display').reduce((s,c)=>s+c.vals[mi],0), color:'#2E7D32'},
+  ];
+
+  const el = document.getElementById('vs-gastado-rows');
+  el.innerHTML = '';
+
+  let html = `<div style="display:grid;grid-template-columns:220px 1fr 130px 130px 130px;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--gray-border)">
+    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase">Área</div>
+    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase">Avance</div>
+    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Presupuestado</div>
+    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Gastado Real</div>
+    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Diferencia</div>
+  `;
+
+  categories.forEach((cat, idx) => {
+    const gastado = saved[cat.key+'-'+mi] !== undefined ? saved[cat.key+'-'+mi] : 0;
+    const pct = cat.presup > 0 ? Math.min((gastado/cat.presup)*100, 150) : 0;
+    const diff = gastado - cat.presup;
+    const diffColor = diff > 0 ? '#DC3545' : diff < 0 ? '#28A745' : '#6B7280';
+    const diffLabel = diff > 0 ? `+$${diff.toLocaleString()} sobrepaso` : diff < 0 ? `-$${Math.abs(diff).toLocaleString()} restante` : 'Exacto';
+    const bg = idx%2===0 ? '#fff' : '#F8FAFF';
+    
+    html += `
+      <div style="background:${bg};padding:14px;display:flex;align-items:center;gap:10px;border-top:1px solid var(--gray-border)">
+        <span style="width:10px;height:10px;border-radius:50%;background:${cat.color};flex-shrink:0"></span>
+        <span style="font-size:12px;font-weight:600">${cat.label}</span>
+      </div>
+      <div style="background:${bg};padding:14px;display:flex;align-items:center;border-top:1px solid var(--gray-border)">
+        ${cat.presup > 0 ? `
+          <div style="flex:1">
+            <div style="height:16px;background:#E2E8F0;border-radius:8px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:${cat.color};border-radius:8px;transition:width .4s"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${Math.round(pct)}% ejecutado</div>
+          </div>
+        ` : '<span style="font-size:11px;color:#CBD5E1">Sin actividad este mes</span>'}
+      </div>
+      <div style="background:${bg};padding:14px;text-align:center;font-weight:700;color:var(--dark);border-top:1px solid var(--gray-border)">${cat.presup > 0 ? '$'+cat.presup.toLocaleString() : '—'}</div>
+      <div style="background:${bg};padding:10px 14px;border-top:1px solid var(--gray-border);text-align:center">
+        ${cat.presup > 0 ? `<input type="number" value="${gastado||''}" placeholder="0"
+          onchange="saveGastado('${cat.key}',${mi},this.value)"
+          style="width:90px;padding:5px 8px;border:1px solid var(--gray-border);border-radius:6px;font-size:12px;font-weight:700;text-align:center;color:${cat.color};outline:none"
+          onfocus="this.select()">` : '<span style="color:#CBD5E1">—</span>'}
+      </div>
+      <div style="background:${bg};padding:14px;text-align:center;font-weight:700;color:${diffColor};font-size:12px;border-top:1px solid var(--gray-border)">${cat.presup > 0 ? diffLabel : '—'}</div>
+    `;
+  });
+
+  const totalPresup = categories.reduce((s,c)=>s+c.presup,0);
+  const totalGastado = categories.reduce((s,c)=>s+(saved[c.key+'-'+mi]||0),0);
+  const totalDiff = totalGastado - totalPresup;
+  const totalDiffColor = totalDiff > 0 ? '#DC3545' : totalDiff < 0 ? '#28A745' : '#6B7280';
+  const totalPct = totalPresup > 0 ? Math.round((totalGastado/totalPresup)*100) : 0;
+
+  html += `
+    <div style="background:#EFF6FF;padding:14px;font-weight:800;color:var(--dark);border-top:2px solid var(--blue)">TOTAL ${mes.toUpperCase()}</div>
+    <div style="background:#EFF6FF;padding:14px;display:flex;align-items:center;border-top:2px solid var(--blue)">
+      <div style="flex:1">
+        <div style="height:16px;background:#E2E8F0;border-radius:8px;overflow:hidden">
+          <div style="height:100%;width:${Math.min(totalPct,100)}%;background:var(--blue);border-radius:8px"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${totalPct}% ejecutado</div>
+      </div>
+    </div>
+    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:var(--dark);border-top:2px solid var(--blue)">$${totalPresup.toLocaleString()}</div>
+    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:var(--blue);border-top:2px solid var(--blue)">$${totalGastado.toLocaleString()}</div>
+    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:${totalDiffColor};border-top:2px solid var(--blue)">${totalPresup > 0 ? (totalDiff >= 0 ? '+$'+totalDiff.toLocaleString() : '-$'+Math.abs(totalDiff).toLocaleString()) : '—'}</div>
+  </div>`;
+
+  el.innerHTML = html;
+  updateVsChart(categories, mes, saved, mi);
+}
+
+function saveGastado(key, mi, val) {
+  const saved = JSON.parse(localStorage.getItem('lofton-gastado') || '{}');
+  saved[key+'-'+mi] = parseFloat(val) || 0;
+  localStorage.setItem('lofton-gastado', JSON.stringify(saved));
+  renderVsGastado();
+}
+
+function clearGastado() {
+  if (confirm('¿Limpiar todos los datos de gasto real guardados?')) {
+    localStorage.removeItem('lofton-gastado');
+    renderVsGastado();
+  }
+}
+
+// ── RENDER PAGOS TABLE ──
+function renderPagosTable() {
+  const tbody = document.getElementById('pagos-tbody');
+  tbody.innerHTML = '';
+  let acum = 0;
+  MESES.forEach((mes, i) => {
+    const meta = META_TOTALS[i];
+    const google = GOOGLE_TOTALS[i];
+    const total = meta + google;
+    acum += total;
+    const rowBg = i % 2 === 0 ? '' : 'style="background:#F8FAFF"';
+    tbody.innerHTML += `<tr ${rowBg}>
+      <td style="font-weight:700">${mes} 2026</td>
+      <td style="color:#1877F2;font-weight:700">${meta > 0 ? '$'+meta.toLocaleString() : '—'}</td>
+      <td style="color:#34A853;font-weight:700">${google > 0 ? '$'+google.toLocaleString() : '—'}</td>
+      <td style="font-weight:800;color:var(--dark)">$${total.toLocaleString()}</td>
+      <td style="color:var(--text-muted)">$${acum.toLocaleString()}</td>
+    </tr>`;
+  });
+  const totalMeta = META_TOTALS.reduce((a,b)=>a+b,0);
+  const totalGoogle = GOOGLE_TOTALS.reduce((a,b)=>a+b,0);
+  tbody.innerHTML += `<tr class="monthly-total">
+    <td style="text-align:left;font-weight:800">TOTAL ANUAL</td>
+    <td style="color:#1877F2;font-weight:800">$${totalMeta.toLocaleString()}</td>
+    <td style="color:#34A853;font-weight:800">$${totalGoogle.toLocaleString()}</td>
+    <td style="font-weight:800;color:var(--dark)">$${(totalMeta+totalGoogle).toLocaleString()}</td>
+    <td style="font-weight:800;color:var(--dark)">$${(totalMeta+totalGoogle).toLocaleString()}</td>
+  </tr>`;
+}
+
+// ── CHARTS FOR BUDGET TAB ──
+let realMonthlyChartInst = null;
+let vsGastadoChartInst = null;
+
+function initBudgetCharts() {
+  // Real Monthly Stacked Bar
+  const ctx1 = document.getElementById('realMonthlyChart');
+  if (realMonthlyChartInst) realMonthlyChartInst.destroy();
+  realMonthlyChartInst = new Chart(ctx1, {
+    type:'bar',
+    data:{
+      labels: MESES,
+      datasets:[
+        {label:'Meta Ads',data:META_TOTALS,backgroundColor:'#1877F2CC',borderRadius:4,stack:'total'},
+        {label:'Google Ads',data:GOOGLE_TOTALS,backgroundColor:'#34A853CC',borderRadius:4,stack:'total'},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top'},
+        tooltip:{callbacks:{
+          footer: items => 'Total: $'+items.reduce((a,b)=>a+b.parsed.y,0).toLocaleString()
+        }}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},stacked:true,grid:{color:'#E2E8F0'}},
+        x:{grid:{display:false},stacked:true}
+      }
+    }
+  });
+}
+
+function updateVsChart(categories, mes, saved, mi) {
+  const ctx2 = document.getElementById('vsGastadoChart');
+  if (vsGastadoChartInst) vsGastadoChartInst.destroy();
+  const labels = categories.map(c=>c.label.split(' — ')[1]||c.label);
+  const presup = categories.map(c=>c.presup);
+  const gastado = categories.map(c=>saved[c.key+'-'+mi]||0);
+  vsGastadoChartInst = new Chart(ctx2, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Presupuestado',data:presup,backgroundColor:'#CBD5E1',borderRadius:4},
+        {label:'Gastado Real',data:gastado,backgroundColor:['#1877F2','#4A90D9','#34A853','#2E7D32'],borderRadius:4},
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top'},
+        title:{display:true,text:`${mes} 2026 — Presupuestado vs Gastado`,font:{size:12}}
+      },
+      scales:{
+        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
+
+// ── INITIALIZE BUDGET TAB ──
+function initBudgetTab() {
+  renderBudgetSummaryCards();
+  renderMonthlyTable(META_MONTHLY, 'meta-monthly-tbody', '#1877F2');
+  renderMonthlyTable(GOOGLE_MONTHLY, 'google-monthly-tbody', '#34A853');
+  renderPagosTable();
+  // Set current month
+  const currentMonth = new Date().getMonth();
+  document.getElementById('vs-month-select').value = currentMonth;
+  renderVsGastado();
+  initBudgetCharts();
+}
+
+// Override showTab to init budget tab on first open
+const _originalShowTab = showTab;
+let budgetTabInit = false;
+showTab = function(tab) {
+  _originalShowTab.call(this, tab);
+  if (tab === 'budget' && !budgetTabInit) {
+    budgetTabInit = true;
+    setTimeout(initBudgetTab, 50);
   }
 };
-
-// ═══════════════════════════════════════════════
-// PRESETS — CAMPAÑAS DEL PLAN 2026
-// ═══════════════════════════════════════════════
-const PRESETS = [
-  { platform:'meta', icon:'🔵', label:'Dictamen Fiscal', detail:'Feb–Mar · $8,000', name:'LOFTON — Dictamen Fiscal T1 2026', objective:'OUTCOME_LEADS', budget:270, start:'2026-04-01', end:'2026-05-15', headline:'El dictamen fiscal tiene fecha límite: 15 mayo', body:'Cada año el SAT incrementa sus revisiones. ¿Tu dictamen está listo? Acompañamiento integral.', service:'Auditoría / Dictamen', cls:'pb-meta' },
-  { platform:'meta', icon:'🔵', label:'Inspecciones STPS', detail:'May–Jun · $5,000', name:'LOFTON — STPS Prevención T2 2026', objective:'OUTCOME_LEADS', budget:165, start:'2026-05-01', end:'2026-06-30', headline:'¿Tu REPSE está al día? STPS puede visitarte sin aviso', body:'Las inspecciones STPS se intensifican en 2026. Te preparamos para pasar cualquier revisión.', service:'Laboral / STPS', cls:'pb-meta' },
-  { platform:'meta', icon:'🔵', label:'Nómina Arranque', detail:'Feb · $4,000', name:'LOFTON — Nómina Arranque de Año 2026', objective:'OUTCOME_LEADS', budget:200, start:'2026-04-01', end:'2026-04-30', headline:'¿Sigues calculando nómina en Excel?', body:'Errores de nómina = multas + demandas. Profesionaliza el proceso con Lofton.', service:'Nómina', cls:'pb-meta' },
-  { platform:'meta', icon:'🔵', label:'Cierre Fiscal T4', detail:'Sep–Nov · $7,000', name:'LOFTON — Cierre Fiscal T4 2026', objective:'OUTCOME_LEADS', budget:230, start:'2026-09-14', end:'2026-11-15', headline:'¿Cómo vas a cerrar fiscalmente el 2026?', body:'La planeación fiscal antes de diciembre define cuánto pagarás en 2027. Optimizamos tu cierre.', service:'Fiscal / Defensa', cls:'pb-meta' },
-  { platform:'google', icon:'🟢', label:'Brand Search', detail:'Always On · $12,000', name:'LOFTON — Brand Campaign 2026', objective:'OUTCOME_LEADS', budget:400, start:'2026-04-01', end:'2026-12-31', headline:'Lofton Servicios Integrales', body:'Certeza, control y protección para tu empresa. Diagnóstico sin costo. Más de 30 años.', service:'Always On / Brand', cls:'pb-google' },
-  { platform:'google', icon:'🟢', label:'Auditoría Search', detail:'Feb–May · $20,000', name:'LOFTON — Auditoría Search 2026', objective:'OUTCOME_LEADS', budget:660, start:'2026-04-01', end:'2026-05-31', headline:'Dictamen Fiscal 2026 — Fecha Límite 15 May', body:'Acompañamiento integral desde el aviso hasta la presentación. Evita multas del SAT.', service:'Auditoría / Dictamen', cls:'pb-google' },
-];
-
-const UPCOMING = [
-  { platform:'meta', name:'Gobierno Corporativo', dates:'2 May – 31 Oct', budget:'$6,000', urgency:'alta', icon:'🔵' },
-  { platform:'meta', name:'PTU — Cálculo e Inspecciones', dates:'18 Mar – 30 Abr', budget:'$2,500', urgency:'alta', icon:'🔵' },
-  { platform:'google', name:'Laboral — Search', dates:'Mar–Jun / Ago–Nov', budget:'$12,000/año', urgency:'media', icon:'🟢' },
-  { platform:'google', name:'Nómina — Search', dates:'Feb–Mar / Jul', budget:'$12,000/año', urgency:'media', icon:'🟢' },
-];
-
-// ═══════════════════════════════════════════════
-// LOG HELPERS
-// ═══════════════════════════════════════════════
-const logEl = () => document.getElementById('launch-log');
-function log(msg, cls='') {
-  const el = logEl();
-  const ts = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  el.innerHTML += `<span class="log-line ${cls}">[${ts}] ${msg}</span>\n`;
-  el.scrollTop = el.scrollHeight;
-}
-function clearLog() { logEl().innerHTML = '<span class="log-dim">[CLR] Log limpiado.\n</span>'; }
-
-// ═══════════════════════════════════════════════
-// API STATUS CHECK
-// ═══════════════════════════════════════════════
-async function checkApiStatus() {
-  const metaPill = document.getElementById('pill-meta');
-  const metaLabel = document.getElementById('pill-meta-label');
-  const gPill = document.getElementById('pill-google');
-  const gLabel = document.getElementById('pill-google-label');
-
-  // Simulate check delay for UX
-  await sleep(800);
-  metaPill.className = 'api-pill ok';
-  metaLabel.textContent = 'Meta Ads · ✅ Credenciales OK';
-  log('✅ Meta Ads · App ID + Access Token + Ad Account configurados', 'log-ok');
-  log(`   Cuenta: ${API_CONFIG.meta.adAccountId}`, 'log-dim');
-
-  await sleep(500);
-  gPill.className = 'api-pill ok';
-  gLabel.textContent = 'Google Ads · ✅ Credenciales OK';
-  log('✅ Google Ads · Credenciales OAuth2 verificadas (5/5 tokens presentes)', 'log-ok');
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-  log('Sistema listo. Puedes configurar y lanzar campañas.', 'log-info');
-}
-
-// ═══════════════════════════════════════════════
-// RENDER PRESETS
-// ═══════════════════════════════════════════════
-function renderPresets() {
-  const grid = document.getElementById('presets-grid');
-  grid.innerHTML = '';
-  PRESETS.forEach((p, i) => {
-    grid.innerHTML += `<button class="preset-btn ${p.cls}" onclick="loadPreset(${i})">
-      <div class="pb-name">${p.icon} ${p.label}</div>
-      <div class="pb-detail">${p.detail}</div>
-    </button>`;
-  });
-}
-
-function loadPreset(i) {
-  const p = PRESETS[i];
-  document.getElementById('lf-platform').value = p.platform;
-  document.getElementById('lf-name').value = p.name;
-  document.getElementById('lf-objective').value = p.objective;
-  document.getElementById('lf-budget').value = p.budget;
-  document.getElementById('lf-start').value = p.start;
-  document.getElementById('lf-end').value = p.end;
-  document.getElementById('lf-headline').value = p.headline;
-  document.getElementById('lf-body').value = p.body;
-  document.getElementById('lf-service').value = p.service;
-  onPlatformChange();
-  updateBodyCount();
-  updateHlCount();
-  updateBudgetHint();
-  log(`📋 Preset cargado: "${p.name}"`, 'log-info');
-  showBanner('info', '📋 Preset cargado', `Configuración de "${p.label}" lista. Revisa y ajusta antes de lanzar.`);
-}
-
-// ═══════════════════════════════════════════════
-// FORM HELPERS
-// ═══════════════════════════════════════════════
-function onPlatformChange() {
-  const p = document.getElementById('lf-platform').value;
-  document.getElementById('fg-objective').style.display = p === 'meta' ? '' : 'none';
-  document.getElementById('fg-gtype').style.display = p === 'google' ? '' : 'none';
-  const btn = document.getElementById('launch-btn-text');
-  btn.textContent = p === 'meta' ? '🚀 Lanzar en Meta Ads' : '🚀 Lanzar en Google Ads';
-  document.getElementById('btn-launch-main').className = `btn-launch ${p}`;
-}
-
-function updateBodyCount() {
-  const v = document.getElementById('lf-body').value.length;
-  document.getElementById('body-count').textContent = v;
-}
-
-function updateHlCount() {
-  const v = document.getElementById('lf-headline').value.length;
-  document.getElementById('hl-count').textContent = v;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('lf-headline').addEventListener('input', updateHlCount);
-  document.getElementById('lf-budget').addEventListener('input', updateBudgetHint);
-  // Set today as default start
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('lf-start').value = today;
-  const end = new Date(); end.setMonth(end.getMonth()+1);
-  document.getElementById('lf-end').value = end.toISOString().split('T')[0];
-});
-
-function updateBudgetHint() {
-  const d = parseFloat(document.getElementById('lf-budget').value) || 0;
-  const monthly = (d * 30).toLocaleString('es-MX');
-  document.getElementById('budget-hint').textContent = `≈ $${monthly}/mes estimado`;
-}
-
-// ═══════════════════════════════════════════════
-// PREVIEW / VALIDATE
-// ═══════════════════════════════════════════════
-function previewCampaign() {
-  const data = getFormData();
-  if (!validateForm(data)) return;
-  log('━━━━━━━━━━━━━━ VISTA PREVIA ━━━━━━━━━━━━━━', 'log-dim');
-  log(`📋 Nombre: ${data.name}`, 'log-info');
-  log(`🎯 Plataforma: ${data.platform === 'meta' ? 'Meta Ads' : 'Google Ads'}`, 'log-info');
-  log(`💰 Presupuesto diario: $${data.budget} MXN`, 'log-info');
-  log(`📅 Periodo: ${data.start} → ${data.end}`, 'log-info');
-  log(`✍️  Headline: "${data.headline}"`, 'log-info');
-  log(`📝 Body: "${data.body}"`, 'log-info');
-  log(`🏷  Servicio: ${data.service}`, 'log-info');
-  if (data.platform === 'meta') log(`🎯 Objetivo: ${data.objective}`, 'log-info');
-  log('✅ Validación OK — Campaña lista para lanzar.', 'log-ok');
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-  showBanner('info', '✅ Validación correcta', 'Todos los campos están completos. Presiona Lanzar cuando estés listo.');
-}
-
-// ═══════════════════════════════════════════════
-// LAUNCH CAMPAIGN
-// ═══════════════════════════════════════════════
-async function launchCampaign() {
-  const data = getFormData();
-  if (!validateForm(data)) return;
-
-  setLaunching(true);
-  log('━━━━━━━━━━━━━━ LANZANDO CAMPAÑA ━━━━━━━━━━━━━━', 'log-dim');
-  log(`🚀 Iniciando: "${data.name}"`, 'log-info');
-  log(`📡 Plataforma: ${data.platform === 'meta' ? 'Meta Ads' : 'Google Ads'}`, 'log-info');
-
-  try {
-    if (data.platform === 'meta') {
-      await launchMetaCampaign(data);
-    } else {
-      await launchGoogleCampaign(data);
-    }
-  } catch(e) {
-    log(`❌ Error: ${e.message}`, 'log-err');
-    showBanner('error', '❌ Error al lanzar', e.message);
-  }
-
-  setLaunching(false);
-}
-
-async function launchMetaCampaign(data) {
-  const token = API_CONFIG.meta.accessToken;
-  const acct = API_CONFIG.meta.adAccountId;
-  const ver = API_CONFIG.meta.apiVersion;
-  const base = `https://graph.facebook.com/${ver}`;
-
-  // STEP 1: Create Campaign
-  log('① Creando campaña en Meta Ads…', 'log-info');
-  const startTs = Math.floor(new Date(data.start).getTime()/1000);
-  const endTs = Math.floor(new Date(data.end).getTime()/1000);
-
-  const campaignParams = new URLSearchParams({
-    name: data.name,
-    objective: data.objective,
-    status: 'PAUSED',
-    special_ad_categories: '[]',
-    access_token: token,
-  });
-
-  const campaignRes = await fetch(`${base}/${acct}/campaigns`, {
-    method: 'POST',
-    mode: 'cors',
-    body: campaignParams,
-  });
-  const campaignData = JSON.parse(await campaignRes.text());
-
-  if (campaignData.error) throw new Error(`Campaña: ${campaignData.error.message}`);
-  const campaignId = campaignData.id;
-  log(`   ✅ Campaña creada: ID ${campaignId}`, 'log-ok');
-
-  // STEP 2: Create Ad Set
-  log('② Creando Ad Set…', 'log-info');
-  const budgetCentavos = Math.round(data.budget * 100);
-  const adSetParams = new URLSearchParams({
-    name: `${data.name} — Ad Set`,
-    campaign_id: campaignId,
-    daily_budget: String(budgetCentavos),
-    billing_event: 'IMPRESSIONS',
-    optimization_goal: 'LEAD_GENERATION',
-    targeting: JSON.stringify({geo_locations:{countries:['MX']},age_min:25,age_max:65}),
-    start_time: String(startTs),
-    end_time: String(endTs),
-    status: 'PAUSED',
-    access_token: token,
-  });
-
-  let adSetRes, adSetData;
-  try {
-    adSetRes = await fetch(`${base}/${acct}/adsets`, {
-      method: 'POST',
-      mode: 'cors',
-      body: adSetParams,
-    });
-    adSetData = JSON.parse(await adSetRes.text());
-  } catch(fetchErr) {
-    throw new Error(`Error creando Ad Set: ${fetchErr.message}`);
-  }
-  if (adSetData.error) throw new Error(`Ad Set: ${adSetData.error.message}`);
-  const adSetId = adSetData.id;
-  log(`   ✅ Ad Set creado: ID ${adSetId}`, 'log-ok');
-
-  // STEP 3: Create Ad Creative
-  log('③ Creando Creative…', 'log-info');
-  const creativeParams = new URLSearchParams({
-    name: `${data.name} — Creative`,
-    object_story_spec: JSON.stringify({
-      page_id: '0',
-      link_data: {
-        message: data.body,
-        name: data.headline,
-        link: 'https://lofton.mx',
-        call_to_action: { type: 'LEARN_MORE' },
-      }
-    }),
-    access_token: token,
-  });
-
-  let creativeRes, creativeData;
-  try {
-    creativeRes = await fetch(`${base}/${acct}/adcreatives`, {
-      method: 'POST',
-      mode: 'cors',
-      body: creativeParams,
-    });
-    creativeData = JSON.parse(await creativeRes.text());
-  } catch(fetchErr) {
-    creativeData = { error: { message: fetchErr.message } };
-  }
-  let creativeId = null;
-  if (creativeData.error) {
-    log(`   ⚠️  Creative pendiente (requiere Page ID) — campaña y ad set listos`, 'log-warn');
-  } else {
-    creativeId = creativeData.id;
-    log(`   ✅ Creative creado: ID ${creativeId}`, 'log-ok');
-  }
-
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-  log(`🎉 CAMPAÑA CREADA EN META ADS (Estado: PAUSED)`, 'log-ok');
-  log(`   Campaña ID: ${campaignId}`, 'log-ok');
-  log(`   Ad Set ID: ${adSetId}`, 'log-ok');
-  log(`   Presupuesto: $${data.budget} MXN/día`, 'log-ok');
-  log(`   ⚠️  Activa en Meta Ads Manager para publicar`, 'log-warn');
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-
-  addToQueue({ name: data.name, platform: 'meta', icon: '🔵', budget: data.budget, id: campaignId, status: 'launched' });
-  showBanner('success', '✅ Campaña creada en Meta Ads', `ID: ${campaignId} · Estado: PAUSED · Actívala en Ads Manager para publicar.`);
-}
-
-async function launchGoogleCampaign(data) {
-  // Google Ads API requiere OAuth2 server-side (no se puede llamar desde browser)
-  // Simulamos el flujo completo y generamos el payload listo para ejecutar
-  log('① Preparando payload para Google Ads API…', 'log-info');
-  await sleep(600);
-  log('② Validando estructura de campaña…', 'log-info');
-  await sleep(500);
-
-  const payload = {
-    campaign: {
-      name: data.name,
-      status: 'PAUSED',
-      advertisingChannelType: document.getElementById('lf-gtype').value,
-      manualCpc: { enhancedCpcEnabled: true },
-      networkSettings: { targetGoogleSearch: true, targetSearchNetwork: true, targetContentNetwork: false },
-      startDate: data.start.replace(/-/g,''),
-      endDate: data.end.replace(/-/g,''),
-    },
-    budget: {
-      name: `Budget — ${data.name}`,
-      amountMicros: Math.round(data.budget * 1_000_000),
-      deliveryMethod: 'STANDARD',
-    },
-    adGroup: {
-      name: `${data.name} — Grupo 1`,
-      status: 'ENABLED',
-      type: 'SEARCH_STANDARD',
-      cpcBidMicros: 15_000_000,
-    },
-    ad: {
-      headlines: [
-        { text: data.headline.substring(0,30) },
-        { text: 'Más de 30 Años de Experiencia' },
-        { text: 'Diagnóstico Sin Costo' },
-      ],
-      descriptions: [
-        { text: data.body.substring(0,90) },
-        { text: 'Certeza, control y protección para tu empresa.' },
-      ],
-      finalUrls: ['https://lofton.mx'],
-    }
-  };
-
-  log('③ Payload Google Ads generado ✅', 'log-ok');
-  await sleep(400);
-  log('④ Credenciales OAuth2 verificadas ✅', 'log-ok');
-  log('⑤ Google Ads requiere ejecución server-side vía Python SDK', 'log-warn');
-  log('   → Ejecuta: python3 launch_google_campaign.py', 'log-warn');
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-  log('📋 PAYLOAD GOOGLE ADS LISTO:', 'log-ok');
-  log(JSON.stringify(payload, null, 2).split('\n').slice(0,12).join('\n'), 'log-dim');
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'log-dim');
-
-  addToQueue({ name: data.name, platform: 'google', icon: '🟢', budget: data.budget, id: 'PENDING-GADS', status: 'pending' });
-  showBanner('info', '📋 Google Ads: Payload generado', 'Ejecuta el script Python con las credenciales configuradas para activar en Google Ads. El payload está en el log.');
-}
-
-// ═══════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════
-function getFormData() {
-  return {
-    platform: document.getElementById('lf-platform').value,
-    name: document.getElementById('lf-name').value.trim(),
-    objective: document.getElementById('lf-objective').value,
-    budget: parseFloat(document.getElementById('lf-budget').value),
-    start: document.getElementById('lf-start').value,
-    end: document.getElementById('lf-end').value,
-    headline: document.getElementById('lf-headline').value.trim(),
-    body: document.getElementById('lf-body').value.trim(),
-    service: document.getElementById('lf-service').value,
-  };
-}
-
-function validateForm(data) {
-  const errs = [];
-  if (!data.name) errs.push('Nombre de campaña requerido');
-  if (!data.budget || data.budget < 100) errs.push('Presupuesto mínimo: $100 MXN/día');
-  if (!data.start) errs.push('Fecha de inicio requerida');
-  if (!data.end) errs.push('Fecha de fin requerida');
-  if (!data.headline) errs.push('Headline requerido');
-  if (!data.body) errs.push('Body copy requerido');
-  if (errs.length) {
-    errs.forEach(e => log(`⚠️  ${e}`, 'log-warn'));
-    showBanner('error', '⚠️ Campos incompletos', errs.join(' · '));
-    return false;
-  }
-  return true;
-}
-
-function setLaunching(on) {
-  document.getElementById('btn-launch-main').disabled = on;
-  document.getElementById('launch-btn-text').style.display = on ? 'none' : '';
-  document.getElementById('launch-spinner').style.display = on ? '' : 'none';
-}
-
-function showBanner(type, title, body) {
-  const el = document.getElementById('result-banner');
-  const icons = { success:'✅', error:'❌', info:'📋' };
-  el.className = `result-banner show ${type}`;
-  document.getElementById('rb-icon').textContent = icons[type];
-  document.getElementById('rb-title').textContent = title;
-  document.getElementById('rb-body').textContent = body;
-  setTimeout(() => el.classList.remove('show'), 12000);
-}
-
-function addToQueue(item) {
-  const q = document.getElementById('campaign-queue');
-  if (q.querySelector('div[style]')) q.innerHTML = '';
-  const statusMap = { launched:'qs-launched', pending:'qs-pending', error:'qs-error', ready:'qs-ready' };
-  const statusLabel = { launched:'🟢 Creada', pending:'🟡 Payload listo', error:'🔴 Error', ready:'⚪ Lista' };
-  q.innerHTML += `<div class="queue-item">
-    <div class="qi-icon">${item.icon}</div>
-    <div class="qi-info">
-      <div class="qi-name">${item.name}</div>
-      <div class="qi-meta">ID: ${item.id} · $${item.budget}/día · ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}</div>
-    </div>
-    <span class="qi-status ${statusMap[item.status]}">${statusLabel[item.status]}</span>
-  </div>`;
-}
-
-function renderUpcoming() {
-  const el = document.getElementById('upcoming-campaigns');
-  el.innerHTML = '';
-  UPCOMING.forEach(u => {
-    const urgencyColor = u.urgency === 'alta' ? '#DC3545' : '#F4A100';
-    el.innerHTML += `<div class="queue-item" style="margin-bottom:8px">
-      <div class="qi-icon">${u.icon}</div>
-      <div class="qi-info">
-        <div class="qi-name">${u.name}</div>
-        <div class="qi-meta">${u.dates} · ${u.budget}</div>
-      </div>
-      <span class="qi-status" style="background:${urgencyColor}20;color:${urgencyColor};border:1px solid ${urgencyColor}40">
-        Urgencia ${u.urgency}
-      </span>
-    </div>`;
-  });
-}
-
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-// ── INIT LAUNCH MODULE ──
-window.addEventListener('load', () => {
-  renderPresets();
-  renderUpcoming();
-  checkApiStatus();
-});
 </script>
-
 </body>
 </html>
