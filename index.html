@@ -181,6 +181,7 @@
   /* ── NAV TAB PLATFORM COLORS ── */
   .nav-btn[data-tab="meta"].active { color:#1877F2; border-bottom-color:#1877F2; }
   .nav-btn[data-tab="google"].active { color:#34A853; border-bottom-color:#34A853; }
+  .nav-btn[data-tab="borradores"].active { color:#EA4335; border-bottom-color:#EA4335; }
 </style>
 </head>
 <body>
@@ -205,7 +206,7 @@
   <button class="nav-btn" data-tab="keywords" onclick="showTab('keywords')"><span class="tab-icon">🔑</span> Keywords</button>
   <button class="nav-btn" data-tab="calendar" onclick="showTab('calendar')"><span class="tab-icon">📅</span> Calendario</button>
   <button class="nav-btn" data-tab="kpis" onclick="showTab('kpis')"><span class="tab-icon">🎯</span> KPIs & Benchmarks</button>
-  <button class="nav-btn" data-tab="budget" onclick="showTab('budget')"><span class="tab-icon">💰</span> Presupuesto por Área</button>
+  <button class="nav-btn" data-tab="borradores" onclick="showTab('borradores')"><span class="tab-icon">🚀</span> <span style="color:#EA4335;font-weight:700">Google Borradores</span></button>
 </div>
 
 <!-- ═══════════════ OVERVIEW ═══════════════ -->
@@ -360,7 +361,7 @@
 <!-- ═══════════════ KEYWORDS ═══════════════ -->
 <div id="tab-keywords" class="page">
   <div class="section-title">Banco de Keywords</div>
-  <div class="section-sub">89 palabras clave positivas + 69 negativas · Actualizado Abril 2026 con retroalimentación de gerentes</div>
+  <div class="section-sub">89 palabras clave positivas + 51 negativas · Actualizado Abril 2026 con retroalimentación de gerentes</div>
 
   <div class="filter-bar">
     <input class="filter-input" id="kw-search" placeholder="🔍  Buscar keyword…" oninput="filterKW()">
@@ -397,7 +398,8 @@
     <input class="filter-input" id="neg-search" placeholder="🔍  Buscar negativa…" oninput="filterNeg()">
     <select class="filter-select" id="neg-cat" onchange="filterNeg()">
       <option value="">Todas las categorías</option>
-      <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>Específica Auditoría</option><option>Específica Fiscal</option><option>Específica Nómina</option><option>Específica Laboral</option><option>Específica Corporativo</option><option>Específica Contabilidad</option><option>Precio</option><option>No relevante</option>
+      <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>No relevante</option>
+      <option>Específica Auditoría</option><option>Específica Contabilidad</option><option>Específica Corporativo</option><option>Específica Laboral</option><option>Precio</option>
     </select>
     <span class="filter-count" id="neg-count"></span>
   </div>
@@ -521,6 +523,245 @@
   </div>
 </div>
 
+<!-- ═══════════════ GOOGLE BORRADORES ═══════════════ -->
+<div id="tab-borradores" class="page">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+    <div style="width:44px;height:44px;background:#EA4335;border-radius:10px;display:flex;align-items:center;justify-content:22px;font-size:22px;justify-content:center">🚀</div>
+    <div>
+      <div class="section-title" style="color:#EA4335">Google Ads — Campañas en Borrador</div>
+      <div class="section-sub" style="margin-bottom:0">Abril 2026 · Listas para publicar manualmente desde Google Ads Manager</div>
+    </div>
+  </div>
+  <div style="height:4px;background:linear-gradient(90deg,#EA4335,#FBBC05,#34A853,#4285F4);border-radius:2px;margin-bottom:20px"></div>
+
+  <div class="tip" style="border-color:#EA4335;background:#FFF5F5">
+    <strong>⚠️ Estado: BORRADOR</strong> — Estas campañas están preparadas con copies, keywords y segmentación listos. Publícalas manualmente desde <strong>Google Ads Manager</strong>. No se activan automáticamente.
+  </div>
+
+  <!-- LEYENDA DE ESTADO -->
+  <div class="grid-4 mb24">
+    <div class="card" style="border-top:4px solid #EA4335">
+      <div class="card-header"><div class="card-title">🔴 Defensa Fiscal / UIF</div></div>
+      <div class="card-body"><div class="card-value" style="color:#EA4335;font-size:20px">⏳ Activa hasta 30 Abr</div><div class="card-sub">PRIORIDAD MÁXIMA — Publicar HOY</div><div class="card-tag tag-red">3 variaciones listas</div></div>
+    </div>
+    <div class="card" style="border-top:4px solid #FBBC05">
+      <div class="card-header"><div class="card-title">🟡 PTU + Laboral</div></div>
+      <div class="card-body"><div class="card-value" style="color:#92400E;font-size:20px">Cierre 30 Abr</div><div class="card-sub">Última semana crítica</div><div class="card-tag tag-orange">3 variaciones listas</div></div>
+    </div>
+    <div class="card" style="border-top:4px solid #34A853">
+      <div class="card-header"><div class="card-title">🟢 Brand Search</div></div>
+      <div class="card-body"><div class="card-value" style="color:#34A853;font-size:20px">Always On</div><div class="card-sub">Reforzar en Abril</div><div class="card-tag tag-green">3 variaciones listas</div></div>
+    </div>
+    <div class="card" style="border-top:4px solid #8B5CF6">
+      <div class="card-header"><div class="card-title">🟣 Laboral / STPS</div></div>
+      <div class="card-body"><div class="card-value" style="color:#8B5CF6;font-size:20px">Lanzar 1 Mayo</div><div class="card-sub">Setup en Abril, activa en Mayo</div><div class="card-tag" style="background:#EDE9FE;color:#5B21B6">3 variaciones listas</div></div>
+    </div>
+  </div>
+
+  <!-- CAMPAÑA 1: BRAND SEARCH -->
+  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
+    <span style="background:#34A853;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟢 ALWAYS ON</span>
+    Brand Search — Always On
+    <span style="background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">BORRADOR</span>
+  </div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="tip" style="background:#E6F4EA;border-color:#34A853"><strong>Objetivo en Abril:</strong> Reforzar posicionamiento de marca mientras las campañas de Defensa Fiscal y PTU están activas. Protección de marca ante búsquedas de la competencia.</div>
+      <div class="table-wrap mb16">
+        <table>
+          <thead><tr><th>Keyword</th><th>Match Type</th><th>Intención</th><th>Prioridad</th><th>Negativas Clave</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">[Lofton Servicios Integrales]</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe, lofton salud</td></tr>
+            <tr><td class="fw700">[lofton auditoria]</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
+            <tr><td class="fw700">"despacho lofton"</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
+            <tr><td class="fw700">lofton servicios profesionales</td><td><span class="chip">Broad</span></td><td><span class="card-tag tag-blue" style="margin:0">Navegacional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table id="brand-copies-table">
+          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge b-p0">A</span></td><td>Lofton Servicios Integrales</td><td>Auditoría, Fiscal y Laboral</td><td>30 Años Blindando Empresas</td><td><em style="color:var(--blue)">Certeza, control y protección para tu negocio. Diagnóstico sin costo.</em></td><td><em style="color:var(--blue)">Equipo multidisciplinario con acompañamiento en todos los niveles.</em></td><td><span class="badge" style="background:#DBEAFE;color:#1E40AF">Autoridad</span></td></tr>
+            <tr><td><span class="badge b-p0">B</span></td><td>Lofton — Tu Aliado Fiscal</td><td>Diagnóstico sin Costo</td><td>Despacho Multidisciplinario</td><td><em style="color:var(--blue)">Auditoría, Fiscal, Laboral y Nómina integrados en un solo despacho.</em></td><td><em style="color:var(--blue)">Más de 30 años acompañando a empresas mexicanas. Agenda sin compromiso.</em></td><td><span class="badge" style="background:#D1FAE5;color:#065F46">CTA Directo</span></td></tr>
+            <tr><td><span class="badge b-p0">C</span></td><td>Lofton: Certeza para tu Empresa</td><td>Control · Protección · Tranquilidad</td><td>¿Buscas un Despacho Confiable?</td><td><em style="color:var(--blue)">No vendemos servicios: vendemos certeza. Auditoría, Fiscal, Laboral.</em></td><td><em style="color:var(--blue)">Atención directa encargados, gerentes y director. Sin intermediarios.</em></td><td><span class="badge" style="background:#FEF3C7;color:#92400E">Emocional</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPAÑA 2: DEFENSA FISCAL -->
+  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
+    <span style="background:#EA4335;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🔴 CRÍTICA</span>
+    Defensa Fiscal / Bloqueo UIF — Activa hasta 30 Abr
+    <span style="background:#FEE2E2;color:#991B1B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">⚡ PUBLICAR HOY</span>
+  </div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="tip" style="background:#FFF5F5;border-color:#EA4335"><strong>⚠️ Contexto Regulatorio (Karla Hernández):</strong> Cambio CFF 2026 — al interponer recurso de revocación, el contribuyente DEBE garantizarlo con billete de depósito inmediatamente. Estrategia: actuar ANTES de que el SAT emita el crédito. Mensaje: <em>"actúa hoy para evitar garantizar mañana"</em>.</div>
+      <div class="table-wrap mb16">
+        <table>
+          <thead><tr><th>Keyword</th><th>Match Type</th><th>Intención</th><th>Prioridad</th><th>Volumen</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">defensa fiscal sat</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700">asesoría fiscal empresas</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700">auditoría del sat qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700">vigilancia profunda sat</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700" style="color:#EA4335">restricción de CSD ⚡</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-red" style="margin:0">Urgente</span></td><td><span class="badge b-muy-alta">MUY ALTA</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700">carta invitación sat</td><td><span class="chip">Broad</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
+            <tr><td class="fw700">recurso de revocación fiscal</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
+            <tr><td class="fw700">adeudo SAT</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
+            <tr><td class="fw700" style="color:#EA4335">bloqueo certificado sello digital ⚡</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-muy-alta">MUY ALTA</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
+            <tr><td class="fw700">materialidad fiscal 2026</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p1">P1</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
+            <tr><td class="fw700">CFDI falsos qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p1">P1</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge b-p0">A</span></td><td>¿Te Audita el SAT?</td><td>Defensa Fiscal Profesional</td><td>Protege tu CSD — Actúa Hoy</td><td><em style="color:var(--blue)">Vigilancias profundas, restricción de CSD o créditos fiscales: actuamos ya.</em></td><td><em style="color:var(--blue)">Estrategia desde la primera notificación del SAT. Diagnóstico sin costo.</em></td><td><span class="badge b-alta">Dolor / Urgencia</span></td></tr>
+            <tr><td><span class="badge b-p0">B</span></td><td>Vigilancia SAT sin Respuesta</td><td>Puede Cerrar tu Empresa</td><td>Estrategia Fiscal desde el Día 1</td><td><em style="color:var(--blue)">Sin respuesta correcta a tiempo, el SAT puede bloquear tu sello y generar créditos.</em></td><td><em style="color:var(--blue)">Más de 30 años construyendo defensas sólidas. Atención personalizada.</em></td><td><span class="badge b-muy-alta">Consecuencias</span></td></tr>
+            <tr><td><span class="badge b-p0">C</span></td><td>¿Adeudo o Auditoría del SAT?</td><td>30 Años de Defensa Fiscal</td><td>Atención Directa Director y Gerente</td><td><em style="color:var(--blue)">Recursos de revocación, materialidad y respuesta a vigilancias: servicio completo.</em></td><td><em style="color:var(--blue)">En Lofton no hay cliente pequeño. Diagnóstico fiscal sin compromiso.</em></td><td><span class="badge" style="background:#DBEAFE;color:#1E40AF">Autoridad</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">💡 <strong>Nota Karla H.:</strong> Diferenciador validado: "atención personalizada en todos los niveles (encargados, gerentes, director)". Usar Var. B en remarketing para prospectos que visitaron landing de fiscal.</div>
+    </div>
+  </div>
+
+  <!-- CAMPAÑA 3: PTU + LABORAL -->
+  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
+    <span style="background:#FBBC05;color:#1B2A4A;padding:4px 12px;border-radius:20px;font-size:12px">🟡 CIERRE</span>
+    PTU + Laboral — Cierre 30 Abril
+    <span style="background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">Última semana crítica</span>
+  </div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="tip" style="background:#FFFBEB;border-color:#FBBC05"><strong>📅 Campaña activa: 18 Mar – 30 Abr.</strong> Casuística validada por Erik Lozano: reclamos de empleados con pagos distintos a los pactados, quejas por retención ISR/IMSS/INFONAVIT, cartas invitación de Finanzas por diferencias en ISN, inconsistencias en aguinaldos.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge b-p0">A</span></td>
+              <td>PTU 2026: Vence en Mayo</td>
+              <td>¿Calculaste Bien el Reparto?</td>
+              <td>Asesoría de Nómina y Laboral</td>
+              <td><em style="color:var(--blue)">Un error en el cálculo de PTU genera inspecciones STPS y demandas costosas.</em></td>
+              <td><em style="color:var(--blue)">Revisamos tu PTU antes de la fecha límite. Diagnóstico gratuito.</em></td>
+              <td><span class="badge b-muy-alta">Urgencia Real</span></td>
+              <td style="font-size:11px">Activar 1ª semana Abril. Pausar 1 Mayo.</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-p0">B</span></td>
+              <td>STPS Puede Visitarte sin Aviso</td>
+              <td>PTU, Nómina y Expedientes</td>
+              <td>Blindaje Laboral Integral</td>
+              <td><em style="color:var(--blue)">¿Tu PTU está bien calculado? ¿Expedientes al día? Preparamos tu empresa.</em></td>
+              <td><em style="color:var(--blue)">Reducción de jornada 2026, REPSE y cumplimiento STPS: asesoría completa.</em></td>
+              <td><span class="badge b-alta">Inspecciones STPS</span></td>
+              <td style="font-size:11px">Integra mensaje reducción de jornada 2026 (Erik Lozano).</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-p0">C</span></td>
+              <td>¿Error en PTU = Multa STPS?</td>
+              <td>Auditoría Laboral Preventiva</td>
+              <td>Antes de que te Visiten</td>
+              <td><em style="color:var(--blue)">Empleados con quejas CCRL, diferencias salariales y expedientes incompletos.</em></td>
+              <td><em style="color:var(--blue)">Preparamos tu empresa para pasar cualquier inspección. Diagnóstico sin costo.</em></td>
+              <td><span class="badge b-media-alta">Casuística Real</span></td>
+              <td style="font-size:11px">Basado directamente en retroalimentación Erik Lozano. PRIORIZAR.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPAÑA 4: LABORAL / STPS -->
+  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
+    <span style="background:#8B5CF6;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟣 SETUP</span>
+    Laboral / STPS — Lanzamiento 1 Mayo
+    <span style="background:#EDE9FE;color:#5B21B6;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">Preparar assets en Abril</span>
+  </div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="tip" style="background:#F5F3FF;border-color:#8B5CF6"><strong>🚀 Setup en Abril, Activar el 1 de Mayo sin demora.</strong> Presupuesto: $26,100 MXN (Laboral). Keywords validadas por Erik Lozano.</div>
+      <div class="table-wrap mb16">
+        <table>
+          <thead><tr><th>Keyword</th><th>Match</th><th>Intención</th><th>Prio</th><th>Fuente</th></tr></thead>
+          <tbody>
+            <tr><td class="fw700">blindaje laboral empresas</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
+            <tr><td class="fw700">inspección stps</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
+            <tr><td class="fw700">compliance laboral empresas</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
+            <tr><td class="fw700">repse obligaciones</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
+            <tr><td class="fw700">demanda laboral empresa qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
+            <tr><td class="fw700">cómo despedir justificadamente</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
+            <tr><td class="fw700">asesoría para despedir personal</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
+            <tr><td class="fw700">reducción de jornada laboral 2026</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
+            <tr><td class="fw700">prestación de servicios especializados nómina</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Var.</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge b-p0">A</span></td><td>¿Tiene tu Empresa REPSE al Día?</td><td>Inspecciones STPS sin Aviso</td><td>Blindaje Laboral Integral</td><td><em style="color:var(--blue)">Sin documentación correcta una inspección STPS puede costarte cientos de miles.</em></td><td><em style="color:var(--blue)">Preparamos tu empresa para pasar cualquier revisión. Asesoría personalizada.</em></td><td><span class="badge b-alta">STPS / Miedo</span></td></tr>
+            <tr><td><span class="badge b-p0">B</span></td><td>¿Pagando Liquidaciones Evitables?</td><td>Despido Justificado con Estrategia</td><td>Prevén Demandas Laborales</td><td><em style="color:var(--blue)">Mala baja de personal = demandas y laudos millonarios. Protege tu empresa.</em></td><td><em style="color:var(--blue)">30 años de defensa laboral. Preparación estratégica de baja de personal.</em></td><td><span class="badge b-muy-alta">Despidos / Litigios</span></td></tr>
+            <tr><td><span class="badge b-p0">C</span></td><td>Reducción de Jornada 2026</td><td>¿Ya Sabes Cómo Implementarla?</td><td>Cumplimiento Laboral Garantizado</td><td><em style="color:var(--blue)">La reforma de jornada laboral 2026 tiene implicaciones complejas en tu nómina.</em></td><td><em style="color:var(--blue)">Te ayudamos a implementarla sin riesgos laborales ni sindicales. Diagnóstico gratis.</em></td><td><span class="badge b-media-alta">Reforma 2026</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPLAY REMARKETING -->
+  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
+    <span style="background:#795548;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟤 DISPLAY</span>
+    Display Remarketing — Always On Abril
+    <span style="background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">BORRADOR</span>
+  </div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Var.</th><th>Título 1</th><th>Título 2</th><th>Descripción Principal</th><th>Segmento de Audiencia</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge b-p0">A</span></td><td>¿Aún Sin Resolver tu Situación Fiscal?</td><td>Lofton: Diagnóstico sin Costo</td><td><em style="color:var(--blue)">Expertos en defensa fiscal, auditoría y blindaje laboral. Agenda sin compromiso.</em></td><td>Visitantes landing fiscal 90d + Prospectos que abrieron formulario</td></tr>
+            <tr><td><span class="badge b-p0">B</span></td><td>Tu Empresa Necesita Certeza</td><td>No un Proveedor — un Aliado</td><td><em style="color:var(--blue)">Auditoría · Fiscal · Laboral · Nómina. Un solo despacho, protección integral.</em></td><td>Visitantes web generales 60d + Similar audiences clientes actuales</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section-title mb16" style="font-size:15px">✅ Checklist de Implementación — Abril 2026</div>
+  <div class="card mb24">
+    <div class="card-body">
+      <div class="table-wrap">
+        <table id="checklist-table">
+          <thead><tr><th style="width:50px">Estado</th><th>Acción</th><th>Campaña</th><th>Nota</th></tr></thead>
+          <tbody id="checklist-tbody">
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td class="fw700" style="color:#EA4335">Subir copies Var. A y B de Defensa Fiscal / Bloqueo UIF</td><td>Defensa Fiscal</td><td>PRIORIDAD — Termina 30 Abr. Incluir kw "restricción CSD"</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Activar anuncios PTU Variación C (casuística Erik Lozano)</td><td>PTU / Laboral</td><td>Basado en retroalimentación directa del área de Nómina</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Agregar 45 keywords nuevas al banco del dashboard</td><td>Todas</td><td>Complementar — NUNCA reemplazar</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Agregar negativas nuevas a las campañas</td><td>Todas</td><td>Incluye: cálculo, despachos competidores (rsm, crowe, bdo, grant thornton, baker tilly)</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Preparar audiencias y assets para Laboral STPS</td><td>Laboral STPS</td><td>Setup en Abril para activar el 1 de Mayo sin demora</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Evaluar uso de "outsourcing" en nómina</td><td>Nómina</td><td>Erik Lozano: término estigmatizado legalmente. Decisión estratégica pendiente.</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Pausar "cuca cufin nómina" del banco de keywords</td><td>Nómina</td><td>Eliminada por indicación de Erik Lozano</td></tr>
+            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Actualizar nombre campaña Notion: "Defensa Fiscal / Bloqueo UIF"</td><td>Notion</td><td>Corrección identificada en tracker de Notion</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════
 // DATA
@@ -569,7 +810,6 @@ const GOOGLE_CAMPAIGNS = [
 ];
 
 const KEYWORDS = [
-  // ── AUDITORÍA (originales) ──
   ["Auditoría","dictamen fiscal","Exact","Transaccional","Alto","P0"],
   ["Auditoría","dictamen fiscal obligatorio","Phrase","Informativa","Medio","P1"],
   ["Auditoría","auditoría de estados financieros","Exact","Transaccional","Medio","P0"],
@@ -581,7 +821,41 @@ const KEYWORDS = [
   ["Auditoría","auditoría contribuciones locales edomex","Phrase","Transaccional","Bajo","P1"],
   ["Auditoría","precio dictamen fiscal","Phrase","Transaccional","Medio","P0"],
   ["Auditoría","quién está obligado al dictamen fiscal","Phrase","Informativa","Alto","P1"],
-  // ── AUDITORÍA (nuevas — Ismael Aguilar + Joaquín Delgado) ──
+  ["Fiscal","asesoría fiscal empresas","Exact","Transaccional","Alto","P0"],
+  ["Fiscal","defensa fiscal sat","Exact","Transaccional","Alto","P0"],
+  ["Fiscal","auditoría del sat qué hacer","Phrase","Informativa","Alto","P0"],
+  ["Fiscal","carta invitación sat","Broad Modified","Informativa","Alto","P1"],
+  ["Fiscal","vigilancia profunda sat","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","recurso de revocación fiscal","Exact","Transaccional","Medio","P1"],
+  ["Fiscal","planeación fiscal empresas","Phrase","Transaccional","Medio","P0"],
+  ["Fiscal","cierre fiscal 2026","Phrase","Transaccional","Alto","P0"],
+  ["Fiscal","materialidad fiscal 2026","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","despacho fiscal méxico","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","administración de nómina","Exact","Transaccional","Alto","P0"],
+  ["Nómina","servicio de nómina outsourcing","Exact","Transaccional","Alto","P0"],
+  ["Nómina","cálculo de nómina empresas","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","timbrado de nómina","Phrase","Transaccional","Medio","P1"],
+  ["Nómina","maquila de nómina","Exact","Transaccional","Alto","P0"],
+  ["Nómina","outsourcing nómina méxico","Exact","Transaccional","Alto","P0"],
+  ["Laboral","blindaje laboral empresas","Exact","Transaccional","Medio","P0"],
+  ["Laboral","inspección stps","Exact","Informativa","Alto","P1"],
+  ["Laboral","compliance laboral empresas","Phrase","Transaccional","Medio","P0"],
+  ["Laboral","repse obligaciones","Phrase","Informativa","Medio","P1"],
+  ["Laboral","demanda laboral empresa qué hacer","Phrase","Informativa","Alto","P0"],
+  ["Laboral","prevención laboral","Phrase","Transaccional","Bajo","P1"],
+  ["Laboral","litigio laboral empresas","Phrase","Transaccional","Medio","P0"],
+  ["Corporativo","gobierno corporativo empresas","Exact","Transaccional","Medio","P0"],
+  ["Corporativo","actas de asamblea","Phrase","Transaccional","Medio","P1"],
+  ["Corporativo","contratos mercantiles empresa","Phrase","Transaccional","Medio","P0"],
+  ["Corporativo","beneficiario controlador","Exact","Informativa","Alto","P1"],
+  ["Corporativo","constitución de empresas","Exact","Transaccional","Alto","P1"],
+  ["Corporativo","blindaje patrimonial","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","servicio de contabilidad empresas","Exact","Transaccional","Alto","P0"],
+  ["Contabilidad","outsourcing contable","Exact","Transaccional","Alto","P0"],
+  ["Contabilidad","llevar contabilidad empresa","Phrase","Transaccional","Medio","P1"],
+  ["Contabilidad","contabilidad integral","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","despacho contable méxico","Phrase","Transaccional","Medio","P0"],
+  // ── NUEVAS ABRIL 2026 — Retroalimentación gerentes ──
   ["Auditoría","auditoría externa","Exact","Transaccional","Medio","P0"],
   ["Auditoría","firma de auditoría","Phrase","Transaccional","Medio","P0"],
   ["Auditoría","despacho de auditoría","Phrase","Transaccional","Medio","P0"],
@@ -593,173 +867,87 @@ const KEYWORDS = [
   ["Auditoría","SIPREDI 2026","Phrase","Transaccional","Bajo","P0"],
   ["Auditoría","informe del auditor","Phrase","Informativa","Medio","P1"],
   ["Auditoría","control interno empresas","Phrase","Transaccional","Medio","P1"],
-  // ── FISCAL (originales — sin cierre fiscal 2026 por retroalimentación Karla H.) ──
-  ["Fiscal","asesoría fiscal empresas","Exact","Transaccional","Alto","P0"],
-  ["Fiscal","defensa fiscal sat","Exact","Transaccional","Alto","P0"],
-  ["Fiscal","auditoría del sat qué hacer","Phrase","Informativa","Alto","P0"],
-  ["Fiscal","carta invitación sat","Broad Modified","Informativa","Alto","P1"],
-  ["Fiscal","vigilancia profunda sat","Phrase","Informativa","Medio","P0"],
-  ["Fiscal","recurso de revocación fiscal","Exact","Transaccional","Medio","P1"],
-  ["Fiscal","planeación fiscal empresas","Phrase","Transaccional","Medio","P0"],
-  ["Fiscal","materialidad fiscal 2026","Phrase","Informativa","Medio","P0"],
-  ["Fiscal","despacho fiscal méxico","Phrase","Transaccional","Medio","P0"],
-  // ── FISCAL (nuevas — Karla Hernández) ──
-  ["Fiscal","restricción CSD","Exact","Transaccional","Medio","P0"],
   ["Fiscal","vigilancias profundas sat","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","restricción CSD","Exact","Transaccional","Medio","P0"],
   ["Fiscal","beneficios fiscales empresas","Phrase","Transaccional","Medio","P1"],
+  ["Fiscal","materialidad fiscal","Phrase","Informativa","Medio","P0"],
   ["Fiscal","CFDI falsos qué hacer","Phrase","Informativa","Medio","P0"],
   ["Fiscal","adeudo SAT","Phrase","Transaccional","Alto","P0"],
   ["Fiscal","auditorías SAT","Phrase","Transaccional","Alto","P0"],
   ["Fiscal","estímulo fiscal","Phrase","Informativa","Bajo","P1"],
-  ["Fiscal","bloqueo certificado sello digital","Exact","Transaccional","Medio","P0"],
-  // ── NÓMINA (originales — cuca cufin eliminada por Erik Lozano) ──
-  ["Nómina","administración de nómina","Exact","Transaccional","Alto","P0"],
-  ["Nómina","servicio de nómina outsourcing","Exact","Transaccional","Alto","P0"],
-  ["Nómina","cálculo de nómina empresas","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","timbrado de nómina","Phrase","Transaccional","Medio","P1"],
-  ["Nómina","maquila de nómina","Exact","Transaccional","Alto","P0"],
-  ["Nómina","outsourcing nómina méxico","Exact","Transaccional","Alto","P0"],
-  // ── NÓMINA (nuevas — Erik Lozano) ──
-  ["Nómina","REPSE prestación servicios especializados","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","cumplimiento IMSS INFONAVIT nómina","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","diferencias ISR nómina","Phrase","Informativa","Medio","P0"],
-  ["Nómina","ptu reparto utilidades asesoría","Phrase","Transaccional","Alto","P0"],
-  ["Nómina","aguinaldo asesoría empresas","Phrase","Transaccional","Alto","P0"],
-  // ── LABORAL (originales) ──
-  ["Laboral","blindaje laboral empresas","Exact","Transaccional","Medio","P0"],
-  ["Laboral","inspección stps","Exact","Informativa","Alto","P0"],
-  ["Laboral","compliance laboral empresas","Phrase","Transaccional","Medio","P0"],
-  ["Laboral","repse obligaciones","Phrase","Informativa","Medio","P1"],
-  ["Laboral","demanda laboral empresa qué hacer","Phrase","Informativa","Alto","P0"],
-  ["Laboral","prevención laboral","Phrase","Transaccional","Bajo","P1"],
-  ["Laboral","litigio laboral empresas","Phrase","Transaccional","Medio","P0"],
-  // ── LABORAL (nuevas — Erik Lozano) ──
   ["Laboral","cómo despedir justificadamente","Phrase","Transaccional","Alto","P0"],
   ["Laboral","asesoría para despedir personal","Phrase","Transaccional","Alto","P0"],
   ["Laboral","reducción de jornada laboral 2026","Phrase","Informativa","Alto","P0"],
   ["Laboral","obligaciones patronales multas","Phrase","Informativa","Medio","P0"],
   ["Laboral","prestación de servicios especializados nómina","Phrase","Transaccional","Medio","P0"],
   ["Laboral","auditoría laboral empresas","Phrase","Transaccional","Medio","P0"],
-  ["Laboral","inspecciones stps prevención","Phrase","Transaccional","Medio","P0"],
-  // ── CORPORATIVO (originales) ──
-  ["Corporativo","gobierno corporativo empresas","Exact","Transaccional","Medio","P0"],
-  ["Corporativo","actas de asamblea","Phrase","Transaccional","Medio","P1"],
-  ["Corporativo","contratos mercantiles empresa","Phrase","Transaccional","Medio","P0"],
-  ["Corporativo","beneficiario controlador","Exact","Informativa","Alto","P1"],
-  ["Corporativo","constitución de empresas","Exact","Transaccional","Alto","P1"],
-  ["Corporativo","blindaje patrimonial","Phrase","Transaccional","Medio","P0"],
-  // ── CORPORATIVO (nuevas — Gabriel Salas) ──
-  ["Corporativo","conflicto entre socios empresa","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","REPSE prestación servicios especializados","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","cumplimiento IMSS INFONAVIT nómina","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","diferencias ISR nómina","Phrase","Informativa","Medio","P0"],
   ["Corporativo","riesgo empresarial entre socios","Phrase","Transaccional","Bajo","P0"],
+  ["Corporativo","conflicto entre socios empresa","Phrase","Transaccional","Medio","P0"],
   ["Corporativo","due diligence empresarial","Exact","Transaccional","Medio","P1"],
   ["Corporativo","revisión corporativa","Phrase","Transaccional","Bajo","P1"],
-  ["Corporativo","protocolo familiar empresas","Phrase","Transaccional","Bajo","P0"],
-  // ── CONTABILIDAD (originales) ──
-  ["Contabilidad","servicio de contabilidad empresas","Exact","Transaccional","Alto","P0"],
-  ["Contabilidad","outsourcing contable","Exact","Transaccional","Alto","P0"],
-  ["Contabilidad","llevar contabilidad empresa","Phrase","Transaccional","Medio","P1"],
-  ["Contabilidad","contabilidad integral","Phrase","Transaccional","Medio","P0"],
-  ["Contabilidad","despacho contable méxico","Phrase","Transaccional","Medio","P0"],
-  // ── CONTABILIDAD (nuevas — Estefanía Rodríguez + Mónica Ortíz) ──
   ["Contabilidad","contabilidad mensual empresas","Phrase","Transaccional","Medio","P0"],
   ["Contabilidad","cumplimiento fiscal contable","Phrase","Transaccional","Medio","P0"],
   ["Contabilidad","asesoría contable y fiscal","Phrase","Transaccional","Medio","P0"],
   ["Contabilidad","conciliación contable fiscal","Phrase","Transaccional","Bajo","P0"],
   ["Contabilidad","cierre contable anual","Phrase","Transaccional","Alto","P0"],
-  ["Contabilidad","estados financieros auditados","Phrase","Transaccional","Medio","P0"],
 ];
 
 const NEGATIVES = [
-  // ── GRATUITO / EMPLEO ──
   ["Gratuito/Empleo","gratis","Filtra usuarios que buscan servicios sin costo"],
   ["Gratuito/Empleo","gratuito","Mismo caso — excluir siempre"],
   ["Gratuito/Empleo","empleo","Búsquedas laborales, no servicios profesionales"],
   ["Gratuito/Empleo","vacantes","Ofertas de trabajo"],
   ["Gratuito/Empleo","trabajo","Búsquedas de empleo"],
-  ["Gratuito/Empleo","bolsa de trabajo","Portales de empleo — no prospectos"],
-  // ── EDUCATIVO ──
   ["Educativo","curso","Usuarios buscando capacitación, no servicios"],
   ["Educativo","diplomado","Formación académica"],
   ["Educativo","maestría","Educación formal"],
   ["Educativo","certificación","Credenciales educativas"],
   ["Educativo","capacitación","Cursos y talleres"],
   ["Educativo","tesis","Trabajo académico"],
-  // ── SOFTWARE / DIY ──
   ["Software/DIY","software","Usuarios buscando herramientas digitales"],
-  ["Software/DIY","programa contable","Software tipo CONTPAQi, SAP"],
-  ["Software/DIY","excel","Herramientas ofimáticas gratuitas"],
+  ["Software/DIY","programa contable","Software de contabilidad"],
+  ["Software/DIY","excel","Herramientas ofimáticas"],
   ["Software/DIY","plantilla","Formatos descargables"],
   ["Software/DIY","calculadora","Herramientas en línea"],
-  ["Software/DIY","nomipaq","Software de nómina — no busca outsourcing"],
-  ["Software/DIY","cálculo","Buscan hacer el cálculo ellos mismos — no el servicio (Erik Lozano + Karla H.)"],
-  ["Software/DIY","tutorial","Contenido educativo DIY (Gabriel Salas)"],
-  ["Software/DIY","machote","Formato gratuito corporativo"],
-  // ── GUBERNAMENTAL ──
   ["Gubernamental","sat cita","Trámites directos SAT"],
   ["Gubernamental","rfc","Trámite personal en SAT"],
   ["Gubernamental","imss cita","Cita directa IMSS"],
   ["Gubernamental","stps normas","Búsqueda de normativa, no servicio"],
-  ["Gubernamental","trámite sat","Autogestión en SAT — no asesoría"],
-  // ── PERSONAL ──
   ["Personal","persona física","Personas físicas sin empresa (baja conversión)"],
   ["Personal","declaración anual persona","Declaraciones individuales básicas"],
-  // ── COMPETENCIA Big 4 ──
-  ["Competencia","deloitte","Búsqueda de competidor Big 4"],
-  ["Competencia","kpmg","Búsqueda de competidor Big 4"],
-  ["Competencia","ey méxico","Búsqueda de competidor Big 4"],
-  ["Competencia","pwc","Búsqueda de competidor Big 4"],
-  // ── COMPETENCIA Despachos Medios (Joaquín Delgado) ──
-  ["Competencia","rsm","Despacho medio competidor"],
-  ["Competencia","crowe","Despacho medio competidor"],
-  ["Competencia","bdo","Despacho medio competidor"],
-  ["Competencia","grant thornton","Despacho medio competidor"],
-  ["Competencia","baker tilly","Despacho medio competidor"],
-  // ── ESPECÍFICA AUDITORÍA (Ismael Aguilar + Joaquín Delgado) ──
-  ["Específica Auditoría","auditoría interna empleo","Personas buscando trabajo como auditores"],
-  ["Específica Auditoría","formato auditoría","Plantillas gratuitas de auditoría"],
-  ["Específica Auditoría","auditoría de sistemas","Auditoría IT — diferente al servicio"],
-  ["Específica Auditoría","auditoría forense","Tipo de auditoría no financiera"],
-  ["Específica Auditoría","auditoría operativa","Tipo de auditoría no relacionada"],
-  ["Específica Auditoría","auditoría administrativa","Tipo de auditoría no relacionada"],
-  ["Específica Auditoría","auditoría de calidad","ISO / calidad — no sector Lofton"],
-  // ── ESPECÍFICA FISCAL ──
-  ["Específica Fiscal","trámites sat gratis","Autogestión sin pago de servicio"],
-  ["Específica Fiscal","contador gratis","Búsqueda de servicio gratuito"],
-  ["Específica Fiscal","cómo pagar impuestos","Autoaprendizaje básico"],
-  ["Específica Fiscal","simulador sat","Herramienta digital del SAT sin costo"],
-  // ── ESPECÍFICA NÓMINA (Erik Lozano) ──
-  ["Específica Nómina","nómina gratis","Servicio gratuito — no cliente potencial"],
-  ["Específica Nómina","cómo hacer nómina","Autoaprendizaje — no busca servicio externo"],
-  ["Específica Nómina","formato nómina","Plantilla gratuita"],
-  ["Específica Nómina","recibo de nómina persona","Empleado buscando su recibo — no empleador"],
-  // ── ESPECÍFICA LABORAL (Erik Lozano) ──
-  ["Específica Laboral","abogado laboral gratis","Servicio gratuito — no cliente potencial"],
-  ["Específica Laboral","demanda laboral trabajador","Perspectiva del empleado, no de la empresa"],
-  ["Específica Laboral","derechos laborales","Información para trabajadores"],
-  ["Específica Laboral","curso stps","Capacitación DIY — no busca consultoría"],
-  // ── ESPECÍFICA CORPORATIVO (Gabriel Salas) ──
-  ["Específica Corporativo","gobierno corporativo qué es","Curiosidad informativa — no intención de compra"],
-  ["Específica Corporativo","acta constitutiva gratis","Plantilla gratuita"],
-  ["Específica Corporativo","formato contrato","Formato sin costo — no servicio jurídico"],
-  // ── ESPECÍFICA CONTABILIDAD (Estefanía R. + Mónica O.) ──
-  ["Específica Contabilidad","contador gratis","Servicio gratuito — no cliente"],
-  ["Específica Contabilidad","curso contabilidad","Formación académica"],
-  ["Específica Contabilidad","software contable","Herramienta digital propia"],
-  ["Específica Contabilidad","cómo llevar contabilidad","Autoaprendizaje — no busca outsourcing"],
-  ["Específica Contabilidad","contabilidad básica","No busca servicio profesional"],
-  ["Específica Contabilidad","carrera contabilidad","Búsqueda académica"],
-  ["Específica Contabilidad","licenciatura contabilidad","Búsqueda académica"],
-  ["Específica Contabilidad","guia contable","Contenido educativo DIY"],
-  // ── PRECIO / LOW COST (Mónica Ortíz) ──
-  ["Precio","barato","Filtrar clientes de bajo presupuesto"],
-  ["Precio","económico","Filtrar clientes de bajo presupuesto"],
-  ["Precio","low cost","Filtrar clientes de bajo presupuesto"],
-  // ── NO RELEVANTE ──
+  ["Competencia","deloitte","Búsqueda de competidor"],
+  ["Competencia","kpmg","Búsqueda de competidor"],
+  ["Competencia","ey méxico","Búsqueda de competidor"],
+  ["Competencia","pwc","Búsqueda de competidor"],
   ["No relevante","inmobiliaria","Industria diferente"],
   ["No relevante","salud","Sector salud no relacionado"],
   ["No relevante","comida","No relacionado"],
   ["No relevante","restaurante","No relacionado"],
-  ["No relevante","auditoría médica","Auditoría en sector salud — irrelevante"],
+  // ── NUEVAS ABRIL 2026 — Retroalimentación gerentes ──
+  ["Software/DIY","cálculo","Buscan hacer el cálculo ellos mismos (Erik Lozano + Karla H.)"],
+  ["Gratuito/Empleo","bolsa de trabajo","Portales de empleo — no prospectos"],
+  ["Gubernamental","trámite sat","Autogestión en SAT"],
+  ["Específica Auditoría","auditoría forense","Tipo de auditoría no financiera (Ismael A. + Joaquín D.)"],
+  ["Específica Auditoría","auditoría operativa","Tipo de auditoría no relacionada"],
+  ["Específica Auditoría","auditoría administrativa","Tipo de auditoría no relacionada"],
+  ["Específica Auditoría","auditoría de calidad","ISO / calidad — no sector Lofton"],
+  ["Competencia","rsm","Despacho medio competidor (Joaquín D.)"],
+  ["Competencia","crowe","Despacho medio competidor"],
+  ["Competencia","bdo","Despacho medio competidor"],
+  ["Competencia","grant thornton","Despacho medio competidor"],
+  ["Competencia","baker tilly","Despacho medio competidor"],
+  ["Específica Corporativo","tutorial","Contenido educativo DIY (Gabriel Salas)"],
+  ["Específica Corporativo","machote","Formato gratuito corporativo"],
+  ["Específica Contabilidad","contabilidad básica","No busca servicio profesional (Mónica Ortíz)"],
+  ["Específica Contabilidad","carrera contabilidad","Búsqueda académica"],
+  ["Específica Contabilidad","licenciatura contabilidad","Búsqueda académica"],
+  ["Precio","barato","Filtrar clientes de bajo presupuesto (Mónica Ortíz)"],
+  ["Precio","económico","Filtrar clientes de bajo presupuesto"],
+  ["Precio","low cost","Filtrar clientes de bajo presupuesto"],
+  ["Específica Laboral","derechos laborales","Perspectiva de trabajador — no empresa"],
 ];
 
 const CAL_CAMPAIGNS = [
@@ -1118,441 +1306,6 @@ function initCharts() {
     }
   });
 }
-</script>
-
-<!-- ═══════════════ PRESUPUESTO POR ÁREA ═══════════════ -->
-<div id="tab-budget" class="page">
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
-    <div style="width:44px;height:44px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px">💰</div>
-    <div>
-      <div class="section-title">Presupuesto Anual + Mensual por Área</div>
-      <div class="section-sub" style="margin-bottom:0">Datos reales por campaña · Para solicitud de pagos y control financiero</div>
-    </div>
-  </div>
-  <div style="height:4px;background:linear-gradient(90deg,#1877F2,#C8922A,#34A853);border-radius:2px;margin-bottom:20px"></div>
-
-  <!-- SUMMARY CARDS -->
-  <div class="grid-4 mb24" id="budget-summary-cards"></div>
-
-  <!-- MONTHLY TOTAL CHART -->
-  <div class="grid-2 mb24">
-    <div class="card">
-      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Inversión Real Mensual (Meta + Google)</div></div>
-      <div class="card-body">
-        <div class="chart-box"><canvas id="realMonthlyChart"></canvas></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title" style="font-size:16px;font-weight:800;color:var(--dark);text-transform:none;">Presupuestado vs Gastado por Tipo</div></div>
-      <div class="card-body">
-        <div class="chart-box"><canvas id="vsGastadoChart"></canvas></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- META ADS MONTHLY TABLE -->
-  <div class="section-title mb16" style="color:#1877F2;font-size:16px;">🔵 Meta Ads — Presupuesto Mensual Real por Campaña</div>
-  <div class="card mb24">
-    <div class="card-body" style="padding:16px">
-      <div class="table-wrap">
-        <table class="monthly-tbl" id="meta-monthly-tbl">
-          <thead>
-            <tr>
-              <th style="text-align:left;background:#1877F2">Campaña</th>
-              <th style="background:#1877F2">Ene</th><th style="background:#1877F2">Feb</th><th style="background:#1877F2">Mar</th><th style="background:#1877F2">Abr</th><th style="background:#1877F2">May</th><th style="background:#1877F2">Jun</th>
-              <th style="background:#1877F2">Jul</th><th style="background:#1877F2">Ago</th><th style="background:#1877F2">Sep</th><th style="background:#1877F2">Oct</th><th style="background:#1877F2">Nov</th><th style="background:#1877F2">Dic</th>
-              <th style="background:#1877F2">TOTAL ANUAL</th>
-            </tr>
-          </thead>
-          <tbody id="meta-monthly-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- GOOGLE ADS MONTHLY TABLE -->
-  <div class="section-title mb16" style="color:#34A853;font-size:16px;">🟢 Google Ads — Presupuesto Mensual Real por Campaña</div>
-  <div class="card mb24">
-    <div class="card-body" style="padding:16px">
-      <div class="table-wrap">
-        <table class="monthly-tbl" id="google-monthly-tbl">
-          <thead>
-            <tr>
-              <th style="text-align:left;background:#34A853">Campaña</th>
-              <th style="background:#34A853">Ene</th><th style="background:#34A853">Feb</th><th style="background:#34A853">Mar</th><th style="background:#34A853">Abr</th><th style="background:#34A853">May</th><th style="background:#34A853">Jun</th>
-              <th style="background:#34A853">Jul</th><th style="background:#34A853">Ago</th><th style="background:#34A853">Sep</th><th style="background:#34A853">Oct</th><th style="background:#34A853">Nov</th><th style="background:#34A853">Dic</th>
-              <th style="background:#34A853">TOTAL ANUAL</th>
-            </tr>
-          </thead>
-          <tbody id="google-monthly-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- PRESUPUESTADO VS GASTADO -->
-  <div class="section-title mb16" style="font-size:16px;">📊 Presupuestado vs Gastado — Por Tipo de Campaña</div>
-  <div class="tip"><strong>Instrucciones:</strong> Ingresa el gasto real acumulado por área para visualizar la comparativa. Los datos se guardan automáticamente en tu navegador.</div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <select class="filter-select" id="vs-month-select" onchange="renderVsGastado()">
-          <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
-          <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
-          <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
-          <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
-        </select>
-        <span style="font-size:12px;color:var(--text-muted)">Selecciona el mes de reporte</span>
-        <button onclick="clearGastado()" style="padding:6px 14px;border-radius:8px;border:1px solid var(--gray-border);background:#FEE2E2;color:#991B1B;font-size:12px;font-weight:700;cursor:pointer">🗑 Limpiar datos</button>
-      </div>
-      <div id="vs-gastado-rows"></div>
-    </div>
-  </div>
-
-  <!-- RESUMEN DE PAGOS -->
-  <div class="section-title mb16" style="font-size:16px;">🧾 Resumen de Pagos — Por Mes</div>
-  <div class="card">
-    <div class="card-body">
-      <div class="table-wrap">
-        <table class="monthly-tbl" id="pagos-tbl">
-          <thead>
-            <tr>
-              <th style="text-align:left">Mes</th>
-              <th>Meta Ads</th>
-              <th>Google Ads</th>
-              <th>Total a Pagar</th>
-              <th>Acumulado</th>
-            </tr>
-          </thead>
-          <tbody id="pagos-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ════════════════════════════════
-// BUDGET TAB DATA
-// ════════════════════════════════
-const META_MONTHLY = [
-  {name:'Always On Brand',          vals:[2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500,2500], tipo:'always'},
-  {name:'Always On Remarketing',    vals:[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500], tipo:'always'},
-  {name:'Dictamen Fiscal',          vals:[0,4000,4000,0,0,0,0,0,2500,2500,0,0], tipo:'temporal'},
-  {name:'Dictamen CDMX',            vals:[0,2000,2000,0,0,0,0,0,0,0,0,0], tipo:'temporal'},
-  {name:'Dictamen IMSS/INFONAVIT',  vals:[0,2500,2500,0,0,0,0,0,0,0,0,0], tipo:'temporal'},
-  {name:'Nómina',                   vals:[0,2000,2000,0,0,0,3500,0,0,0,0,0], tipo:'temporal'},
-  {name:'PTU / CUCA-CUFIN',         vals:[0,1500,1500,1000,0,0,0,0,0,0,0,0], tipo:'temporal'},
-  {name:'Inspecciones STPS',        vals:[0,0,0,0,2500,2500,0,1750,1750,0,0,0], tipo:'temporal'},
-  {name:'Blindaje Laboral',         vals:[0,0,0,0,2250,2250,0,0,2000,2000,0,0], tipo:'temporal'},
-  {name:'Gobierno Corporativo',     vals:[0,0,0,0,1000,1000,1000,1000,1000,1000,0,0], tipo:'temporal'},
-  {name:'Defensa Fiscal',           vals:[0,0,2000,2000,0,0,0,1500,1500,0,0,0], tipo:'temporal'},
-  {name:'Coeficiente de Utilidad',  vals:[0,0,0,1250,1250,0,0,0,0,0,0,0], tipo:'temporal'},
-  {name:'Contratos Mercantiles',    vals:[0,0,0,0,0,1750,1750,0,0,0,0,0], tipo:'temporal'},
-  {name:'Cierre Fiscal',            vals:[0,0,0,0,0,0,0,0,3500,3500,0,0], tipo:'temporal'},
-  {name:'Aguinaldo',                vals:[0,0,0,0,0,0,0,0,0,1250,1250,0], tipo:'temporal'},
-  {name:'Declaración Anual',        vals:[0,0,0,0,0,0,0,0,0,0,0,3500], tipo:'temporal'},
-];
-
-const GOOGLE_MONTHLY = [
-  {name:'Brand Search',          vals:[1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000], tipo:'search'},
-  {name:'Auditoría Search',      vals:[0,2500,2500,2500,2500,0,0,0,2500,2500,2500,0], tipo:'search'},
-  {name:'Fiscal Search',         vals:[0,0,2000,2000,2000,2000,0,2000,2000,2000,2000,0], tipo:'search'},
-  {name:'Nómina Search',         vals:[0,1500,1500,0,0,0,1500,0,0,1500,1500,0], tipo:'search'},
-  {name:'Laboral Search',        vals:[0,0,1500,1500,1500,1500,0,1500,1500,1500,1500,0], tipo:'search'},
-  {name:'Corporativo Search',    vals:[0,0,0,0,1200,1200,1200,1200,1200,1200,1200,0], tipo:'search'},
-  {name:'Contabilidad Search',   vals:[0,0,0,0,0,0,800,0,0,800,800,0], tipo:'search'},
-  {name:'Display Remarketing',   vals:[1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500], tipo:'display'},
-  {name:'Display Temporales',    vals:[0,1000,1000,1000,1000,0,0,0,1000,1000,1000,0], tipo:'display'},
-];
-
-const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
-function calcMonthlyTotal(campaigns) {
-  return MESES.map((_,i) => campaigns.reduce((s,c) => s+c.vals[i],0));
-}
-
-const META_TOTALS = calcMonthlyTotal(META_MONTHLY);
-const GOOGLE_TOTALS = calcMonthlyTotal(GOOGLE_MONTHLY);
-const GRAND_TOTALS = META_TOTALS.map((v,i)=>v+GOOGLE_TOTALS[i]);
-
-// ── RENDER BUDGET SUMMARY CARDS ──
-function renderBudgetSummaryCards() {
-  const el = document.getElementById('budget-summary-cards');
-  const metaAnual = META_TOTALS.reduce((a,b)=>a+b,0);
-  const googleAnual = GOOGLE_TOTALS.reduce((a,b)=>a+b,0);
-  const totalAnual = metaAnual + googleAnual;
-  const reserva = 45000;
-
-  const maxMes = GRAND_TOTALS.indexOf(Math.max(...GRAND_TOTALS));
-
-  el.innerHTML = `
-    <div class="card"><div class="card-header"><div class="card-title">Total Campañas</div></div><div class="card-body">
-      <div class="card-value">$${totalAnual.toLocaleString()}</div>
-      <div class="card-sub">Meta + Google Ads · Campañas activas</div>
-      <div class="card-tag tag-blue">Sin reserva estratégica</div>
-    </div></div>
-    <div class="card card-meta"><div class="card-header"><div class="card-title">🔵 Meta Ads</div></div><div class="card-body">
-      <div class="card-value" style="color:#1877F2">$${metaAnual.toLocaleString()}</div>
-      <div class="card-sub">${META_MONTHLY.length} campañas · 16 activaciones</div>
-      <div class="card-tag tag-blue">16 campañas</div>
-    </div></div>
-    <div class="card card-google"><div class="card-header"><div class="card-title">🟢 Google Ads</div></div><div class="card-body">
-      <div class="card-value" style="color:#34A853">$${googleAnual.toLocaleString()}</div>
-      <div class="card-sub">9 campañas · Search + Display</div>
-      <div class="card-tag tag-green">9 campañas</div>
-    </div></div>
-    <div class="card"><div class="card-header"><div class="card-title">Mes Pico</div></div><div class="card-body">
-      <div class="card-value">$${Math.max(...GRAND_TOTALS).toLocaleString()}</div>
-      <div class="card-sub">${MESES[maxMes]} — Mayor inversión del año</div>
-      <div class="card-tag tag-orange">Peak mensual</div>
-    </div></div>
-  `;
-}
-
-// ── RENDER MONTHLY TABLE ──
-function renderMonthlyTable(campaigns, tbodyId, color) {
-  const tbody = document.getElementById(tbodyId);
-  tbody.innerHTML = '';
-  
-  // Section rows
-  let currentSection = '';
-  
-  campaigns.forEach(c => {
-    const total = c.vals.reduce((a,b)=>a+b,0);
-    const cells = c.vals.map(v => v===0
-      ? `<td style="color:#CBD5E1;font-size:11px">—</td>`
-      : `<td style="font-weight:700;color:${color}">$${v.toLocaleString()}</td>`
-    ).join('');
-    tbody.innerHTML += `<tr>
-      <td style="font-weight:600;font-size:12px;white-space:nowrap">${c.name}</td>
-      ${cells}
-      <td style="font-weight:800;color:${color}">$${total.toLocaleString()}</td>
-    </tr>`;
-  });
-
-  // Total row
-  const totals = MESES.map((_,i) => campaigns.reduce((s,c)=>s+c.vals[i],0));
-  const grandTotal = totals.reduce((a,b)=>a+b,0);
-  tbody.innerHTML += `<tr class="monthly-total">
-    <td style="text-align:left;font-weight:800">TOTAL MENSUAL</td>
-    ${totals.map(v=>`<td style="font-weight:800;color:${color}">$${v.toLocaleString()}</td>`).join('')}
-    <td style="font-weight:800;color:${color};font-size:15px">$${grandTotal.toLocaleString()}</td>
-  </tr>`;
-}
-
-// ── RENDER VS GASTADO ──
-function renderVsGastado() {
-  const mi = parseInt(document.getElementById('vs-month-select').value);
-  const mes = MESES[mi];
-  const saved = JSON.parse(localStorage.getItem('lofton-gastado') || '{}');
-  
-  const categories = [
-    {key:'meta-always', label:'Meta — Always On', presup: META_MONTHLY.filter(c=>c.tipo==='always').reduce((s,c)=>s+c.vals[mi],0), color:'#1877F2'},
-    {key:'meta-temporal', label:'Meta — Campañas Temporales', presup: META_MONTHLY.filter(c=>c.tipo==='temporal').reduce((s,c)=>s+c.vals[mi],0), color:'#4A90D9'},
-    {key:'google-search', label:'Google — Search', presup: GOOGLE_MONTHLY.filter(c=>c.tipo==='search').reduce((s,c)=>s+c.vals[mi],0), color:'#34A853'},
-    {key:'google-display', label:'Google — Display', presup: GOOGLE_MONTHLY.filter(c=>c.tipo==='display').reduce((s,c)=>s+c.vals[mi],0), color:'#2E7D32'},
-  ];
-
-  const el = document.getElementById('vs-gastado-rows');
-  el.innerHTML = '';
-
-  let html = `<div style="display:grid;grid-template-columns:220px 1fr 130px 130px 130px;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--gray-border)">
-    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase">Área</div>
-    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase">Avance</div>
-    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Presupuestado</div>
-    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Gastado Real</div>
-    <div style="background:var(--dark);color:#fff;padding:10px 14px;font-size:11px;font-weight:700;text-align:center;text-transform:uppercase">Diferencia</div>
-  `;
-
-  categories.forEach((cat, idx) => {
-    const gastado = saved[cat.key+'-'+mi] !== undefined ? saved[cat.key+'-'+mi] : 0;
-    const pct = cat.presup > 0 ? Math.min((gastado/cat.presup)*100, 150) : 0;
-    const diff = gastado - cat.presup;
-    const diffColor = diff > 0 ? '#DC3545' : diff < 0 ? '#28A745' : '#6B7280';
-    const diffLabel = diff > 0 ? `+$${diff.toLocaleString()} sobrepaso` : diff < 0 ? `-$${Math.abs(diff).toLocaleString()} restante` : 'Exacto';
-    const bg = idx%2===0 ? '#fff' : '#F8FAFF';
-    
-    html += `
-      <div style="background:${bg};padding:14px;display:flex;align-items:center;gap:10px;border-top:1px solid var(--gray-border)">
-        <span style="width:10px;height:10px;border-radius:50%;background:${cat.color};flex-shrink:0"></span>
-        <span style="font-size:12px;font-weight:600">${cat.label}</span>
-      </div>
-      <div style="background:${bg};padding:14px;display:flex;align-items:center;border-top:1px solid var(--gray-border)">
-        ${cat.presup > 0 ? `
-          <div style="flex:1">
-            <div style="height:16px;background:#E2E8F0;border-radius:8px;overflow:hidden">
-              <div style="height:100%;width:${pct}%;background:${cat.color};border-radius:8px;transition:width .4s"></div>
-            </div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${Math.round(pct)}% ejecutado</div>
-          </div>
-        ` : '<span style="font-size:11px;color:#CBD5E1">Sin actividad este mes</span>'}
-      </div>
-      <div style="background:${bg};padding:14px;text-align:center;font-weight:700;color:var(--dark);border-top:1px solid var(--gray-border)">${cat.presup > 0 ? '$'+cat.presup.toLocaleString() : '—'}</div>
-      <div style="background:${bg};padding:10px 14px;border-top:1px solid var(--gray-border);text-align:center">
-        ${cat.presup > 0 ? `<input type="number" value="${gastado||''}" placeholder="0"
-          onchange="saveGastado('${cat.key}',${mi},this.value)"
-          style="width:90px;padding:5px 8px;border:1px solid var(--gray-border);border-radius:6px;font-size:12px;font-weight:700;text-align:center;color:${cat.color};outline:none"
-          onfocus="this.select()">` : '<span style="color:#CBD5E1">—</span>'}
-      </div>
-      <div style="background:${bg};padding:14px;text-align:center;font-weight:700;color:${diffColor};font-size:12px;border-top:1px solid var(--gray-border)">${cat.presup > 0 ? diffLabel : '—'}</div>
-    `;
-  });
-
-  const totalPresup = categories.reduce((s,c)=>s+c.presup,0);
-  const totalGastado = categories.reduce((s,c)=>s+(saved[c.key+'-'+mi]||0),0);
-  const totalDiff = totalGastado - totalPresup;
-  const totalDiffColor = totalDiff > 0 ? '#DC3545' : totalDiff < 0 ? '#28A745' : '#6B7280';
-  const totalPct = totalPresup > 0 ? Math.round((totalGastado/totalPresup)*100) : 0;
-
-  html += `
-    <div style="background:#EFF6FF;padding:14px;font-weight:800;color:var(--dark);border-top:2px solid var(--blue)">TOTAL ${mes.toUpperCase()}</div>
-    <div style="background:#EFF6FF;padding:14px;display:flex;align-items:center;border-top:2px solid var(--blue)">
-      <div style="flex:1">
-        <div style="height:16px;background:#E2E8F0;border-radius:8px;overflow:hidden">
-          <div style="height:100%;width:${Math.min(totalPct,100)}%;background:var(--blue);border-radius:8px"></div>
-        </div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${totalPct}% ejecutado</div>
-      </div>
-    </div>
-    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:var(--dark);border-top:2px solid var(--blue)">$${totalPresup.toLocaleString()}</div>
-    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:var(--blue);border-top:2px solid var(--blue)">$${totalGastado.toLocaleString()}</div>
-    <div style="background:#EFF6FF;padding:14px;text-align:center;font-weight:800;color:${totalDiffColor};border-top:2px solid var(--blue)">${totalPresup > 0 ? (totalDiff >= 0 ? '+$'+totalDiff.toLocaleString() : '-$'+Math.abs(totalDiff).toLocaleString()) : '—'}</div>
-  </div>`;
-
-  el.innerHTML = html;
-  updateVsChart(categories, mes, saved, mi);
-}
-
-function saveGastado(key, mi, val) {
-  const saved = JSON.parse(localStorage.getItem('lofton-gastado') || '{}');
-  saved[key+'-'+mi] = parseFloat(val) || 0;
-  localStorage.setItem('lofton-gastado', JSON.stringify(saved));
-  renderVsGastado();
-}
-
-function clearGastado() {
-  if (confirm('¿Limpiar todos los datos de gasto real guardados?')) {
-    localStorage.removeItem('lofton-gastado');
-    renderVsGastado();
-  }
-}
-
-// ── RENDER PAGOS TABLE ──
-function renderPagosTable() {
-  const tbody = document.getElementById('pagos-tbody');
-  tbody.innerHTML = '';
-  let acum = 0;
-  MESES.forEach((mes, i) => {
-    const meta = META_TOTALS[i];
-    const google = GOOGLE_TOTALS[i];
-    const total = meta + google;
-    acum += total;
-    const rowBg = i % 2 === 0 ? '' : 'style="background:#F8FAFF"';
-    tbody.innerHTML += `<tr ${rowBg}>
-      <td style="font-weight:700">${mes} 2026</td>
-      <td style="color:#1877F2;font-weight:700">${meta > 0 ? '$'+meta.toLocaleString() : '—'}</td>
-      <td style="color:#34A853;font-weight:700">${google > 0 ? '$'+google.toLocaleString() : '—'}</td>
-      <td style="font-weight:800;color:var(--dark)">$${total.toLocaleString()}</td>
-      <td style="color:var(--text-muted)">$${acum.toLocaleString()}</td>
-    </tr>`;
-  });
-  const totalMeta = META_TOTALS.reduce((a,b)=>a+b,0);
-  const totalGoogle = GOOGLE_TOTALS.reduce((a,b)=>a+b,0);
-  tbody.innerHTML += `<tr class="monthly-total">
-    <td style="text-align:left;font-weight:800">TOTAL ANUAL</td>
-    <td style="color:#1877F2;font-weight:800">$${totalMeta.toLocaleString()}</td>
-    <td style="color:#34A853;font-weight:800">$${totalGoogle.toLocaleString()}</td>
-    <td style="font-weight:800;color:var(--dark)">$${(totalMeta+totalGoogle).toLocaleString()}</td>
-    <td style="font-weight:800;color:var(--dark)">$${(totalMeta+totalGoogle).toLocaleString()}</td>
-  </tr>`;
-}
-
-// ── CHARTS FOR BUDGET TAB ──
-let realMonthlyChartInst = null;
-let vsGastadoChartInst = null;
-
-function initBudgetCharts() {
-  // Real Monthly Stacked Bar
-  const ctx1 = document.getElementById('realMonthlyChart');
-  if (realMonthlyChartInst) realMonthlyChartInst.destroy();
-  realMonthlyChartInst = new Chart(ctx1, {
-    type:'bar',
-    data:{
-      labels: MESES,
-      datasets:[
-        {label:'Meta Ads',data:META_TOTALS,backgroundColor:'#1877F2CC',borderRadius:4,stack:'total'},
-        {label:'Google Ads',data:GOOGLE_TOTALS,backgroundColor:'#34A853CC',borderRadius:4,stack:'total'},
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top'},
-        tooltip:{callbacks:{
-          footer: items => 'Total: $'+items.reduce((a,b)=>a+b.parsed.y,0).toLocaleString()
-        }}
-      },
-      scales:{
-        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},stacked:true,grid:{color:'#E2E8F0'}},
-        x:{grid:{display:false},stacked:true}
-      }
-    }
-  });
-}
-
-function updateVsChart(categories, mes, saved, mi) {
-  const ctx2 = document.getElementById('vsGastadoChart');
-  if (vsGastadoChartInst) vsGastadoChartInst.destroy();
-  const labels = categories.map(c=>c.label.split(' — ')[1]||c.label);
-  const presup = categories.map(c=>c.presup);
-  const gastado = categories.map(c=>saved[c.key+'-'+mi]||0);
-  vsGastadoChartInst = new Chart(ctx2, {
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        {label:'Presupuestado',data:presup,backgroundColor:'#CBD5E1',borderRadius:4},
-        {label:'Gastado Real',data:gastado,backgroundColor:['#1877F2','#4A90D9','#34A853','#2E7D32'],borderRadius:4},
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'top'},
-        title:{display:true,text:`${mes} 2026 — Presupuestado vs Gastado`,font:{size:12}}
-      },
-      scales:{
-        y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'#E2E8F0'}},
-        x:{grid:{display:false}}
-      }
-    }
-  });
-}
-
-// ── INITIALIZE BUDGET TAB ──
-function initBudgetTab() {
-  renderBudgetSummaryCards();
-  renderMonthlyTable(META_MONTHLY, 'meta-monthly-tbody', '#1877F2');
-  renderMonthlyTable(GOOGLE_MONTHLY, 'google-monthly-tbody', '#34A853');
-  renderPagosTable();
-  // Set current month
-  const currentMonth = new Date().getMonth();
-  document.getElementById('vs-month-select').value = currentMonth;
-  renderVsGastado();
-  initBudgetCharts();
-}
-
-// Override showTab to init budget tab on first open
-const _originalShowTab = showTab;
-let budgetTabInit = false;
-showTab = function(tab) {
-  _originalShowTab.call(this, tab);
-  if (tab === 'budget' && !budgetTabInit) {
-    budgetTabInit = true;
-    setTimeout(initBudgetTab, 50);
-  }
-};
 </script>
 </body>
 </html>
