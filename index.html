@@ -360,7 +360,7 @@
 <!-- ═══════════════ KEYWORDS ═══════════════ -->
 <div id="tab-keywords" class="page">
   <div class="section-title">Banco de Keywords</div>
-  <div class="section-sub">50+ palabras clave positivas + 30+ negativas, clasificadas por intención y prioridad</div>
+  <div class="section-sub">89 palabras clave positivas + 69 negativas · Actualizado Abril 2026 con retroalimentación de gerentes</div>
 
   <div class="filter-bar">
     <input class="filter-input" id="kw-search" placeholder="🔍  Buscar keyword…" oninput="filterKW()">
@@ -397,7 +397,7 @@
     <input class="filter-input" id="neg-search" placeholder="🔍  Buscar negativa…" oninput="filterNeg()">
     <select class="filter-select" id="neg-cat" onchange="filterNeg()">
       <option value="">Todas las categorías</option>
-      <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>No relevante</option>
+      <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>Específica Auditoría</option><option>Específica Fiscal</option><option>Específica Nómina</option><option>Específica Laboral</option><option>Específica Corporativo</option><option>Específica Contabilidad</option><option>Precio</option><option>No relevante</option>
     </select>
     <span class="filter-count" id="neg-count"></span>
   </div>
@@ -569,6 +569,7 @@ const GOOGLE_CAMPAIGNS = [
 ];
 
 const KEYWORDS = [
+  // ── AUDITORÍA (originales) ──
   ["Auditoría","dictamen fiscal","Exact","Transaccional","Alto","P0"],
   ["Auditoría","dictamen fiscal obligatorio","Phrase","Informativa","Medio","P1"],
   ["Auditoría","auditoría de estados financieros","Exact","Transaccional","Medio","P0"],
@@ -580,6 +581,19 @@ const KEYWORDS = [
   ["Auditoría","auditoría contribuciones locales edomex","Phrase","Transaccional","Bajo","P1"],
   ["Auditoría","precio dictamen fiscal","Phrase","Transaccional","Medio","P0"],
   ["Auditoría","quién está obligado al dictamen fiscal","Phrase","Informativa","Alto","P1"],
+  // ── AUDITORÍA (nuevas — Ismael Aguilar + Joaquín Delgado) ──
+  ["Auditoría","auditoría externa","Exact","Transaccional","Medio","P0"],
+  ["Auditoría","firma de auditoría","Phrase","Transaccional","Medio","P0"],
+  ["Auditoría","despacho de auditoría","Phrase","Transaccional","Medio","P0"],
+  ["Auditoría","servicios de auditoría","Phrase","Transaccional","Medio","P0"],
+  ["Auditoría","dictamen fiscal 2026","Phrase","Transaccional","Alto","P0"],
+  ["Auditoría","SIPRED","Exact","Transaccional","Medio","P0"],
+  ["Auditoría","ISSIF","Exact","Transaccional","Bajo","P0"],
+  ["Auditoría","SIDEIMSS 2026","Phrase","Transaccional","Bajo","P0"],
+  ["Auditoría","SIPREDI 2026","Phrase","Transaccional","Bajo","P0"],
+  ["Auditoría","informe del auditor","Phrase","Informativa","Medio","P1"],
+  ["Auditoría","control interno empresas","Phrase","Transaccional","Medio","P1"],
+  // ── FISCAL (originales — sin cierre fiscal 2026 por retroalimentación Karla H.) ──
   ["Fiscal","asesoría fiscal empresas","Exact","Transaccional","Alto","P0"],
   ["Fiscal","defensa fiscal sat","Exact","Transaccional","Alto","P0"],
   ["Fiscal","auditoría del sat qué hacer","Phrase","Informativa","Alto","P0"],
@@ -587,66 +601,165 @@ const KEYWORDS = [
   ["Fiscal","vigilancia profunda sat","Phrase","Informativa","Medio","P0"],
   ["Fiscal","recurso de revocación fiscal","Exact","Transaccional","Medio","P1"],
   ["Fiscal","planeación fiscal empresas","Phrase","Transaccional","Medio","P0"],
-  ["Fiscal","cierre fiscal 2026","Phrase","Transaccional","Alto","P0"],
   ["Fiscal","materialidad fiscal 2026","Phrase","Informativa","Medio","P0"],
   ["Fiscal","despacho fiscal méxico","Phrase","Transaccional","Medio","P0"],
+  // ── FISCAL (nuevas — Karla Hernández) ──
+  ["Fiscal","restricción CSD","Exact","Transaccional","Medio","P0"],
+  ["Fiscal","vigilancias profundas sat","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","beneficios fiscales empresas","Phrase","Transaccional","Medio","P1"],
+  ["Fiscal","CFDI falsos qué hacer","Phrase","Informativa","Medio","P0"],
+  ["Fiscal","adeudo SAT","Phrase","Transaccional","Alto","P0"],
+  ["Fiscal","auditorías SAT","Phrase","Transaccional","Alto","P0"],
+  ["Fiscal","estímulo fiscal","Phrase","Informativa","Bajo","P1"],
+  ["Fiscal","bloqueo certificado sello digital","Exact","Transaccional","Medio","P0"],
+  // ── NÓMINA (originales — cuca cufin eliminada por Erik Lozano) ──
   ["Nómina","administración de nómina","Exact","Transaccional","Alto","P0"],
   ["Nómina","servicio de nómina outsourcing","Exact","Transaccional","Alto","P0"],
   ["Nómina","cálculo de nómina empresas","Phrase","Transaccional","Medio","P0"],
   ["Nómina","timbrado de nómina","Phrase","Transaccional","Medio","P1"],
   ["Nómina","maquila de nómina","Exact","Transaccional","Alto","P0"],
   ["Nómina","outsourcing nómina méxico","Exact","Transaccional","Alto","P0"],
+  // ── NÓMINA (nuevas — Erik Lozano) ──
+  ["Nómina","REPSE prestación servicios especializados","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","cumplimiento IMSS INFONAVIT nómina","Phrase","Transaccional","Medio","P0"],
+  ["Nómina","diferencias ISR nómina","Phrase","Informativa","Medio","P0"],
+  ["Nómina","ptu reparto utilidades asesoría","Phrase","Transaccional","Alto","P0"],
+  ["Nómina","aguinaldo asesoría empresas","Phrase","Transaccional","Alto","P0"],
+  // ── LABORAL (originales) ──
   ["Laboral","blindaje laboral empresas","Exact","Transaccional","Medio","P0"],
-  ["Laboral","inspección stps","Exact","Informativa","Alto","P1"],
+  ["Laboral","inspección stps","Exact","Informativa","Alto","P0"],
   ["Laboral","compliance laboral empresas","Phrase","Transaccional","Medio","P0"],
   ["Laboral","repse obligaciones","Phrase","Informativa","Medio","P1"],
   ["Laboral","demanda laboral empresa qué hacer","Phrase","Informativa","Alto","P0"],
   ["Laboral","prevención laboral","Phrase","Transaccional","Bajo","P1"],
   ["Laboral","litigio laboral empresas","Phrase","Transaccional","Medio","P0"],
+  // ── LABORAL (nuevas — Erik Lozano) ──
+  ["Laboral","cómo despedir justificadamente","Phrase","Transaccional","Alto","P0"],
+  ["Laboral","asesoría para despedir personal","Phrase","Transaccional","Alto","P0"],
+  ["Laboral","reducción de jornada laboral 2026","Phrase","Informativa","Alto","P0"],
+  ["Laboral","obligaciones patronales multas","Phrase","Informativa","Medio","P0"],
+  ["Laboral","prestación de servicios especializados nómina","Phrase","Transaccional","Medio","P0"],
+  ["Laboral","auditoría laboral empresas","Phrase","Transaccional","Medio","P0"],
+  ["Laboral","inspecciones stps prevención","Phrase","Transaccional","Medio","P0"],
+  // ── CORPORATIVO (originales) ──
   ["Corporativo","gobierno corporativo empresas","Exact","Transaccional","Medio","P0"],
   ["Corporativo","actas de asamblea","Phrase","Transaccional","Medio","P1"],
   ["Corporativo","contratos mercantiles empresa","Phrase","Transaccional","Medio","P0"],
   ["Corporativo","beneficiario controlador","Exact","Informativa","Alto","P1"],
   ["Corporativo","constitución de empresas","Exact","Transaccional","Alto","P1"],
   ["Corporativo","blindaje patrimonial","Phrase","Transaccional","Medio","P0"],
+  // ── CORPORATIVO (nuevas — Gabriel Salas) ──
+  ["Corporativo","conflicto entre socios empresa","Phrase","Transaccional","Medio","P0"],
+  ["Corporativo","riesgo empresarial entre socios","Phrase","Transaccional","Bajo","P0"],
+  ["Corporativo","due diligence empresarial","Exact","Transaccional","Medio","P1"],
+  ["Corporativo","revisión corporativa","Phrase","Transaccional","Bajo","P1"],
+  ["Corporativo","protocolo familiar empresas","Phrase","Transaccional","Bajo","P0"],
+  // ── CONTABILIDAD (originales) ──
   ["Contabilidad","servicio de contabilidad empresas","Exact","Transaccional","Alto","P0"],
   ["Contabilidad","outsourcing contable","Exact","Transaccional","Alto","P0"],
   ["Contabilidad","llevar contabilidad empresa","Phrase","Transaccional","Medio","P1"],
   ["Contabilidad","contabilidad integral","Phrase","Transaccional","Medio","P0"],
   ["Contabilidad","despacho contable méxico","Phrase","Transaccional","Medio","P0"],
+  // ── CONTABILIDAD (nuevas — Estefanía Rodríguez + Mónica Ortíz) ──
+  ["Contabilidad","contabilidad mensual empresas","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","cumplimiento fiscal contable","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","asesoría contable y fiscal","Phrase","Transaccional","Medio","P0"],
+  ["Contabilidad","conciliación contable fiscal","Phrase","Transaccional","Bajo","P0"],
+  ["Contabilidad","cierre contable anual","Phrase","Transaccional","Alto","P0"],
+  ["Contabilidad","estados financieros auditados","Phrase","Transaccional","Medio","P0"],
 ];
 
 const NEGATIVES = [
+  // ── GRATUITO / EMPLEO ──
   ["Gratuito/Empleo","gratis","Filtra usuarios que buscan servicios sin costo"],
   ["Gratuito/Empleo","gratuito","Mismo caso — excluir siempre"],
   ["Gratuito/Empleo","empleo","Búsquedas laborales, no servicios profesionales"],
   ["Gratuito/Empleo","vacantes","Ofertas de trabajo"],
   ["Gratuito/Empleo","trabajo","Búsquedas de empleo"],
+  ["Gratuito/Empleo","bolsa de trabajo","Portales de empleo — no prospectos"],
+  // ── EDUCATIVO ──
   ["Educativo","curso","Usuarios buscando capacitación, no servicios"],
   ["Educativo","diplomado","Formación académica"],
   ["Educativo","maestría","Educación formal"],
   ["Educativo","certificación","Credenciales educativas"],
   ["Educativo","capacitación","Cursos y talleres"],
   ["Educativo","tesis","Trabajo académico"],
+  // ── SOFTWARE / DIY ──
   ["Software/DIY","software","Usuarios buscando herramientas digitales"],
-  ["Software/DIY","programa contable","Software de contabilidad"],
-  ["Software/DIY","excel","Herramientas ofimáticas"],
+  ["Software/DIY","programa contable","Software tipo CONTPAQi, SAP"],
+  ["Software/DIY","excel","Herramientas ofimáticas gratuitas"],
   ["Software/DIY","plantilla","Formatos descargables"],
   ["Software/DIY","calculadora","Herramientas en línea"],
+  ["Software/DIY","nomipaq","Software de nómina — no busca outsourcing"],
+  ["Software/DIY","cálculo","Buscan hacer el cálculo ellos mismos — no el servicio (Erik Lozano + Karla H.)"],
+  ["Software/DIY","tutorial","Contenido educativo DIY (Gabriel Salas)"],
+  ["Software/DIY","machote","Formato gratuito corporativo"],
+  // ── GUBERNAMENTAL ──
   ["Gubernamental","sat cita","Trámites directos SAT"],
   ["Gubernamental","rfc","Trámite personal en SAT"],
   ["Gubernamental","imss cita","Cita directa IMSS"],
   ["Gubernamental","stps normas","Búsqueda de normativa, no servicio"],
+  ["Gubernamental","trámite sat","Autogestión en SAT — no asesoría"],
+  // ── PERSONAL ──
   ["Personal","persona física","Personas físicas sin empresa (baja conversión)"],
   ["Personal","declaración anual persona","Declaraciones individuales básicas"],
-  ["Competencia","deloitte","Búsqueda de competidor"],
-  ["Competencia","kpmg","Búsqueda de competidor"],
-  ["Competencia","ey méxico","Búsqueda de competidor"],
-  ["Competencia","pwc","Búsqueda de competidor"],
+  // ── COMPETENCIA Big 4 ──
+  ["Competencia","deloitte","Búsqueda de competidor Big 4"],
+  ["Competencia","kpmg","Búsqueda de competidor Big 4"],
+  ["Competencia","ey méxico","Búsqueda de competidor Big 4"],
+  ["Competencia","pwc","Búsqueda de competidor Big 4"],
+  // ── COMPETENCIA Despachos Medios (Joaquín Delgado) ──
+  ["Competencia","rsm","Despacho medio competidor"],
+  ["Competencia","crowe","Despacho medio competidor"],
+  ["Competencia","bdo","Despacho medio competidor"],
+  ["Competencia","grant thornton","Despacho medio competidor"],
+  ["Competencia","baker tilly","Despacho medio competidor"],
+  // ── ESPECÍFICA AUDITORÍA (Ismael Aguilar + Joaquín Delgado) ──
+  ["Específica Auditoría","auditoría interna empleo","Personas buscando trabajo como auditores"],
+  ["Específica Auditoría","formato auditoría","Plantillas gratuitas de auditoría"],
+  ["Específica Auditoría","auditoría de sistemas","Auditoría IT — diferente al servicio"],
+  ["Específica Auditoría","auditoría forense","Tipo de auditoría no financiera"],
+  ["Específica Auditoría","auditoría operativa","Tipo de auditoría no relacionada"],
+  ["Específica Auditoría","auditoría administrativa","Tipo de auditoría no relacionada"],
+  ["Específica Auditoría","auditoría de calidad","ISO / calidad — no sector Lofton"],
+  // ── ESPECÍFICA FISCAL ──
+  ["Específica Fiscal","trámites sat gratis","Autogestión sin pago de servicio"],
+  ["Específica Fiscal","contador gratis","Búsqueda de servicio gratuito"],
+  ["Específica Fiscal","cómo pagar impuestos","Autoaprendizaje básico"],
+  ["Específica Fiscal","simulador sat","Herramienta digital del SAT sin costo"],
+  // ── ESPECÍFICA NÓMINA (Erik Lozano) ──
+  ["Específica Nómina","nómina gratis","Servicio gratuito — no cliente potencial"],
+  ["Específica Nómina","cómo hacer nómina","Autoaprendizaje — no busca servicio externo"],
+  ["Específica Nómina","formato nómina","Plantilla gratuita"],
+  ["Específica Nómina","recibo de nómina persona","Empleado buscando su recibo — no empleador"],
+  // ── ESPECÍFICA LABORAL (Erik Lozano) ──
+  ["Específica Laboral","abogado laboral gratis","Servicio gratuito — no cliente potencial"],
+  ["Específica Laboral","demanda laboral trabajador","Perspectiva del empleado, no de la empresa"],
+  ["Específica Laboral","derechos laborales","Información para trabajadores"],
+  ["Específica Laboral","curso stps","Capacitación DIY — no busca consultoría"],
+  // ── ESPECÍFICA CORPORATIVO (Gabriel Salas) ──
+  ["Específica Corporativo","gobierno corporativo qué es","Curiosidad informativa — no intención de compra"],
+  ["Específica Corporativo","acta constitutiva gratis","Plantilla gratuita"],
+  ["Específica Corporativo","formato contrato","Formato sin costo — no servicio jurídico"],
+  // ── ESPECÍFICA CONTABILIDAD (Estefanía R. + Mónica O.) ──
+  ["Específica Contabilidad","contador gratis","Servicio gratuito — no cliente"],
+  ["Específica Contabilidad","curso contabilidad","Formación académica"],
+  ["Específica Contabilidad","software contable","Herramienta digital propia"],
+  ["Específica Contabilidad","cómo llevar contabilidad","Autoaprendizaje — no busca outsourcing"],
+  ["Específica Contabilidad","contabilidad básica","No busca servicio profesional"],
+  ["Específica Contabilidad","carrera contabilidad","Búsqueda académica"],
+  ["Específica Contabilidad","licenciatura contabilidad","Búsqueda académica"],
+  ["Específica Contabilidad","guia contable","Contenido educativo DIY"],
+  // ── PRECIO / LOW COST (Mónica Ortíz) ──
+  ["Precio","barato","Filtrar clientes de bajo presupuesto"],
+  ["Precio","económico","Filtrar clientes de bajo presupuesto"],
+  ["Precio","low cost","Filtrar clientes de bajo presupuesto"],
+  // ── NO RELEVANTE ──
   ["No relevante","inmobiliaria","Industria diferente"],
   ["No relevante","salud","Sector salud no relacionado"],
   ["No relevante","comida","No relacionado"],
   ["No relevante","restaurante","No relacionado"],
+  ["No relevante","auditoría médica","Auditoría en sector salud — irrelevante"],
 ];
 
 const CAL_CAMPAIGNS = [
