@@ -181,7 +181,6 @@
   /* ── NAV TAB PLATFORM COLORS ── */
   .nav-btn[data-tab="meta"].active { color:#1877F2; border-bottom-color:#1877F2; }
   .nav-btn[data-tab="google"].active { color:#34A853; border-bottom-color:#34A853; }
-  .nav-btn[data-tab="borradores"].active { color:#EA4335; border-bottom-color:#EA4335; }
 </style>
 </head>
 <body>
@@ -206,7 +205,6 @@
   <button class="nav-btn" data-tab="keywords" onclick="showTab('keywords')"><span class="tab-icon">🔑</span> Keywords</button>
   <button class="nav-btn" data-tab="calendar" onclick="showTab('calendar')"><span class="tab-icon">📅</span> Calendario</button>
   <button class="nav-btn" data-tab="kpis" onclick="showTab('kpis')"><span class="tab-icon">🎯</span> KPIs & Benchmarks</button>
-  <button class="nav-btn" data-tab="borradores" onclick="showTab('borradores')"><span class="tab-icon">🚀</span> <span style="color:#EA4335;font-weight:700">Google Borradores</span></button>
 </div>
 
 <!-- ═══════════════ OVERVIEW ═══════════════ -->
@@ -361,7 +359,7 @@
 <!-- ═══════════════ KEYWORDS ═══════════════ -->
 <div id="tab-keywords" class="page">
   <div class="section-title">Banco de Keywords</div>
-  <div class="section-sub">89 palabras clave positivas + 51 negativas · Actualizado Abril 2026 con retroalimentación de gerentes</div>
+  <div class="section-sub">229 palabras clave positivas (45 base + 184 nuevas para tráfico) + 30+ negativas, clasificadas por intención y prioridad</div>
 
   <div class="filter-bar">
     <input class="filter-input" id="kw-search" placeholder="🔍  Buscar keyword…" oninput="filterKW()">
@@ -399,7 +397,6 @@
     <select class="filter-select" id="neg-cat" onchange="filterNeg()">
       <option value="">Todas las categorías</option>
       <option>Gratuito/Empleo</option><option>Educativo</option><option>Software/DIY</option><option>Gubernamental</option><option>Personal</option><option>Competencia</option><option>No relevante</option>
-      <option>Específica Auditoría</option><option>Específica Contabilidad</option><option>Específica Corporativo</option><option>Específica Laboral</option><option>Precio</option>
     </select>
     <span class="filter-count" id="neg-count"></span>
   </div>
@@ -523,245 +520,6 @@
   </div>
 </div>
 
-<!-- ═══════════════ GOOGLE BORRADORES ═══════════════ -->
-<div id="tab-borradores" class="page">
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
-    <div style="width:44px;height:44px;background:#EA4335;border-radius:10px;display:flex;align-items:center;justify-content:22px;font-size:22px;justify-content:center">🚀</div>
-    <div>
-      <div class="section-title" style="color:#EA4335">Google Ads — Campañas en Borrador</div>
-      <div class="section-sub" style="margin-bottom:0">Abril 2026 · Listas para publicar manualmente desde Google Ads Manager</div>
-    </div>
-  </div>
-  <div style="height:4px;background:linear-gradient(90deg,#EA4335,#FBBC05,#34A853,#4285F4);border-radius:2px;margin-bottom:20px"></div>
-
-  <div class="tip" style="border-color:#EA4335;background:#FFF5F5">
-    <strong>⚠️ Estado: BORRADOR</strong> — Estas campañas están preparadas con copies, keywords y segmentación listos. Publícalas manualmente desde <strong>Google Ads Manager</strong>. No se activan automáticamente.
-  </div>
-
-  <!-- LEYENDA DE ESTADO -->
-  <div class="grid-4 mb24">
-    <div class="card" style="border-top:4px solid #EA4335">
-      <div class="card-header"><div class="card-title">🔴 Defensa Fiscal / UIF</div></div>
-      <div class="card-body"><div class="card-value" style="color:#EA4335;font-size:20px">⏳ Activa hasta 30 Abr</div><div class="card-sub">PRIORIDAD MÁXIMA — Publicar HOY</div><div class="card-tag tag-red">3 variaciones listas</div></div>
-    </div>
-    <div class="card" style="border-top:4px solid #FBBC05">
-      <div class="card-header"><div class="card-title">🟡 PTU + Laboral</div></div>
-      <div class="card-body"><div class="card-value" style="color:#92400E;font-size:20px">Cierre 30 Abr</div><div class="card-sub">Última semana crítica</div><div class="card-tag tag-orange">3 variaciones listas</div></div>
-    </div>
-    <div class="card" style="border-top:4px solid #34A853">
-      <div class="card-header"><div class="card-title">🟢 Brand Search</div></div>
-      <div class="card-body"><div class="card-value" style="color:#34A853;font-size:20px">Always On</div><div class="card-sub">Reforzar en Abril</div><div class="card-tag tag-green">3 variaciones listas</div></div>
-    </div>
-    <div class="card" style="border-top:4px solid #8B5CF6">
-      <div class="card-header"><div class="card-title">🟣 Laboral / STPS</div></div>
-      <div class="card-body"><div class="card-value" style="color:#8B5CF6;font-size:20px">Lanzar 1 Mayo</div><div class="card-sub">Setup en Abril, activa en Mayo</div><div class="card-tag" style="background:#EDE9FE;color:#5B21B6">3 variaciones listas</div></div>
-    </div>
-  </div>
-
-  <!-- CAMPAÑA 1: BRAND SEARCH -->
-  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
-    <span style="background:#34A853;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟢 ALWAYS ON</span>
-    Brand Search — Always On
-    <span style="background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">BORRADOR</span>
-  </div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="tip" style="background:#E6F4EA;border-color:#34A853"><strong>Objetivo en Abril:</strong> Reforzar posicionamiento de marca mientras las campañas de Defensa Fiscal y PTU están activas. Protección de marca ante búsquedas de la competencia.</div>
-      <div class="table-wrap mb16">
-        <table>
-          <thead><tr><th>Keyword</th><th>Match Type</th><th>Intención</th><th>Prioridad</th><th>Negativas Clave</th></tr></thead>
-          <tbody>
-            <tr><td class="fw700">[Lofton Servicios Integrales]</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe, lofton salud</td></tr>
-            <tr><td class="fw700">[lofton auditoria]</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
-            <tr><td class="fw700">"despacho lofton"</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
-            <tr><td class="fw700">lofton servicios profesionales</td><td><span class="chip">Broad</span></td><td><span class="card-tag tag-blue" style="margin:0">Navegacional</span></td><td><span class="badge b-p0">P0</span></td><td style="color:var(--red);font-size:12px">deloitte, kpmg, ey, pwc, rsm, crowe</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table id="brand-copies-table">
-          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
-          <tbody>
-            <tr><td><span class="badge b-p0">A</span></td><td>Lofton Servicios Integrales</td><td>Auditoría, Fiscal y Laboral</td><td>30 Años Blindando Empresas</td><td><em style="color:var(--blue)">Certeza, control y protección para tu negocio. Diagnóstico sin costo.</em></td><td><em style="color:var(--blue)">Equipo multidisciplinario con acompañamiento en todos los niveles.</em></td><td><span class="badge" style="background:#DBEAFE;color:#1E40AF">Autoridad</span></td></tr>
-            <tr><td><span class="badge b-p0">B</span></td><td>Lofton — Tu Aliado Fiscal</td><td>Diagnóstico sin Costo</td><td>Despacho Multidisciplinario</td><td><em style="color:var(--blue)">Auditoría, Fiscal, Laboral y Nómina integrados en un solo despacho.</em></td><td><em style="color:var(--blue)">Más de 30 años acompañando a empresas mexicanas. Agenda sin compromiso.</em></td><td><span class="badge" style="background:#D1FAE5;color:#065F46">CTA Directo</span></td></tr>
-            <tr><td><span class="badge b-p0">C</span></td><td>Lofton: Certeza para tu Empresa</td><td>Control · Protección · Tranquilidad</td><td>¿Buscas un Despacho Confiable?</td><td><em style="color:var(--blue)">No vendemos servicios: vendemos certeza. Auditoría, Fiscal, Laboral.</em></td><td><em style="color:var(--blue)">Atención directa encargados, gerentes y director. Sin intermediarios.</em></td><td><span class="badge" style="background:#FEF3C7;color:#92400E">Emocional</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- CAMPAÑA 2: DEFENSA FISCAL -->
-  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
-    <span style="background:#EA4335;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🔴 CRÍTICA</span>
-    Defensa Fiscal / Bloqueo UIF — Activa hasta 30 Abr
-    <span style="background:#FEE2E2;color:#991B1B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">⚡ PUBLICAR HOY</span>
-  </div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="tip" style="background:#FFF5F5;border-color:#EA4335"><strong>⚠️ Contexto Regulatorio (Karla Hernández):</strong> Cambio CFF 2026 — al interponer recurso de revocación, el contribuyente DEBE garantizarlo con billete de depósito inmediatamente. Estrategia: actuar ANTES de que el SAT emita el crédito. Mensaje: <em>"actúa hoy para evitar garantizar mañana"</em>.</div>
-      <div class="table-wrap mb16">
-        <table>
-          <thead><tr><th>Keyword</th><th>Match Type</th><th>Intención</th><th>Prioridad</th><th>Volumen</th></tr></thead>
-          <tbody>
-            <tr><td class="fw700">defensa fiscal sat</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700">asesoría fiscal empresas</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700">auditoría del sat qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700">vigilancia profunda sat</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700" style="color:#EA4335">restricción de CSD ⚡</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-red" style="margin:0">Urgente</span></td><td><span class="badge b-muy-alta">MUY ALTA</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700">carta invitación sat</td><td><span class="chip">Broad</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
-            <tr><td class="fw700">recurso de revocación fiscal</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
-            <tr><td class="fw700">adeudo SAT</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td><span class="card-tag tag-red" style="margin:0">Alta</span></td></tr>
-            <tr><td class="fw700" style="color:#EA4335">bloqueo certificado sello digital ⚡</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-muy-alta">MUY ALTA</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
-            <tr><td class="fw700">materialidad fiscal 2026</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p1">P1</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
-            <tr><td class="fw700">CFDI falsos qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p1">P1</span></td><td><span class="card-tag tag-orange" style="margin:0">Medio</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
-          <tbody>
-            <tr><td><span class="badge b-p0">A</span></td><td>¿Te Audita el SAT?</td><td>Defensa Fiscal Profesional</td><td>Protege tu CSD — Actúa Hoy</td><td><em style="color:var(--blue)">Vigilancias profundas, restricción de CSD o créditos fiscales: actuamos ya.</em></td><td><em style="color:var(--blue)">Estrategia desde la primera notificación del SAT. Diagnóstico sin costo.</em></td><td><span class="badge b-alta">Dolor / Urgencia</span></td></tr>
-            <tr><td><span class="badge b-p0">B</span></td><td>Vigilancia SAT sin Respuesta</td><td>Puede Cerrar tu Empresa</td><td>Estrategia Fiscal desde el Día 1</td><td><em style="color:var(--blue)">Sin respuesta correcta a tiempo, el SAT puede bloquear tu sello y generar créditos.</em></td><td><em style="color:var(--blue)">Más de 30 años construyendo defensas sólidas. Atención personalizada.</em></td><td><span class="badge b-muy-alta">Consecuencias</span></td></tr>
-            <tr><td><span class="badge b-p0">C</span></td><td>¿Adeudo o Auditoría del SAT?</td><td>30 Años de Defensa Fiscal</td><td>Atención Directa Director y Gerente</td><td><em style="color:var(--blue)">Recursos de revocación, materialidad y respuesta a vigilancias: servicio completo.</em></td><td><em style="color:var(--blue)">En Lofton no hay cliente pequeño. Diagnóstico fiscal sin compromiso.</em></td><td><span class="badge" style="background:#DBEAFE;color:#1E40AF">Autoridad</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">💡 <strong>Nota Karla H.:</strong> Diferenciador validado: "atención personalizada en todos los niveles (encargados, gerentes, director)". Usar Var. B en remarketing para prospectos que visitaron landing de fiscal.</div>
-    </div>
-  </div>
-
-  <!-- CAMPAÑA 3: PTU + LABORAL -->
-  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
-    <span style="background:#FBBC05;color:#1B2A4A;padding:4px 12px;border-radius:20px;font-size:12px">🟡 CIERRE</span>
-    PTU + Laboral — Cierre 30 Abril
-    <span style="background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">Última semana crítica</span>
-  </div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="tip" style="background:#FFFBEB;border-color:#FBBC05"><strong>📅 Campaña activa: 18 Mar – 30 Abr.</strong> Casuística validada por Erik Lozano: reclamos de empleados con pagos distintos a los pactados, quejas por retención ISR/IMSS/INFONAVIT, cartas invitación de Finanzas por diferencias en ISN, inconsistencias en aguinaldos.</div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Variación</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th><th>Nota</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span class="badge b-p0">A</span></td>
-              <td>PTU 2026: Vence en Mayo</td>
-              <td>¿Calculaste Bien el Reparto?</td>
-              <td>Asesoría de Nómina y Laboral</td>
-              <td><em style="color:var(--blue)">Un error en el cálculo de PTU genera inspecciones STPS y demandas costosas.</em></td>
-              <td><em style="color:var(--blue)">Revisamos tu PTU antes de la fecha límite. Diagnóstico gratuito.</em></td>
-              <td><span class="badge b-muy-alta">Urgencia Real</span></td>
-              <td style="font-size:11px">Activar 1ª semana Abril. Pausar 1 Mayo.</td>
-            </tr>
-            <tr>
-              <td><span class="badge b-p0">B</span></td>
-              <td>STPS Puede Visitarte sin Aviso</td>
-              <td>PTU, Nómina y Expedientes</td>
-              <td>Blindaje Laboral Integral</td>
-              <td><em style="color:var(--blue)">¿Tu PTU está bien calculado? ¿Expedientes al día? Preparamos tu empresa.</em></td>
-              <td><em style="color:var(--blue)">Reducción de jornada 2026, REPSE y cumplimiento STPS: asesoría completa.</em></td>
-              <td><span class="badge b-alta">Inspecciones STPS</span></td>
-              <td style="font-size:11px">Integra mensaje reducción de jornada 2026 (Erik Lozano).</td>
-            </tr>
-            <tr>
-              <td><span class="badge b-p0">C</span></td>
-              <td>¿Error en PTU = Multa STPS?</td>
-              <td>Auditoría Laboral Preventiva</td>
-              <td>Antes de que te Visiten</td>
-              <td><em style="color:var(--blue)">Empleados con quejas CCRL, diferencias salariales y expedientes incompletos.</em></td>
-              <td><em style="color:var(--blue)">Preparamos tu empresa para pasar cualquier inspección. Diagnóstico sin costo.</em></td>
-              <td><span class="badge b-media-alta">Casuística Real</span></td>
-              <td style="font-size:11px">Basado directamente en retroalimentación Erik Lozano. PRIORIZAR.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- CAMPAÑA 4: LABORAL / STPS -->
-  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
-    <span style="background:#8B5CF6;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟣 SETUP</span>
-    Laboral / STPS — Lanzamiento 1 Mayo
-    <span style="background:#EDE9FE;color:#5B21B6;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">Preparar assets en Abril</span>
-  </div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="tip" style="background:#F5F3FF;border-color:#8B5CF6"><strong>🚀 Setup en Abril, Activar el 1 de Mayo sin demora.</strong> Presupuesto: $26,100 MXN (Laboral). Keywords validadas por Erik Lozano.</div>
-      <div class="table-wrap mb16">
-        <table>
-          <thead><tr><th>Keyword</th><th>Match</th><th>Intención</th><th>Prio</th><th>Fuente</th></tr></thead>
-          <tbody>
-            <tr><td class="fw700">blindaje laboral empresas</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
-            <tr><td class="fw700">inspección stps</td><td><span class="chip">Exact</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
-            <tr><td class="fw700">compliance laboral empresas</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
-            <tr><td class="fw700">repse obligaciones</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
-            <tr><td class="fw700">demanda laboral empresa qué hacer</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano</td></tr>
-            <tr><td class="fw700">cómo despedir justificadamente</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
-            <tr><td class="fw700">asesoría para despedir personal</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
-            <tr><td class="fw700">reducción de jornada laboral 2026</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-blue" style="margin:0">Informativa</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
-            <tr><td class="fw700">prestación de servicios especializados nómina</td><td><span class="chip">Phrase</span></td><td><span class="card-tag tag-green" style="margin:0">Transaccional</span></td><td><span class="badge b-p0">P0</span></td><td style="font-size:11px;color:var(--text-muted)">✓ Erik Lozano — NUEVA</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Var.</th><th>Título 1</th><th>Título 2</th><th>Título 3</th><th>Descripción 1</th><th>Descripción 2</th><th>Ángulo</th></tr></thead>
-          <tbody>
-            <tr><td><span class="badge b-p0">A</span></td><td>¿Tiene tu Empresa REPSE al Día?</td><td>Inspecciones STPS sin Aviso</td><td>Blindaje Laboral Integral</td><td><em style="color:var(--blue)">Sin documentación correcta una inspección STPS puede costarte cientos de miles.</em></td><td><em style="color:var(--blue)">Preparamos tu empresa para pasar cualquier revisión. Asesoría personalizada.</em></td><td><span class="badge b-alta">STPS / Miedo</span></td></tr>
-            <tr><td><span class="badge b-p0">B</span></td><td>¿Pagando Liquidaciones Evitables?</td><td>Despido Justificado con Estrategia</td><td>Prevén Demandas Laborales</td><td><em style="color:var(--blue)">Mala baja de personal = demandas y laudos millonarios. Protege tu empresa.</em></td><td><em style="color:var(--blue)">30 años de defensa laboral. Preparación estratégica de baja de personal.</em></td><td><span class="badge b-muy-alta">Despidos / Litigios</span></td></tr>
-            <tr><td><span class="badge b-p0">C</span></td><td>Reducción de Jornada 2026</td><td>¿Ya Sabes Cómo Implementarla?</td><td>Cumplimiento Laboral Garantizado</td><td><em style="color:var(--blue)">La reforma de jornada laboral 2026 tiene implicaciones complejas en tu nómina.</em></td><td><em style="color:var(--blue)">Te ayudamos a implementarla sin riesgos laborales ni sindicales. Diagnóstico gratis.</em></td><td><span class="badge b-media-alta">Reforma 2026</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- DISPLAY REMARKETING -->
-  <div class="section-title mb16" style="font-size:15px;display:flex;align-items:center;gap:10px">
-    <span style="background:#795548;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px">🟤 DISPLAY</span>
-    Display Remarketing — Always On Abril
-    <span style="background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">BORRADOR</span>
-  </div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Var.</th><th>Título 1</th><th>Título 2</th><th>Descripción Principal</th><th>Segmento de Audiencia</th></tr></thead>
-          <tbody>
-            <tr><td><span class="badge b-p0">A</span></td><td>¿Aún Sin Resolver tu Situación Fiscal?</td><td>Lofton: Diagnóstico sin Costo</td><td><em style="color:var(--blue)">Expertos en defensa fiscal, auditoría y blindaje laboral. Agenda sin compromiso.</em></td><td>Visitantes landing fiscal 90d + Prospectos que abrieron formulario</td></tr>
-            <tr><td><span class="badge b-p0">B</span></td><td>Tu Empresa Necesita Certeza</td><td>No un Proveedor — un Aliado</td><td><em style="color:var(--blue)">Auditoría · Fiscal · Laboral · Nómina. Un solo despacho, protección integral.</em></td><td>Visitantes web generales 60d + Similar audiences clientes actuales</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHECKLIST -->
-  <div class="section-title mb16" style="font-size:15px">✅ Checklist de Implementación — Abril 2026</div>
-  <div class="card mb24">
-    <div class="card-body">
-      <div class="table-wrap">
-        <table id="checklist-table">
-          <thead><tr><th style="width:50px">Estado</th><th>Acción</th><th>Campaña</th><th>Nota</th></tr></thead>
-          <tbody id="checklist-tbody">
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td class="fw700" style="color:#EA4335">Subir copies Var. A y B de Defensa Fiscal / Bloqueo UIF</td><td>Defensa Fiscal</td><td>PRIORIDAD — Termina 30 Abr. Incluir kw "restricción CSD"</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Activar anuncios PTU Variación C (casuística Erik Lozano)</td><td>PTU / Laboral</td><td>Basado en retroalimentación directa del área de Nómina</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Agregar 45 keywords nuevas al banco del dashboard</td><td>Todas</td><td>Complementar — NUNCA reemplazar</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Agregar negativas nuevas a las campañas</td><td>Todas</td><td>Incluye: cálculo, despachos competidores (rsm, crowe, bdo, grant thornton, baker tilly)</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Preparar audiencias y assets para Laboral STPS</td><td>Laboral STPS</td><td>Setup en Abril para activar el 1 de Mayo sin demora</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Evaluar uso de "outsourcing" en nómina</td><td>Nómina</td><td>Erik Lozano: término estigmatizado legalmente. Decisión estratégica pendiente.</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Pausar "cuca cufin nómina" del banco de keywords</td><td>Nómina</td><td>Eliminada por indicación de Erik Lozano</td></tr>
-            <tr><td><input type="checkbox" style="transform:scale(1.3);cursor:pointer"></td><td>Actualizar nombre campaña Notion: "Defensa Fiscal / Bloqueo UIF"</td><td>Notion</td><td>Corrección identificada en tracker de Notion</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════
 // DATA
@@ -855,44 +613,166 @@ const KEYWORDS = [
   ["Contabilidad","llevar contabilidad empresa","Phrase","Transaccional","Medio","P1"],
   ["Contabilidad","contabilidad integral","Phrase","Transaccional","Medio","P0"],
   ["Contabilidad","despacho contable méxico","Phrase","Transaccional","Medio","P0"],
-  // ── NUEVAS ABRIL 2026 — Retroalimentación gerentes ──
-  ["Auditoría","auditoría externa","Exact","Transaccional","Medio","P0"],
-  ["Auditoría","firma de auditoría","Phrase","Transaccional","Medio","P0"],
-  ["Auditoría","despacho de auditoría","Phrase","Transaccional","Medio","P0"],
-  ["Auditoría","servicios de auditoría","Phrase","Transaccional","Medio","P0"],
-  ["Auditoría","dictamen fiscal 2026","Phrase","Transaccional","Alto","P0"],
-  ["Auditoría","SIPRED","Exact","Transaccional","Medio","P0"],
-  ["Auditoría","ISSIF","Exact","Transaccional","Bajo","P0"],
-  ["Auditoría","SIDEIMSS 2026","Phrase","Transaccional","Bajo","P0"],
-  ["Auditoría","SIPREDI 2026","Phrase","Transaccional","Bajo","P0"],
-  ["Auditoría","informe del auditor","Phrase","Informativa","Medio","P1"],
-  ["Auditoría","control interno empresas","Phrase","Transaccional","Medio","P1"],
-  ["Fiscal","vigilancias profundas sat","Phrase","Informativa","Medio","P0"],
-  ["Fiscal","restricción CSD","Exact","Transaccional","Medio","P0"],
-  ["Fiscal","beneficios fiscales empresas","Phrase","Transaccional","Medio","P1"],
-  ["Fiscal","materialidad fiscal","Phrase","Informativa","Medio","P0"],
-  ["Fiscal","CFDI falsos qué hacer","Phrase","Informativa","Medio","P0"],
-  ["Fiscal","adeudo SAT","Phrase","Transaccional","Alto","P0"],
-  ["Fiscal","auditorías SAT","Phrase","Transaccional","Alto","P0"],
-  ["Fiscal","estímulo fiscal","Phrase","Informativa","Bajo","P1"],
-  ["Laboral","cómo despedir justificadamente","Phrase","Transaccional","Alto","P0"],
-  ["Laboral","asesoría para despedir personal","Phrase","Transaccional","Alto","P0"],
-  ["Laboral","reducción de jornada laboral 2026","Phrase","Informativa","Alto","P0"],
-  ["Laboral","obligaciones patronales multas","Phrase","Informativa","Medio","P0"],
-  ["Laboral","prestación de servicios especializados nómina","Phrase","Transaccional","Medio","P0"],
-  ["Laboral","auditoría laboral empresas","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","REPSE prestación servicios especializados","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","cumplimiento IMSS INFONAVIT nómina","Phrase","Transaccional","Medio","P0"],
-  ["Nómina","diferencias ISR nómina","Phrase","Informativa","Medio","P0"],
-  ["Corporativo","riesgo empresarial entre socios","Phrase","Transaccional","Bajo","P0"],
-  ["Corporativo","conflicto entre socios empresa","Phrase","Transaccional","Medio","P0"],
-  ["Corporativo","due diligence empresarial","Exact","Transaccional","Medio","P1"],
-  ["Corporativo","revisión corporativa","Phrase","Transaccional","Bajo","P1"],
-  ["Contabilidad","contabilidad mensual empresas","Phrase","Transaccional","Medio","P0"],
-  ["Contabilidad","cumplimiento fiscal contable","Phrase","Transaccional","Medio","P0"],
-  ["Contabilidad","asesoría contable y fiscal","Phrase","Transaccional","Medio","P0"],
-  ["Contabilidad","conciliación contable fiscal","Phrase","Transaccional","Bajo","P0"],
-  ["Contabilidad","cierre contable anual","Phrase","Transaccional","Alto","P0"],
+  ["Auditoría","qué es una auditoría","Phrase","Informativa","Muy Alto","P0"],
+  ["Auditoría","cómo hacer una auditoría","Phrase","Informativa","Muy Alto","P0"],
+  ["Auditoría","qué es un dictamen fiscal","Phrase","Informativa","Muy Alto","P0"],
+  ["Auditoría","cómo presentar dictamen fiscal","Phrase","Informativa","Muy Alto","P0"],
+  ["Auditoría","auditoría empresas","Broad Modified","Informativa","Muy Alto","P1"],
+  ["Auditoría","auditor independiente méxico","Exact","Transaccional","Alto","P1"],
+  ["Auditoría","servicios de auditoría","Broad Modified","Informativa","Alto","P1"],
+  ["Auditoría","despacho auditoría","Broad Modified","Transaccional","Alto","P1"],
+  ["Auditoría","auditoría de estados financieros","Phrase","Informativa","Alto","P0"],
+  ["Auditoría","quién necesita dictamen","Phrase","Informativa","Alto","P1"],
+  ["Auditoría","dictamen fiscal costo","Phrase","Transaccional","Medio","P1"],
+  ["Fiscal","qué es asesoría fiscal","Phrase","Informativa","Muy Alto","P0"],
+  ["Fiscal","cómo funciona la asesoría fiscal","Phrase","Informativa","Alto","P1"],
+  ["Fiscal","asesoría fiscal","Broad Modified","Transaccional","Muy Alto","P0"],
+  ["Fiscal","defensa ante sat","Phrase","Informativa","Alto","P0"],
+  ["Fiscal","impuestos empresas méxico","Broad Modified","Informativa","Muy Alto","P1"],
+  ["Fiscal","cómo pagar menos impuestos legalmente","Phrase","Informativa","Alto","P1"],
+  ["Fiscal","impuestos pymes","Phrase","Informativa","Alto","P1"],
+  ["Fiscal","ley del isr 2026","Phrase","Informativa","Medio","P1"],
+  ["Fiscal","qué son obligaciones fiscales","Phrase","Informativa","Muy Alto","P1"],
+  ["Fiscal","cómo calcular impuestos","Phrase","Informativa","Muy Alto","P1"],
+  ["Fiscal","consultoría fiscal","Broad Modified","Transaccional","Alto","P1"],
+  ["Nómina","qué es asesoría nómina","Phrase","Informativa","Alto","P1"],
+  ["Nómina","cómo funciona la nómina","Phrase","Informativa","Muy Alto","P0"],
+  ["Nómina","cómo calcular nómina empresas","Phrase","Informativa","Muy Alto","P1"],
+  ["Nómina","servicios de nómina","Broad Modified","Informativa","Alto","P1"],
+  ["Nómina","nómina outsourcing beneficios","Phrase","Informativa","Medio","P1"],
+  ["Nómina","obligaciones patronales","Exact","Informativa","Alto","P1"],
+  ["Nómina","salario mínimo 2026 méxico","Phrase","Informativa","Muy Alto","P0"],
+  ["Nómina","ptu cómo se calcula","Phrase","Informativa","Muy Alto","P1"],
+  ["Nómina","contratación de empleados","Phrase","Informativa","Alto","P1"],
+  ["Laboral","qué es cumplimiento laboral","Phrase","Informativa","Alto","P1"],
+  ["Laboral","cumplimiento laboral","Broad Modified","Informativa","Muy Alto","P1"],
+  ["Laboral","seguridad en el trabajo empresas","Phrase","Informativa","Alto","P1"],
+  ["Laboral","normas laborales méxico","Phrase","Informativa","Muy Alto","P1"],
+  ["Laboral","demandas laborales qué hacer","Phrase","Informativa","Alto","P0"],
+  ["Laboral","prevención de riesgos","Exact","Informativa","Alto","P1"],
+  ["Laboral","noms laborales obligatorias","Phrase","Informativa","Medio","P1"],
+  ["Laboral","obligaciones como empleador","Exact","Informativa","Muy Alto","P1"],
+  ["Laboral","inspección stps qué esperar","Phrase","Informativa","Alto","P1"],
+  ["Corporativo","qué es gobierno corporativo","Phrase","Informativa","Medio","P1"],
+  ["Corporativo","cómo proteger una empresa","Phrase","Informativa","Muy Alto","P1"],
+  ["Corporativo","estructura de negocios","Exact","Informativa","Alto","P1"],
+  ["Corporativo","constitución de empresa paso a paso","Phrase","Informativa","Muy Alto","P1"],
+  ["Corporativo","contratos mercantiles","Broad Modified","Informativa","Alto","P1"],
+  ["Corporativo","protección patrimonial","Phrase","Informativa","Medio","P1"],
+  ["Corporativo","acuerdos entre socios","Exact","Informativa","Alto","P1"],
+  ["Contabilidad","qué es contabilidad empresarial","Phrase","Informativa","Muy Alto","P1"],
+  ["Contabilidad","servicios contables","Broad Modified","Informativa","Muy Alto","P1"],
+  ["Contabilidad","llevar contabilidad empresa","Phrase","Informativa","Muy Alto","P1"],
+  ["Contabilidad","contabilidad integral beneficios","Phrase","Informativa","Medio","P1"],
+  ["Contabilidad","balance general","Exact","Informativa","Alto","P1"],
+  ["Contabilidad","finanzas empresariales","Phrase","Informativa","Muy Alto","P1"],
+  ["Auditoría","cuánto cuesta un dictamen fiscal","Phrase","Transaccional","Muy Alto","P0"],
+  ["Fiscal","cuánto cuesta asesoría fiscal","Phrase","Transaccional","Muy Alto","P0"],
+  ["Nómina","cuánto cuesta administración de nómina","Phrase","Transaccional","Muy Alto","P0"],
+  ["Auditoría","cuánto cuesta auditoría","Phrase","Transaccional","Muy Alto","P0"],
+  ["Corporativo","cuánto cuesta asesoría legal","Phrase","Transaccional","Alto","P0"],
+  ["Laboral","cuánto cuesta cumplimiento laboral","Phrase","Transaccional","Medio","P1"],
+  ["Corporativo","cuánto cuesta contratos mercantiles","Phrase","Transaccional","Medio","P1"],
+  ["Contabilidad","cuánto cuesta contabilidad empresarial","Phrase","Transaccional","Muy Alto","P0"],
+  ["Fiscal","qué hacer si te audita el sat","Phrase","Informativa","Muy Alto","P0"],
+  ["Fiscal","cómo evitar multas fiscales","Phrase","Informativa","Muy Alto","P0"],
+  ["Laboral","qué hacer ante inspección stps","Phrase","Informativa","Muy Alto","P0"],
+  ["Laboral","cómo prevenir demandas laborales","Phrase","Informativa","Alto","P0"],
+  ["Corporativo","cómo proteger patrimonio","Phrase","Informativa","Muy Alto","P0"],
+  ["Fiscal","qué hacer con deudas fiscales","Phrase","Informativa","Muy Alto","P0"],
+  ["Corporativo","cómo blindarse legalmente","Phrase","Informativa","Muy Alto","P0"],
+  ["Fiscal","qué hacer ante vigilancia del sat","Phrase","Informativa","Alto","P0"],
+  ["Fiscal","cómo evitar problemas fiscales","Phrase","Informativa","Muy Alto","P0"],
+  ["Laboral","qué hacer en auditoría laboral","Phrase","Informativa","Alto","P0"],
+  ["Fiscal","cómo evitar contingencias","Phrase","Informativa","Alto","P0"],
+  ["Auditoría","necesito asesor fiscal","Phrase","Transaccional","Medio","P1"],
+  ["Auditoría","necesito auditor externo","Phrase","Transaccional","Medio","P1"],
+  ["Nómina","necesito servicio de nómina","Phrase","Transaccional","Medio","P1"],
+  ["Corporativo","necesito abogado mercantil","Phrase","Transaccional","Medio","P1"],
+  ["Laboral","necesito cumplimiento laboral","Phrase","Transaccional","Medio","P1"],
+  ["Auditoría","dónde contratar auditor","Phrase","Transaccional","Alto","P1"],
+  ["Fiscal","dónde encontrar asesor fiscal","Phrase","Transaccional","Alto","P1"],
+  ["Laboral","dónde conseguir asesoría laboral","Phrase","Transaccional","Medio","P1"],
+  ["Nómina","a quién contratar para nómina","Phrase","Transaccional","Medio","P1"],
+  ["Auditoría","a quién llamar para auditoría","Phrase","Transaccional","Medio","P1"],
+  ["Auditoría","cómo estructurar una empresa","Phrase","Informativa","Muy Alto","P1"],
+  ["Nómina","obligaciones de una pyme","Phrase","Informativa","Muy Alto","P1"],
+  ["Corporativo","cumplimiento normativo","Exact","Informativa","Muy Alto","P1"],
+  ["Fiscal","riesgos fiscales","Exact","Informativa","Muy Alto","P1"],
+  ["Auditoría","qué es una auditoría","Phrase","Informativa","Muy Alto","P0"],
+  ["Corporativo","responsabilidades legales","Exact","Informativa","Muy Alto","P1"],
+  ["Corporativo","crecer sin problemas legales","Phrase","Informativa","Alto","P1"],
+  ["Auditoría","mejor asesoría fiscal méxico","Phrase","Transaccional","Alto","P1"],
+  ["Auditoría","mejor despacho auditoría","Phrase","Transaccional","Alto","P1"],
+  ["Nómina","mejor servicio de nómina","Phrase","Transaccional","Alto","P1"],
+  ["Corporativo","mejor asesoría legal empresas","Phrase","Transaccional","Alto","P1"],
+  ["Laboral","mejor compliance laboral","Phrase","Transaccional","Medio","P1"],
+  ["Contabilidad","despacho vs contador","Phrase","Transaccional","Medio","P1"],
+  ["Auditoría","auditor independiente vs interno","Phrase","Informativa","Medio","P1"],
+  ["Nómina","outsourcing nómina vs interno","Phrase","Informativa","Medio","P1"],
+  ["Corporativo","abogado vs despacho","Phrase","Transaccional","Medio","P1"],
+  ["General","dictamen fiscal 2026 plazo","Phrase","Informativa","Muy Alto","P0"],
+  ["General","sat auditoría 2026","Exact","Informativa","Muy Alto","P0"],
+  ["General","declaración anual empresas","Phrase","Informativa","Muy Alto","P0"],
+  ["General","ptu 2026","Exact","Informativa","Muy Alto","P0"],
+  ["General","reparto de utilidades","Phrase","Informativa","Muy Alto","P0"],
+  ["General","inspecciones stps","Phrase","Informativa","Muy Alto","P0"],
+  ["General","cierre fiscal","Phrase","Informativa","Muy Alto","P0"],
+  ["General","auditoría laboral","Phrase","Informativa","Alto","P0"],
+  ["General","planeación fiscal 2027","Phrase","Informativa","Muy Alto","P0"],
+  ["General","aguinaldo cálculo","Phrase","Informativa","Muy Alto","P0"],
+  ["General","declaración anual 2026","Phrase","Informativa","Muy Alto","P0"],
+  ["General","auditoría cdmx","Phrase","Transaccional","Muy Alto","P1"],
+  ["General","asesoría fiscal méxico","Broad Modified","Transaccional","Muy Alto","P0"],
+  ["General","servicios contables méxico","Broad Modified","Informativa","Muy Alto","P1"],
+  ["General","asesor fiscal monterrey","Phrase","Transaccional","Alto","P1"],
+  ["General","auditoría guadalajara","Phrase","Transaccional","Alto","P1"],
+  ["General","despacho legal méxico","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","cumplimiento laboral méxico","Phrase","Informativa","Alto","P1"],
+  ["General","empresa méxico","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","negocios méxico","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","pymes méxico","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","empresario méxico","Broad Modified","Informativa","Muy Alto","P1"],
+  ["General","dueño de empresa","Exact","Informativa","Muy Alto","P1"],
+  ["General","director general","Exact","Informativa","Muy Alto","P1"],
+  ["General","cfo méxico","Exact","Informativa","Alto","P1"],
+  ["General","contador público","Exact","Informativa","Alto","P1"],
+  ["General","asesoría tributaria","Broad Modified","Transaccional","Alto","P1"],
+  ["General","consultoría fiscal","Broad Modified","Transaccional","Muy Alto","P0"],
+  ["General","outsourcing fiscal","Phrase","Transaccional","Medio","P1"],
+  ["General","servicios de auditoría externa","Phrase","Informativa","Muy Alto","P1"],
+  ["General","revisión de estados financieros","Phrase","Informativa","Alto","P1"],
+  ["General","administración de recursos humanos","Phrase","Informativa","Muy Alto","P1"],
+  ["General","gestión de nómina","Phrase","Informativa","Muy Alto","P1"],
+  ["General","compliance empresarial","Phrase","Informativa","Muy Alto","P1"],
+  ["General","asesoría mercantil","Phrase","Transaccional","Alto","P1"],
+  ["General","consultoría laboral","Phrase","Transaccional","Alto","P1"],
+  ["General","necesito ayuda fiscal","Phrase","Transaccional","Muy Alto","P0"],
+  ["General","necesito ayuda con nómina","Phrase","Transaccional","Muy Alto","P0"],
+  ["General","necesito ayuda legal empresa","Phrase","Transaccional","Muy Alto","P1"],
+  ["General","necesito ayuda con sat","Phrase","Transaccional","Muy Alto","P0"],
+  ["General","necesito ayuda laboral","Phrase","Transaccional","Muy Alto","P1"],
+  ["General","necesito ayuda contable","Phrase","Transaccional","Muy Alto","P1"],
+  ["General","ayuda para auditoría","Phrase","Transaccional","Alto","P1"],
+  ["General","ayuda para cierre fiscal","Phrase","Transaccional","Muy Alto","P0"],
+  ["General","asesoría rápida fiscal","Phrase","Transaccional","Medio","P1"],
+  ["General","consultoría express","Phrase","Transaccional","Medio","P1"],
+  ["General","soluciones fiscales","Broad Modified","Transaccional","Muy Alto","P0"],
+  ["General","soluciones de nómina","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","soluciones laborales","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","soluciones empresariales","Broad Modified","Informativa","Muy Alto","P1"],
+  ["General","soluciones contables","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","soluciones legales","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","asesoría integral","Broad Modified","Transaccional","Alto","P1"],
+  ["General","servicios integrales empresa","Broad Modified","Transaccional","Muy Alto","P1"],
+  ["General","servicios empresas","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","profesionales empresa","Broad Modified","Informativa","Muy Alto","P1"],
+  ["General","asesoría empresa","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","consultoría empresa","Broad Modified","Informativa","Muy Alto","P1"],
+  ["General","auditoría empresa","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","contabilidad empresa","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","fiscal empresa","Broad Modified","Informativa","Mega Alto","P1"],
+  ["General","legal empresa","Broad Modified","Informativa","Mega Alto","P1"],
 ];
 
 const NEGATIVES = [
@@ -926,28 +806,6 @@ const NEGATIVES = [
   ["No relevante","salud","Sector salud no relacionado"],
   ["No relevante","comida","No relacionado"],
   ["No relevante","restaurante","No relacionado"],
-  // ── NUEVAS ABRIL 2026 — Retroalimentación gerentes ──
-  ["Software/DIY","cálculo","Buscan hacer el cálculo ellos mismos (Erik Lozano + Karla H.)"],
-  ["Gratuito/Empleo","bolsa de trabajo","Portales de empleo — no prospectos"],
-  ["Gubernamental","trámite sat","Autogestión en SAT"],
-  ["Específica Auditoría","auditoría forense","Tipo de auditoría no financiera (Ismael A. + Joaquín D.)"],
-  ["Específica Auditoría","auditoría operativa","Tipo de auditoría no relacionada"],
-  ["Específica Auditoría","auditoría administrativa","Tipo de auditoría no relacionada"],
-  ["Específica Auditoría","auditoría de calidad","ISO / calidad — no sector Lofton"],
-  ["Competencia","rsm","Despacho medio competidor (Joaquín D.)"],
-  ["Competencia","crowe","Despacho medio competidor"],
-  ["Competencia","bdo","Despacho medio competidor"],
-  ["Competencia","grant thornton","Despacho medio competidor"],
-  ["Competencia","baker tilly","Despacho medio competidor"],
-  ["Específica Corporativo","tutorial","Contenido educativo DIY (Gabriel Salas)"],
-  ["Específica Corporativo","machote","Formato gratuito corporativo"],
-  ["Específica Contabilidad","contabilidad básica","No busca servicio profesional (Mónica Ortíz)"],
-  ["Específica Contabilidad","carrera contabilidad","Búsqueda académica"],
-  ["Específica Contabilidad","licenciatura contabilidad","Búsqueda académica"],
-  ["Precio","barato","Filtrar clientes de bajo presupuesto (Mónica Ortíz)"],
-  ["Precio","económico","Filtrar clientes de bajo presupuesto"],
-  ["Precio","low cost","Filtrar clientes de bajo presupuesto"],
-  ["Específica Laboral","derechos laborales","Perspectiva de trabajador — no empresa"],
 ];
 
 const CAL_CAMPAIGNS = [
