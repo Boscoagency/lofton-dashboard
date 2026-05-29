@@ -224,7 +224,15 @@
   }
   .q-option input[type=radio] { width:16px; height:16px; accent-color: var(--g600); flex-shrink:0; }
   .q-option-si:has(input:checked) input[type=radio],
-  .q-option-no:has(input:checked) input[type=radio] { accent-color: #fff; }
+  .q-option-no:has(input:checked) input[type=radio],
+  .q-option-na:has(input:checked) input[type=radio] { accent-color: #fff; }
+  .q-option-na:has(input:checked) {
+    background: linear-gradient(145deg, #1a1a2e, #2d2d5e);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(99,102,241,.25), 0 2px 6px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.08);
+    transform: translateY(-1px) scale(1.01);
+  }
   .q-option span { font-weight: 600; }
 
   /* ── PROGRESS BAR ── */
@@ -540,6 +548,7 @@
           <span class="material-symbols-outlined text-sm" style="color:var(--lime)">schedule</span>
           <span class="text-sm font-semibold text-white">Duración aproximada: <strong style="color:var(--lime)">15 minutos</strong></span>
         </div>
+        <p class="text-xs mt-3 opacity-60" style="color:#d8f3dc"><span class="material-symbols-outlined" style="font-size:12px; vertical-align:middle">lock</span> La información proporcionada será tratada con carácter confidencial.</p>
       </div>
     </div>
 
@@ -635,15 +644,17 @@
             <label class="q-option q-option-no flex-1"><input type="radio" name="q10" value="no" onchange="updateProgress()"><span>No</span></label>
           </div>
         </div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">11. ¿Labora en tiempo extraordinario?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q_labora_extra" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q_labora_extra" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block">
-          <p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">11. ¿La jornada extra es menor a 10 horas semanales?</p>
-          <div class="flex gap-3">
+          <p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">12. ¿La jornada extra es menor a 10 horas semanales?</p>
+          <div class="flex flex-wrap gap-2">
             <label class="q-option q-option-si flex-1"><input type="radio" name="q11" value="si" onchange="updateProgress()"><span>Sí</span></label>
             <label class="q-option q-option-no flex-1"><input type="radio" name="q11" value="no" onchange="updateProgress()"><span>No</span></label>
+            <label class="q-option q-option-na flex-1"><input type="radio" name="q11" value="na" onchange="updateProgress()"><span>No aplica</span></label>
           </div>
         </div>
         <div class="q-block">
-          <p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">12. ¿Los documentos laborales están actualizados conforme a las últimas reformas (últimos 3 años)?</p>
+          <p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">13. ¿Los documentos laborales están actualizados conforme a las últimas reformas (últimos 3 años)?</p>
           <div class="flex gap-3">
             <label class="q-option q-option-si flex-1"><input type="radio" name="q12" value="si" onchange="updateProgress()"><span>Sí</span></label>
             <label class="q-option q-option-no flex-1"><input type="radio" name="q12" value="no" onchange="updateProgress()"><span>No</span></label>
@@ -662,14 +673,14 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">13. ¿Pagas nómina semanal a empleados de esfuerzo predominantemente material?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q13" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q13" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">14. ¿Pagas la nómina en tiempo y forma sin retrasos deliberados?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q14" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q14" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">15. ¿Realizas en tiempo y forma el pago de prestaciones (vacaciones, aguinaldo, prima)?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q15" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q15" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">16. ¿El tiempo extraordinario se calcula y paga conforme a la LFT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q16" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q16" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">17. ¿El pago de tiempo extra está reflejado en el recibo de nómina?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q17" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q17" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">18. ¿Están libres de descuentos por multas o sanciones los recibos de nómina?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q18" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q18" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">19. ¿Se expiden recibos de pago a todos los empleados?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q19" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q19" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">20. ¿Tu empresa está afiliada al INFONACOT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q20" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q20" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">14. ¿Pagas nómina semanal a empleados de esfuerzo predominantemente material-físico?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q13" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q13" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">15. ¿Pagas la nómina en tiempo y forma sin retrasos deliberados?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q14" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q14" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">16. ¿Realizas en tiempo y forma el pago de prestaciones (vacaciones, aguinaldo y prima vacacional)?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q15" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q15" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q15" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">17. ¿El tiempo extraordinario se calcula y paga conforme a la LFT?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q16" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q16" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q16" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">18. ¿El pago de tiempo extra está reflejado en el recibo de nómina?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q17" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q17" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q17" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">19. ¿Están libres de descuentos por multas o sanciones los recibos de nómina?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q18" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q18" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">20. ¿Se expiden recibos de pago a todos los empleados?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q19" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q19" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">21. ¿Tu empresa está afiliada al INFONACOT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q20" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q20" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
 
@@ -683,9 +694,9 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">21. ¿Tu empresa tiene sindicato activo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q21" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q21" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">22. ¿Las revisiones del Contrato Colectivo se realizan sin intervención del empleador?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q22" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q22" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">23. ¿Se otorga permiso a los trabajadores para realizar libremente sus actividades sindicales?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q23" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q23" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">22. ¿Tu empresa tiene sindicato activo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q21" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q21" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">23. ¿Las revisiones del Contrato Colectivo se realizan sin intervención del empleador?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q22" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q22" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q22" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">24. ¿Se otorga permiso a los trabajadores para realizar libremente sus actividades sindicales?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q23" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q23" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
 
@@ -699,11 +710,11 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">24. ¿Los trabajadores fueron capacitados sobre el uso de herramientas y equipos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q24" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q24" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">25. ¿Los trabajadores fueron capacitados sobre los riesgos laborales a los que están expuestos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q25" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q25" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">26. ¿Los trabajadores fueron capacitados en seguridad y prevención de riesgos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q26" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q26" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">27. ¿Proporcionas capacitación continua para el desempeño de funciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q27" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q27" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">28. ¿Proporcionas adiestramiento para perfeccionar o ampliar habilidades?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q28" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q28" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">25. ¿Los trabajadores fueron capacitados sobre el uso de herramientas y equipos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q24" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q24" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">26. ¿Los trabajadores fueron capacitados sobre los riesgos laborales a los que están expuestos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q25" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q25" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">27. ¿Los trabajadores fueron capacitados en seguridad y prevención de riesgos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q26" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q26" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">28. ¿Proporcionas capacitación continua para el desempeño de funciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q27" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q27" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">29. ¿Proporcionas adiestramiento para perfeccionar o ampliar habilidades?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q28" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q28" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
 
@@ -717,27 +728,27 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">29. ¿Conoces las NOMS-STPS aplicables a tu centro de trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q29" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q29" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">30. ¿Cuentas con un diagnóstico de seguridad y salud en el trabajo (SST)?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q30" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q30" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">31. ¿Cuentas con un programa de seguridad y salud en el trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q31" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q31" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">32. ¿Se otorga capacitación en SST relacionada con el puesto?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q32" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q32" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">33. ¿Dispones de instalaciones seguras con señalización y protecciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q33" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q33" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">34. ¿Dispones de planes de mantenimiento preventivo y correctivo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q34" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q34" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">35. ¿Se realizaron estudios de identificación y control de agentes físicos, químicos y biológicos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q35" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q35" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">36. ¿Se proporciona equipo de protección personal (EPP) adecuado para cada puesto?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q36" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q36" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">37. ¿Se capacita sobre el uso correcto del EPP?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q37" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q37" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">38. ¿Cuentas con servicio médico interno o externo preventivo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q38" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q38" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">39. ¿Se investigan y documentan los accidentes y enfermedades de trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q39" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q39" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">40. ¿Se toman acciones correctivas tras los accidentes?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q40" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q40" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">41. ¿Conoces los protocolos de seguridad por contingencia sanitaria?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q41" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q41" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">42. ¿Tienes un protocolo para prevenir y erradicar la discriminación y violencia?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q42" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q42" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">43. ¿Mantienes un programa activo de prevención de violencia laboral?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q43" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q43" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">44. ¿Se han activado los mecanismos de acción preventiva y correctiva en SST?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q44" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q44" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">45. ¿Cuentas con sillas suficientes en el centro de trabajo (Ley Silla)?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q45" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q45" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">46. ¿Tienes una política de descansos programados actualizada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q46" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q46" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">47. ¿Proporcionas útiles, herramientas e instrumentos necesarios para el trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q47" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q47" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">30. ¿Conoces las NOMS-STPS aplicables a tu centro de trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q29" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q29" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">31. ¿Cuentas con un diagnóstico de seguridad y salud en el trabajo (SST)?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q30" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q30" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">32. ¿Cuentas con un programa de seguridad y salud en el trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q31" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q31" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">33. ¿Se otorga capacitación en SST relacionada con el puesto?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q32" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q32" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">34. ¿Dispones de instalaciones seguras con señalización y protecciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q33" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q33" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">35. ¿Dispones de planes de mantenimiento preventivo y correctivo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q34" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q34" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">36. ¿Se realizaron estudios de identificación y control de agentes físicos, químicos y biológicos?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q35" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q35" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">37. ¿Se proporciona equipo de protección personal (EPP) adecuado para cada puesto?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q36" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q36" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">38. ¿Se capacita sobre el uso correcto del EPP?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q37" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q37" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">39. ¿Cuentas con servicio médico interno o externo preventivo?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q38" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q38" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q38" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">40. ¿Se investigan y documentan los accidentes y enfermedades de trabajo?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q39" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q39" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q39" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">41. ¿Se toman acciones correctivas tras los accidentes?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q40" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q40" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q40" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">42. ¿Conoces los protocolos de seguridad por contingencia sanitaria?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q41" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q41" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">43. ¿Tienes un protocolo para prevenir y erradicar la discriminación y violencia?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q42" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q42" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">44. ¿Mantienes un programa activo de prevención de violencia laboral?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q43" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q43" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">45. ¿Se han activado los mecanismos de acción preventiva y correctiva en Seguridad y Salud en el Trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q44" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q44" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">46. ¿Cuentas con sillas suficientes en el centro de trabajo (Ley Silla)?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q45" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q45" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">47. ¿Tienes una política de descansos programados actualizada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q46" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q46" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">48. ¿Proporcionas útiles, herramientas e instrumentos necesarios para el trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q47" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q47" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <!-- Extra items for SST to reach count from data -->
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">48. ¿Se otorgan facilidades a los trabajadores para descansar durante la jornada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q48" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q48" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">49. ¿Se otorgan facilidades a los trabajadores para descansar durante la jornada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q48" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q48" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
 
@@ -751,10 +762,10 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">49. ¿Se solicitan certificados médicos relacionados con el embarazo durante la contratación?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q49" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q49" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">50. ¿Se han realizado actos intimidatorios para despedir a una trabajadora embarazada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q50" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q50" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">51. ¿Se ha despedido a personal en estado de gravidez?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q51" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q51" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">52. ¿Se otorgan permisos de paternidad conforme a la LFT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q52" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q52" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">50. ¿Se solicitan certificados médicos relacionados con el embarazo durante la contratación?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q49" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q49" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">51. ¿Se han realizado actos intimidatorios para despedir a una trabajadora embarazada?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q50" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q50" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">52. ¿Se ha despedido a personal en estado de gravidez?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q51" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q51" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">53. ¿Se otorgan permisos de paternidad conforme a la LFT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q52" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q52" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
 
@@ -866,7 +877,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">7</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num">$4,704,131</p>
@@ -897,7 +908,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">5</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num">$4,281,815</p>
@@ -928,7 +939,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">0</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num" style="color:var(--amber)">$351,930</p>
@@ -959,7 +970,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">5</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num">$2,932,750</p>
@@ -990,7 +1001,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">5</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num">$12,317,550</p>
@@ -1021,7 +1032,7 @@
           <div class="pc-hero">
             <div class="pc-hero-left">
               <p class="pc-big val-alto">3</p>
-              <p class="pc-big-label">altos en riesgo</p>
+              <p class="pc-big-label">con riesgo alto</p>
             </div>
             <div class="pc-hero-right">
               <p class="pc-amount exp-num">$2,346,200</p>
@@ -1383,7 +1394,9 @@ function calcResults() {
     p.totalQ++;
     const ans = answers[qName];
     const isRisk = ans === meta.risk_if;
-    if (isRisk) {
+    if (ans === 'na') {
+      // "No aplica" — neutral, excluded from all scoring
+    } else if (isRisk) {
       if (meta.level==='alto') p.alto++;
       else if (meta.level==='medio') p.medio++;
       else if (meta.level==='bajo') p.bajo++;
@@ -1481,7 +1494,7 @@ function updatePilarCard(pilarNum, data) {
       bigLabel.textContent = 'sin riesgos';
       if (bigNum) { bigNum.textContent = '✓'; bigNum.style.fontSize = '2.2rem'; }
     } else {
-      bigLabel.textContent = 'altos en riesgo';
+      bigLabel.textContent = 'con riesgo alto';
       if (bigNum) bigNum.style.fontSize = '';
     }
   }
@@ -1534,9 +1547,16 @@ function updateGlobalKPIs(pilares) {
   const criticalCount = Object.values(pilares).filter(p => p.alto > 0).length;
   const criticalNote  = document.getElementById('critical-note');
   if (riskCircle) {
-    if (totalAlto > 3)      riskCircle.textContent = 'ALTO';
-    else if (totalAlto > 0) riskCircle.textContent = 'MEDIO';
-    else                    riskCircle.textContent = 'BAJO';
+    if (totalAlto > 3) {
+      riskCircle.textContent = '🔴 Riesgo Alto';
+      riskCircle.style.color = '#ef4444';
+    } else if (totalAlto > 0) {
+      riskCircle.textContent = '🟡 Riesgo Medio';
+      riskCircle.style.color = '#f59e0b';
+    } else {
+      riskCircle.textContent = '🟢 Riesgo Bajo';
+      riskCircle.style.color = '#52b788';
+    }
   }
   if (criticalNote) criticalNote.textContent = criticalCount + ' de 6 pilares con riesgos';
 }
@@ -1582,7 +1602,7 @@ function submitLeadForm(e) {
 }
 
 // ── PROGRESS TRACKER ──
-const TOTAL_Q = 52;
+const TOTAL_Q = 53;
 function updateProgress() {
   const names = new Set(Array.from(document.querySelectorAll('input[type=radio]:checked')).map(r => r.name));
   const count = names.size;
