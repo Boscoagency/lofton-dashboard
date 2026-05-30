@@ -848,14 +848,31 @@
             <p id="banner-total-num" class="font-extrabold leading-none" style="color:var(--lime); font-size:clamp(2rem,6vw,3.5rem)">$27,134,345</p>
             <p id="banner-total-text" class="text-xs font-medium mt-1" style="color:var(--lime); opacity:.65">veinte y siete millones ciento treinta y cuatro mil trescientos cuarenta y cinco pesos</p>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-center rounded-xl px-5 py-3" style="background:rgba(255,255,255,.08)">
-              <p class="text-xs uppercase tracking-widest opacity-60 text-white mb-0.5">Riesgos detectados</p>
-              <p class="font-extrabold text-white" style="font-size:1.6rem"><span id="kpi-alto">—</span> <span class="text-sm opacity-60">altos</span> · <span id="kpi-medio">—</span> <span class="text-sm opacity-60">medios</span></p>
-            </div>
-            <div class="text-center rounded-xl px-4 py-3 border-2" style="border-color:rgba(255,255,255,.12); background:rgba(0,0,0,.15)">
-              <p class="text-xs uppercase tracking-widest opacity-60 text-white mb-1">Nivel</p>
-              <p id="risk-circle-label" class="text-xl font-extrabold" style="color:var(--lime)">—</p>
+          <!-- GAUGE CHART -->
+          <div class="rounded-2xl p-4" style="background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); min-width:260px">
+            <div class="flex items-center gap-4">
+              <!-- SVG Gauge -->
+              <div style="position:relative; width:110px; height:62px; flex-shrink:0;">
+                <svg id="gauge-svg" viewBox="0 0 110 62" width="110" height="62" style="overflow:visible">
+                  <!-- Track arcs (background) -->
+                  <path d="M10,55 A45,45 0 0,1 100,55" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7" stroke-linecap="round"/>
+                  <path d="M16,55 A39,39 0 0,1 94,55" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7" stroke-linecap="round"/>
+                  <path d="M22,55 A33,33 0 0,1 88,55" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7" stroke-linecap="round"/>
+                  <!-- Filled arcs (updated by JS) -->
+                  <path id="gauge-alto"  d="M10,55 A45,45 0 0,1 100,55" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 141.4"/>
+                  <path id="gauge-medio" d="M16,55 A39,39 0 0,1 94,55"  fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 122.5"/>
+                  <path id="gauge-bajo"  d="M22,55 A33,33 0 0,1 88,55"  fill="none" stroke="#52b788" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 103.7"/>
+                </svg>
+              </div>
+              <!-- Labels -->
+              <div>
+                <p id="risk-circle-label" class="text-lg font-extrabold mb-2" style="color:#ef4444">—</p>
+                <div class="flex flex-col gap-1" style="font-size:11px">
+                  <div class="flex items-center gap-2"><span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;flex-shrink:0"></span><span style="color:rgba(255,255,255,.7)"><span id="kpi-alto" class="font-bold text-white">—</span> riesgos altos</span></div>
+                  <div class="flex items-center gap-2"><span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block;flex-shrink:0"></span><span style="color:rgba(255,255,255,.7)"><span id="kpi-medio" class="font-bold text-white">—</span> riesgos medios</span></div>
+                  <div class="flex items-center gap-2"><span style="width:8px;height:8px;border-radius:50%;background:#52b788;display:inline-block;flex-shrink:0"></span><span style="color:rgba(255,255,255,.7)"><span id="kpi-bajo" class="font-bold text-white">—</span> riesgos bajos</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1532,8 +1549,9 @@ function updateGlobalKPIs(pilares) {
   const el = (id) => document.getElementById(id);
   if (el('kpi-alto'))  el('kpi-alto').textContent  = totalAlto;
   if (el('kpi-medio')) el('kpi-medio').textContent = totalMedio;
+  if (el('kpi-bajo'))  el('kpi-bajo').textContent  = totalBajo;
   if (el('kpi-total-exp')) {
-    el('kpi-total-exp').textContent = fmtMXN(totalExp).replace('$','') ;
+    el('kpi-total-exp').textContent = fmtMXN(totalExp).replace('$','');
   }
 
   // Big total banner
@@ -1542,23 +1560,50 @@ function updateGlobalKPIs(pilares) {
   if (bannerNum)  bannerNum.textContent  = fmtMXN(totalExp);
   if (bannerText) bannerText.textContent = numToES(totalExp);
 
-  // Risk circle
+  // Risk label
   const riskCircle = document.getElementById('risk-circle-label');
   const criticalCount = Object.values(pilares).filter(p => p.alto > 0).length;
   const criticalNote  = document.getElementById('critical-note');
   if (riskCircle) {
     if (totalAlto > 3) {
-      riskCircle.textContent = '🔴 Riesgo Alto';
+      riskCircle.textContent = 'Riesgo Alto';
       riskCircle.style.color = '#ef4444';
     } else if (totalAlto > 0) {
-      riskCircle.textContent = '🟡 Riesgo Medio';
+      riskCircle.textContent = 'Riesgo Medio';
       riskCircle.style.color = '#f59e0b';
     } else {
-      riskCircle.textContent = '🟢 Riesgo Bajo';
+      riskCircle.textContent = 'Riesgo Bajo';
       riskCircle.style.color = '#52b788';
     }
   }
   if (criticalNote) criticalNote.textContent = criticalCount + ' de 6 pilares con riesgos';
+
+  // Animate gauge arcs
+  const totalRiskQ = Object.keys(RISK_MAP).length;
+  const altoArc  = document.getElementById('gauge-alto');
+  const medioArc = document.getElementById('gauge-medio');
+  const bajoArc  = document.getElementById('gauge-bajo');
+  if (altoArc) {
+    const maxDash = 141.4;
+    const pct = Math.min(totalAlto / Math.max(totalRiskQ * 0.5, 1), 1);
+    const dash = pct * maxDash;
+    altoArc.style.transition = 'stroke-dasharray .8s cubic-bezier(.4,0,.2,1)';
+    altoArc.setAttribute('stroke-dasharray', dash + ' ' + maxDash);
+  }
+  if (medioArc) {
+    const maxDash = 122.5;
+    const pct = Math.min(totalMedio / Math.max(totalRiskQ * 0.5, 1), 1);
+    const dash = pct * maxDash;
+    medioArc.style.transition = 'stroke-dasharray .8s cubic-bezier(.4,0,.2,1) .1s';
+    medioArc.setAttribute('stroke-dasharray', dash + ' ' + maxDash);
+  }
+  if (bajoArc) {
+    const maxDash = 103.7;
+    const pct = Math.min(totalBajo / Math.max(totalRiskQ * 0.5, 1), 1);
+    const dash = pct * maxDash;
+    bajoArc.style.transition = 'stroke-dasharray .8s cubic-bezier(.4,0,.2,1) .2s';
+    bajoArc.setAttribute('stroke-dasharray', dash + ' ' + maxDash);
+  }
 }
 
 // ── MAIN: refresh report with current answers ──
