@@ -259,8 +259,92 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
   .fade-up { animation: fadeUp .45s ease both; }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width:768px) { .desktop-only{display:none!important;} }
+  /* ══════════ RESPONSIVE ══════════ */
+
+  /* Tablet (≤ 768px) */
+  @media (max-width: 768px) {
+    /* Header: oculta el texto del diagnóstico, solo logo + badge */
+    .header-diag-name { display: none !important; }
+    .header-divider   { display: none !important; }
+
+    /* Hero intro */
+    .card-emerald { border-radius: 18px; }
+
+    /* Cuestionario: progress sticky baja menos (header más pequeño) */
+    #view-cuestionario .sticky { top: 58px; }
+
+    /* Pilar separator en tablet: texto más compacto */
+    .pilar-separator { margin: 24px 0 14px; }
+
+    /* Result hero: gauge encima del texto */
+    .result-hero-inner { flex-direction: column !important; align-items: center !important; text-align: center; }
+
+    /* Pilares grid: 2 cols en tablet */
+    .pilares-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* CTA padding */
+    .cta-section { padding: 40px 20px; }
+
+    /* Form: 2 cols se mantiene en tablet */
+  }
+
+  /* Mobile (≤ 480px) */
+  @media (max-width: 480px) {
+    /* Header muy compacto */
+    .app-header { padding: 10px 16px; }
+    .header-logo { height: 26px !important; }
+    .header-badge { font-size: 10px; padding: 5px 10px; }
+
+    /* Intro hero */
+    .card-emerald { padding: 22px 20px !important; border-radius: 16px; }
+    .card-emerald h1 { font-size: 1.5rem !important; }
+
+    /* Pilares overview: 1 col en móvil */
+    .pilares-intro-grid { grid-template-columns: 1fr !important; }
+
+    /* Cuestionario padding */
+    #view-cuestionario > div { padding-left: 12px; padding-right: 12px; padding-top: 16px; }
+
+    /* Progress card */
+    #view-cuestionario .sticky { top: 50px; padding: 12px 14px; }
+
+    /* Question card padding */
+    .q-block { padding: 14px !important; }
+
+    /* Options: 2 cols en móvil (ya definido arriba, se mantiene) */
+    .q-option { padding: 10px 8px; font-size: 12px; }
+
+    /* Lead gate */
+    #view-leadgate > div { padding: 16px 12px; }
+    .lead-form-grid { grid-template-columns: 1fr !important; }
+
+    /* Pilares grid: 1 col en móvil */
+    .pilares-grid { grid-template-columns: 1fr !important; }
+
+    /* Report hero */
+    #view-reporte > div { padding: 16px 12px; }
+    .card-emerald.p-8 { padding: 20px 18px !important; }
+
+    /* Priority list items */
+    .priority-item { flex-wrap: wrap; gap: 8px; }
+    .priority-item .pc-status-chip { margin-left: auto; }
+
+    /* CTA */
+    .cta-section { padding: 32px 16px; }
+    .cta-isotipo { width: 76px !important; height: 76px !important; border-radius: 18px !important; }
+    #cta-title { font-size: 1.25rem !important; }
+
+    /* Buttons full width en móvil */
+    .btn-primary { width: 100%; justify-content: center; padding: 13px 20px; }
+    #btn-submit { width: auto; }
+
+    /* Ghost buttons */
+    .btn-ghost { font-size: 12px; padding: 7px 12px; }
+
+    /* Pilar separator */
+    .pilar-separator { gap: 8px; }
+    .pilar-separator > div:nth-child(2) { display: none; }
+  }
 
   /* Print */
   @media print { .app-header, .btn-primary, .btn-outline, .btn-ghost { display:none!important; } }
@@ -273,16 +357,16 @@
   <div class="header-glow"></div>
   <div class="max-w-5xl mx-auto flex items-center justify-between relative">
     <!-- Logo + nombre diagnóstico (estilo igual al de Riesgos Laborales) -->
-    <div class="flex items-center gap-4">
-      <img src="Lofton Logos/Logo blanco .png" alt="Lofton Servicios Integrales" style="height:34px;width:auto;object-fit:contain">
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.18);flex-shrink:0"></div>
-      <div>
+    <div class="flex items-center gap-3">
+      <img class="header-logo" src="Lofton Logos/Logo blanco .png" alt="Lofton Servicios Integrales" style="height:34px;width:auto;object-fit:contain">
+      <div class="header-divider" style="width:1px;height:36px;background:rgba(255,255,255,.18);flex-shrink:0"></div>
+      <div class="header-diag-name">
         <div class="text-xs font-bold uppercase tracking-widest" style="color:rgba(255,255,255,.45);letter-spacing:.1em">Servicios Integrales</div>
         <div class="text-sm font-bold text-white" style="letter-spacing:.01em">Diagnóstico de Riesgo Patronal IMSS/Infonavit</div>
       </div>
     </div>
     <!-- Confidencial badge -->
-    <div class="px-3 py-1.5 rounded-full text-xs font-bold" style="background:rgba(184,224,74,.12);color:rgba(184,224,74,.9);border:1px solid rgba(184,224,74,.2)">
+    <div class="header-badge px-3 py-1.5 rounded-full text-xs font-bold" style="background:rgba(184,224,74,.12);color:rgba(184,224,74,.9);border:1px solid rgba(184,224,74,.2)">
       Confidencial
     </div>
   </div>
@@ -312,7 +396,7 @@
     <!-- Pilares overview -->
     <div class="fade-up" style="animation-delay:.1s">
       <div class="text-xs font-bold uppercase tracking-widest mb-3" style="color:var(--muted)">Áreas que evalúa este diagnóstico</div>
-      <div class="grid grid-cols-2 gap-3 mb-3">
+      <div class="pilares-intro-grid grid grid-cols-2 gap-3 mb-3">
         <div class="card p-4 flex items-start gap-3">
           <div class="pilar-separator-num">01</div>
           <div><div class="font-bold text-sm" style="color:var(--text)">Preparación documental IMSS/Infonavit</div></div>
@@ -404,7 +488,7 @@
     <div class="card p-6 fade-up" style="animation-delay:.08s">
       <h3 class="font-extrabold text-base mb-4" style="color:var(--text)">Datos de contacto</h3>
 
-      <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="lead-form-grid grid grid-cols-2 gap-4 mb-4">
         <div>
           <label class="form-label">Nombre *</label>
           <input id="f-nombre" type="text" class="form-input" placeholder="Tu nombre">
@@ -457,7 +541,7 @@
 
     <!-- Result hero -->
     <div class="card-emerald p-8 mb-8 fade-up">
-      <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+      <div class="result-hero-inner flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10">
         <!-- Gauge -->
         <div class="flex-shrink-0 text-center">
           <svg class="gauge-svg" width="160" height="100" viewBox="0 0 160 100">
