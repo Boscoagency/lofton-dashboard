@@ -634,34 +634,78 @@ const PILARES = [
 ];
 
 const PREGUNTAS = [
-  { id:1,  pilar:1, texto:"¿Tu empresa tiene identificados todos sus registros patronales activos?",                                                  hasNa:false },
-  { id:2,  pilar:1, texto:"¿La información de cada registro patronal está actualizada y documentada?",                                               hasNa:false },
-  { id:3,  pilar:1, texto:"¿Cuentan con un expediente organizado de la información presentada ante IMSS e Infonavit?",                               hasNa:false },
-  { id:4,  pilar:1, texto:"¿Conservan respaldos de pagos, líneas de captura y documentos relacionados con SIPARE?",                                  hasNa:false },
-  { id:5,  pilar:1, texto:"¿La empresa resguarda de forma periódica los archivos SUA, EMAS y EBAS?",                                                 hasNa:false },
-  { id:6,  pilar:2, texto:"¿Existe una persona o equipo responsable de validar la nómina antes de su cierre?",                                       hasNa:false },
-  { id:7,  pilar:2, texto:"¿La empresa cuenta con controles para registrar incidencias como ausencias, incapacidades, vacaciones o bajas?",           hasNa:false },
-  { id:8,  pilar:2, texto:"¿Se revisa que las prestaciones y percepciones estén correctamente registradas en nómina?",                               hasNa:false },
-  { id:9,  pilar:2, texto:"¿Se realizan conciliaciones entre nómina, registros contables y CFDI?",                                                   hasNa:false },
-  { id:10, pilar:2, texto:"¿El sistema de nómina permite exportar o respaldar información para revisión interna?",                                    hasNa:false },
-  { id:11, pilar:3, texto:"¿La empresa lleva control actualizado de altas, bajas y modificaciones salariales?",                                       hasNa:false },
-  { id:12, pilar:3, texto:"¿Se revisa que los movimientos ante IMSS correspondan con la información real de nómina?",                                 hasNa:false },
-  { id:13, pilar:3, texto:"¿La empresa identifica a los trabajadores que cuentan con crédito Infonavit?",                                             hasNa:false },
-  { id:14, pilar:3, texto:"¿Se valida periódicamente que las retenciones de Infonavit estén aplicándose correctamente?",                              hasNa:false },
-  { id:15, pilar:3, texto:"¿Ha cambiado la actividad principal de la empresa desde su constitución o registro original?",                             hasNa:false },
-  { id:16, pilar:4, texto:"¿La empresa contrata proveedores de servicios especializados relacionados con personal, operación o administración?",       hasNa:false },
-  { id:17, pilar:4, texto:"Si contrata proveedores especializados, ¿cuenta con documentación que respalde la relación y el servicio recibido?",       hasNa:true  },
-  { id:18, pilar:4, texto:"¿La empresa realiza pagos recurrentes a personas físicas por servicios relacionados con la operación?",                     hasNa:false },
-  { id:19, pilar:4, texto:"¿Existe un proceso para revisar que los proveedores vinculados con servicios especializados cumplan con sus obligaciones?", hasNa:true  },
-  { id:20, pilar:4, texto:"¿La empresa presta servicios especializados a terceros?",                                                                  hasNa:false },
-  { id:21, pilar:5, texto:"¿La empresa ha recibido alguna visita, requerimiento o revisión del IMSS en los últimos cinco años?",                      hasNa:false },
-  { id:22, pilar:5, texto:"¿Cuentan con un proceso definido para responder ante requerimientos de IMSS o Infonavit?",                                 hasNa:false },
-  { id:23, pilar:5, texto:"¿La documentación necesaria para una revisión puede localizarse rápidamente?",                                             hasNa:false },
-  { id:24, pilar:5, texto:"¿La empresa realiza revisiones preventivas antes de recibir una visita o requerimiento?",                                  hasNa:false },
-  { id:25, pilar:5, texto:"¿Consideras que tu empresa podría comprobar correctamente sus pagos, movimientos y registros si fuera revisada hoy?",      hasNa:false },
+  { id:1,  pilar:1, texto:"¿Tu empresa tiene identificados todos sus registros patronales activos?",                                                  hasNa:false, modo:'cumplimiento' },
+  { id:2,  pilar:1, texto:"¿La información de cada registro patronal está actualizada y documentada?",                                               hasNa:false, modo:'cumplimiento' },
+  { id:3,  pilar:1, texto:"¿Cuentan con un expediente organizado de la información presentada ante IMSS e Infonavit?",                               hasNa:false, modo:'cumplimiento' },
+  { id:4,  pilar:1, texto:"¿Conservan respaldos de pagos, líneas de captura y documentos relacionados con SIPARE?",                                  hasNa:false, modo:'cumplimiento' },
+  { id:5,  pilar:1, texto:"¿La empresa resguarda de forma periódica los archivos SUA, EMAS y EBAS?",                                                 hasNa:false, modo:'cumplimiento' },
+  { id:6,  pilar:2, texto:"¿Existe una persona o equipo responsable de validar la nómina antes de su cierre?",                                       hasNa:false, modo:'cumplimiento' },
+  { id:7,  pilar:2, texto:"¿La empresa cuenta con controles para registrar incidencias como ausencias, incapacidades, vacaciones o bajas?",           hasNa:false, modo:'cumplimiento' },
+  { id:8,  pilar:2, texto:"¿Se revisa que las prestaciones y percepciones estén correctamente registradas en nómina?",                               hasNa:false, modo:'cumplimiento' },
+  { id:9,  pilar:2, texto:"¿Se realizan conciliaciones entre nómina, registros contables y CFDI?",                                                   hasNa:false, modo:'cumplimiento' },
+  { id:10, pilar:2, texto:"¿El sistema de nómina permite exportar o respaldar información para revisión interna?",                                    hasNa:false, modo:'cumplimiento' },
+  { id:11, pilar:3, texto:"¿La empresa lleva control actualizado de altas, bajas y modificaciones salariales?",                                       hasNa:false, modo:'cumplimiento' },
+  { id:12, pilar:3, texto:"¿Se revisa que los movimientos ante IMSS correspondan con la información real de nómina?",                                 hasNa:false, modo:'cumplimiento' },
+  { id:13, pilar:3, texto:"¿La empresa identifica a los trabajadores que cuentan con crédito Infonavit?",                                             hasNa:false, modo:'cumplimiento' },
+  { id:14, pilar:3, texto:"¿Se valida periódicamente que las retenciones de Infonavit estén aplicándose correctamente?",                              hasNa:false, modo:'cumplimiento' },
+  { id:15, pilar:3, texto:"¿Ha cambiado la actividad principal de la empresa desde su constitución o registro original?",                             hasNa:false, modo:'cumplimiento' },
+
+  // ── PILAR 4: Preguntas de existencia (No = neutral, no penaliza) ──
+  // Q16: si responde No → no tienen proveedores especializados → sin riesgo en Q17 y Q19
+  { id:16, pilar:4, texto:"¿La empresa contrata proveedores de servicios especializados relacionados con personal, operación o administración?",       hasNa:false, modo:'existencia' },
+  // Q17: depende de Q16 — si Q16=No, se excluye automáticamente del cálculo
+  { id:17, pilar:4, texto:"Si contrata proveedores especializados, ¿cuenta con documentación que respalde la relación y el servicio recibido?",       hasNa:true,  modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no' } },
+  // Q18: si responde No → no hacen pagos a personas físicas → sin riesgo adicional
+  { id:18, pilar:4, texto:"¿La empresa realiza pagos recurrentes a personas físicas por servicios relacionados con la operación?",                     hasNa:false, modo:'existencia' },
+  // Q19: depende de Q16 y Q18 — si ambas son No, se excluye del cálculo
+  { id:19, pilar:4, texto:"¿Existe un proceso para revisar que los proveedores vinculados con servicios especializados cumplan con sus obligaciones?", hasNa:true,  modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no', yTambien:{ id:18, excluirSiRespuesta:'no' } } },
+  // Q20: si responde No → no prestan servicios especializados → sin obligación adicional
+  { id:20, pilar:4, texto:"¿La empresa presta servicios especializados a terceros?",                                                                  hasNa:false, modo:'existencia' },
+
+  { id:21, pilar:5, texto:"¿La empresa ha recibido alguna visita, requerimiento o revisión del IMSS en los últimos cinco años?",                      hasNa:false, modo:'cumplimiento' },
+  { id:22, pilar:5, texto:"¿Cuentan con un proceso definido para responder ante requerimientos de IMSS o Infonavit?",                                 hasNa:false, modo:'cumplimiento' },
+  { id:23, pilar:5, texto:"¿La documentación necesaria para una revisión puede localizarse rápidamente?",                                             hasNa:false, modo:'cumplimiento' },
+  { id:24, pilar:5, texto:"¿La empresa realiza revisiones preventivas antes de recibir una visita o requerimiento?",                                  hasNa:false, modo:'cumplimiento' },
+  { id:25, pilar:5, texto:"¿Consideras que tu empresa podría comprobar correctamente sus pagos, movimientos y registros si fuera revisada hoy?",      hasNa:false, modo:'cumplimiento' },
 ];
 
-const SCORES = { si:0, parcial:1, ns:2, no:3, na:null };
+/*
+  MODOS DE SCORING:
+  - 'cumplimiento': Sí=0 | Parcial=1 | NS=2 | No=3   (No responder bien = riesgo)
+  - 'existencia':   Sí=0 | Parcial=1 | NS=2 | No=0   (No tener esa figura = neutral, sin riesgo)
+
+  DEPENDENCIAS:
+  - dependeDe: si la pregunta de referencia tiene la respuesta indicada, ésta se excluye del score (= na)
+  - yTambien: condición adicional (ambas deben cumplirse para excluir)
+*/
+
+function getScore(q, respuesta) {
+  if (!respuesta || respuesta === 'na') return null;
+
+  // Verificar dependencias: si aplica, excluir pregunta del cálculo
+  if (q.dependeDe) {
+    const dep = q.dependeDe;
+    const respDep = answers[dep.id];
+    const condPrincipal = respDep === dep.excluirSiRespuesta;
+    if (dep.yTambien) {
+      const respDep2 = answers[dep.yTambien.id];
+      const condSecundaria = respDep2 === dep.yTambien.excluirSiRespuesta;
+      if (condPrincipal && condSecundaria) return null; // excluir
+    } else {
+      if (condPrincipal) return null; // excluir
+    }
+  }
+
+  // Scoring según modo
+  if (q.modo === 'existencia') {
+    const tabla = { si:0, parcial:1, ns:2, no:0 };
+    return tabla[respuesta] ?? null;
+  } else {
+    // cumplimiento (default)
+    const tabla = { si:0, parcial:1, ns:2, no:3 };
+    return tabla[respuesta] ?? null;
+  }
+}
 
 /* ─── STATE ─── */
 let answers = {};
@@ -825,9 +869,8 @@ function calcScore() {
 
   PREGUNTAS.forEach(q => {
     const a = answers[q.id];
-    if (!a || a === 'na') return;
-    const pts = SCORES[a];
-    if (pts === null) return;
+    const pts = getScore(q, a);   // usa lógica de modo + dependencias
+    if (pts === null) return;     // excluida del cálculo (na o dependencia)
     total += pts; counted++;
     if (a === 'ns') nsCount++;
     pilarScores[q.pilar].total += pts;
@@ -836,10 +879,11 @@ function calcScore() {
 
   PILARES.forEach(p => {
     const ps = pilarScores[p.id];
+    // max posible por pilar: preguntas contadas × 3
     ps.pct = ps.counted ? Math.round((ps.total / (ps.counted * 3)) * 100) : 0;
   });
 
-  // Level
+  // Nivel general
   const nsPct = counted ? nsCount / counted : 0;
   let nivel;
   if (nsPct > 0.35)       nivel = 4;
