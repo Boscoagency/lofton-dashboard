@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lofton | Diagnóstico Fiscal para Personas Morales</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  * { font-family: 'Manrope', sans-serif; }
+
+  :root {
+    --g900: #001a0c; --g800: #002d15; --g700: #003e1c;
+    --g600: #1a5230; --g500: #2d6a4f; --g400: #52b788;
+    --g300: #95d5b2; --g100: #d8f3dc; --g050: #f0faf2;
+    --lime: #b8e04a; --lime-dim: #8fb83a;
+    --text: #1b1c1c; --muted: #5a6360; --subtle: #8a9490;
+    --border: rgba(0,0,0,.07); --border-2: rgba(0,0,0,.11);
+    --surface: #f6f7f5; --surface-2: #eef0ec; --card: #ffffff;
+    --red: #b91c1c; --red-bg: #fff0f0;
+    --amber: #d97706; --amber-bg: #fffbeb;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.05);
+    --neu-bg: #f0f2ef;
+  }
+
+  html, body { scroll-behavior: smooth; }
+  body { background: var(--surface); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  .view { display: none; }
+  .view.active { display: block; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: linear-gradient(135deg, var(--g900) 0%, var(--g700) 50%, var(--g800) 100%);
+    box-shadow: 0 4px 32px rgba(0,62,28,.45), inset 0 1px 0 rgba(255,255,255,.06);
+    position: relative;
+  }
+  .app-header::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(184,224,74,.3), transparent);
+  }
+  .header-glow {
+    position:absolute; top:-60px; right:80px;
+    width:260px; height:260px; border-radius:50%;
+    background: radial-gradient(circle, rgba(184,224,74,.07) 0%, transparent 70%);
+    pointer-events:none;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card); border-radius: 20px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--border);
+  }
+  .card-emerald {
+    background: linear-gradient(145deg, var(--g900) 0%, var(--g700) 55%, var(--g600) 100%);
+    border-radius: 24px; position: relative; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,62,28,.35), 0 2px 8px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.05);
+  }
+  .card-emerald::before {
+    content:''; position:absolute; top:-80px; right:-60px;
+    width:300px; height:300px; border-radius:50%;
+    background: radial-gradient(circle, rgba(82,183,136,.12) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .card-emerald::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(184,224,74,.25), transparent);
+  }
+
+  /* ── QUESTION OPTIONS — NEUMORPHIC ── */
+  .q-option {
+    cursor: pointer; border-radius: 14px; padding: 11px 14px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-size: 13px; font-weight: 600; text-align: center;
+    transition: all .22s cubic-bezier(.4,0,.2,1);
+    background: var(--neu-bg); border: 1.5px solid transparent;
+    box-shadow: 4px 4px 10px rgba(0,0,0,.08), -3px -3px 8px rgba(255,255,255,.85);
+    color: var(--muted); user-select: none; width: 100%;
+  }
+  .q-option:hover {
+    box-shadow: 2px 2px 6px rgba(0,0,0,.1), -2px -2px 5px rgba(255,255,255,.9);
+    color: var(--g700); border-color: rgba(0,62,28,.15); transform: translateY(-1px);
+  }
+  .q-option.selected-si {
+    background: linear-gradient(145deg, #002d15, #1a5230); color: #fff;
+    box-shadow: 0 6px 20px rgba(0,62,28,.4), inset 0 1px 0 rgba(255,255,255,.1);
+    transform: translateY(-1px) scale(1.02);
+  }
+  .q-option.selected-no {
+    background: linear-gradient(145deg, #1c0606, #7f1d1d); color: #fff;
+    box-shadow: 0 6px 20px rgba(185,28,28,.35), inset 0 1px 0 rgba(255,255,255,.08);
+    transform: translateY(-1px) scale(1.02);
+  }
+  .q-option.selected-nose {
+    background: linear-gradient(145deg, #0a1530, #1e3a8a); color: #fff;
+    box-shadow: 0 6px 20px rgba(30,58,138,.35), inset 0 1px 0 rgba(255,255,255,.08);
+    transform: translateY(-1px) scale(1.02);
+  }
+  .q-option.selected-na {
+    background: linear-gradient(145deg, #2a2236, #4c1d95); color: #fff;
+    box-shadow: 0 6px 20px rgba(76,29,149,.3), inset 0 1px 0 rgba(255,255,255,.08);
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  /* Options row: 4 cols desktop, 2 cols mobile */
+  .options-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (max-width: 560px) {
+    .options-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── PROGRESS BAR ── */
+  .prog-bar { height: 6px; background: var(--surface-2); border-radius: 9999px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.08); }
+  .prog-fill { height: 100%; border-radius: 9999px; background: linear-gradient(90deg, var(--g700), var(--lime)); transition: width .5s cubic-bezier(.4,0,.2,1); }
+
+  /* ── PILAR SEPARATOR ── */
+  .pilar-separator {
+    display: flex; align-items: center; gap: 12px;
+    margin: 32px 0 20px;
+  }
+  .pilar-separator-num {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px; color: #fff;
+    background: linear-gradient(145deg, var(--g600), var(--g800));
+    box-shadow: 0 3px 10px rgba(0,62,28,.3);
+  }
+  .pilar-separator-line { flex: 1; height: 1px; background: var(--border-2); }
+
+  /* ── QUESTION BLOCK ── */
+  .q-block { margin-bottom: 20px; }
+  .q-num-inline {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 7px; font-size: 11px; font-weight: 800;
+    background: var(--surface-2); color: var(--muted); flex-shrink: 0;
+  }
+  .q-depend-tag {
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--g600); background:var(--g050);
+    border:1px solid rgba(0,62,28,.12); border-radius:7px; padding:3px 8px; margin-bottom:8px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; border-radius: 9999px;
+    font-size: 14px; font-weight: 700; letter-spacing: .02em;
+    cursor: pointer; border: none; outline: none;
+    transition: all .25s cubic-bezier(.4,0,.2,1);
+    background: linear-gradient(145deg, var(--lime), #9fc937);
+    color: var(--g900);
+    box-shadow: 0 4px 14px rgba(140,185,0,.35), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(140,185,0,.4); }
+  .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 32px; border-radius: 9999px;
+    font-size: 14px; font-weight: 700; letter-spacing: .02em;
+    cursor: pointer; outline: none; transition: all .25s cubic-bezier(.4,0,.2,1);
+    background: transparent; color: rgba(255,255,255,.8);
+    border: 1.5px solid rgba(255,255,255,.3);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,.08); transform: translateY(-1px); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 9999px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; background: transparent; color: var(--muted);
+    transition: all .2s ease;
+  }
+  .btn-ghost:hover { color: var(--g700); background: var(--g050); }
+
+  /* ── PILAR CARDS (results) ── */
+  .pc-card {
+    background: linear-gradient(155deg, #051a0d 0%, #0a2616 40%, #0d2e1a 100%);
+    border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.07);
+    box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+    transition: transform .22s ease, box-shadow .22s ease; position: relative;
+  }
+  .pc-card::before {
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:140px; height:140px; border-radius:50%;
+    background: radial-gradient(circle, rgba(184,224,74,.06) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .pc-card:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,.4); }
+  .pc-accent-bar { height: 3px; width: 100%; }
+  .pc-inner { padding: 20px 22px 18px; }
+  .pc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .pc-num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.12);
+  }
+  .pc-name { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.75); line-height: 1.3; flex: 1; }
+  .pc-status-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0;
+  }
+  .pc-status-chip::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .chip-prioritario { color: rgba(248,113,113,.85); }
+  .chip-prioritario::before { background:#ef4444; box-shadow:0 0 5px rgba(239,68,68,.6); }
+  .chip-revision { color: rgba(251,191,36,.8); }
+  .chip-revision::before { background:#f59e0b; box-shadow:0 0 5px rgba(245,158,11,.5); }
+  .chip-adecuado { color: rgba(149,213,178,.85); }
+  .chip-adecuado::before { background:#52b788; box-shadow:0 0 5px rgba(82,183,136,.5); }
+  .pc-score-big { font-size: clamp(2.2rem,5vw,3rem); font-weight:800; color:#fff; line-height:1; letter-spacing:-.02em; }
+  .pc-score-label { font-size:11px; color:rgba(255,255,255,.45); font-weight:500; margin-top:2px; }
+  .pc-msg { font-size:12px; color:rgba(255,255,255,.6); line-height:1.55; margin-top:14px; }
+
+  /* ── PILARES GRID ── */
+  .pilares-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:520px) { .pilares-grid { grid-template-columns:1fr; } }
+
+  /* ── LEVEL BAR ── */
+  .level-bar-wrap { border-radius:9999px; height:8px; background:rgba(255,255,255,.1); overflow:hidden; }
+  .level-bar { height:100%; border-radius:9999px; transition:width 1s cubic-bezier(.4,0,.2,1); }
+
+  /* ── GAUGE ── */
+  .gauge-svg { display:block; margin:0 auto; }
+
+  /* ── CTA SECTION (isotipo style) ── */
+  .cta-section {
+    text-align: center; padding: 56px 32px;
+  }
+  .cta-isotipo {
+    width: 96px; height: 96px; border-radius: 22px; overflow: hidden;
+    margin: 0 auto 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  }
+  .cta-isotipo img { width:100%; height:100%; object-fit:cover; }
+
+  /* ── FORM ── */
+  .form-input {
+    width:100%; padding:11px 14px; border-radius:12px;
+    border:1.5px solid var(--border-2); background:var(--surface);
+    font-size:14px; font-weight:500; color:var(--text);
+    transition:border-color .2s, box-shadow .2s; outline:none;
+  }
+  .form-input:focus { border-color:var(--g500); box-shadow:0 0 0 3px rgba(45,106,79,.1); }
+  .form-label { font-size:12px; font-weight:700; color:var(--muted); margin-bottom:5px; display:block; text-transform:uppercase; letter-spacing:.04em; }
+  .form-select {
+    width:100%; padding:11px 14px; border-radius:12px;
+    border:1.5px solid var(--border-2); background:var(--surface);
+    font-size:14px; font-weight:500; color:var(--text);
+    outline:none; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%235a6360'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center; background-size:18px; padding-right:40px;
+  }
+  .form-select:focus { border-color:var(--g500); box-shadow:0 0 0 3px rgba(45,106,79,.1); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+  .fade-up { animation: fadeUp .45s ease both; }
+
+  /* ══════════ RESPONSIVE ══════════ */
+
+  /* Tablet (≤ 768px) */
+  @media (max-width: 768px) {
+    .header-diag-name { display: none !important; }
+    .header-divider   { display: none !important; }
+    .card-emerald { border-radius: 18px; }
+    #view-cuestionario .sticky { top: 58px; }
+    .pilar-separator { margin: 24px 0 14px; }
+    .result-hero-inner { flex-direction: column !important; align-items: center !important; text-align: center; }
+    .cta-section { padding: 40px 20px; }
+  }
+
+  /* Mobile (≤ 480px) */
+  @media (max-width: 480px) {
+    .app-header { padding: 10px 16px; }
+    .header-logo { height: 26px !important; }
+    .header-badge { font-size: 10px; padding: 5px 10px; }
+    .card-emerald { padding: 22px 20px !important; border-radius: 16px; }
+    .card-emerald h1 { font-size: 1.5rem !important; }
+    .pilares-intro-grid { grid-template-columns: 1fr !important; }
+    #view-cuestionario > div { padding-left: 12px; padding-right: 12px; padding-top: 16px; }
+    #view-cuestionario .sticky { top: 50px; padding: 12px 14px; }
+    .q-block { padding: 14px !important; }
+    .q-option { padding: 10px 8px; font-size: 12px; }
+    #view-leadgate > div { padding: 16px 12px; }
+    .lead-form-grid { grid-template-columns: 1fr !important; }
+    .pilares-grid { grid-template-columns: 1fr !important; }
+    #view-reporte > div { padding: 16px 12px; }
+    .card-emerald.p-8 { padding: 20px 18px !important; }
+    .priority-item { flex-wrap: wrap; gap: 8px; }
+    .priority-item .pc-status-chip { margin-left: auto; }
+    .cta-section { padding: 32px 16px; }
+    .cta-isotipo { width: 76px !important; height: 76px !important; border-radius: 18px !important; }
+    #cta-title { font-size: 1.25rem !important; }
+    .btn-primary { width: 100%; justify-content: center; padding: 13px 20px; }
+    #btn-submit { width: auto; }
+    .btn-ghost { font-size: 12px; padding: 7px 12px; }
+    .pilar-separator { gap: 8px; }
+    .pilar-separator > div:nth-child(2) { display: none; }
+  }
+
+  /* Print */
+  @media print { .app-header, .btn-primary, .btn-outline, .btn-ghost { display:none!important; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header sticky top-0 z-50 px-6 py-3">
+  <div class="header-glow"></div>
+  <div class="max-w-5xl mx-auto flex items-center justify-between relative">
+    <div class="flex items-center gap-3">
+      <img class="header-logo" src="Lofton Logos/Logo blanco .png" alt="Lofton Servicios Integrales" style="height:34px;width:auto;object-fit:contain">
+      <div class="header-divider" style="width:1px;height:36px;background:rgba(255,255,255,.18);flex-shrink:0"></div>
+      <div class="header-diag-name">
+        <div class="text-xs font-bold uppercase tracking-widest" style="color:rgba(255,255,255,.45);letter-spacing:.1em">Servicios Integrales</div>
+        <div class="text-sm font-bold text-white" style="letter-spacing:.01em">Diagnóstico Fiscal · Personas Morales</div>
+      </div>
+    </div>
+    <div class="header-badge px-3 py-1.5 rounded-full text-xs font-bold" style="background:rgba(184,224,74,.12);color:rgba(184,224,74,.9);border:1px solid rgba(184,224,74,.2)">
+      Confidencial
+    </div>
+  </div>
+</header>
+
+<!-- ══ VIEW: INTRO ══ -->
+<div id="view-intro" class="view active">
+  <div class="max-w-3xl mx-auto px-4 py-12">
+
+    <div class="card-emerald p-8 mb-8 fade-up">
+      <div class="relative z-10">
+        <div class="inline-block px-3 py-1.5 rounded-full text-xs font-bold mb-6" style="background:rgba(184,224,74,.15);color:rgba(184,224,74,.9);border:1px solid rgba(184,224,74,.2)">
+          Diagnóstico gratuito &nbsp;·&nbsp; 26 preguntas &nbsp;·&nbsp; ~10 minutos &nbsp;·&nbsp; Solo Personas Morales
+        </div>
+        <h1 class="text-3xl font-extrabold text-white leading-tight mb-4" style="letter-spacing:-.02em">
+          ¿Tu empresa está preparada ante una revisión del SAT, IMSS o la Secretaría de Finanzas?
+        </h1>
+        <p class="text-base mb-6" style="color:rgba(255,255,255,.65);line-height:1.7">
+          Identifica si tu persona moral cuenta con la situación fiscal, la documentación comprobatoria y los controles contables necesarios para operar con tranquilidad y responder ante cartas invitación, vigilancias profundas, auditorías, créditos fiscales o requerimientos de la autoridad.
+        </p>
+        <button onclick="startDiagnostico()" class="btn-primary">
+          Iniciar diagnóstico gratuito
+        </button>
+      </div>
+    </div>
+
+    <!-- Pilares overview -->
+    <div class="fade-up" style="animation-delay:.1s">
+      <div class="text-xs font-bold uppercase tracking-widest mb-3" style="color:var(--muted)">Áreas que evalúa este diagnóstico</div>
+      <div class="pilares-intro-grid grid grid-cols-2 gap-3">
+        <div class="card p-4 flex items-start gap-3">
+          <div class="pilar-separator-num">01</div>
+          <div><div class="font-bold text-sm" style="color:var(--text)">Situación Legal Fiscal</div></div>
+        </div>
+        <div class="card p-4 flex items-start gap-3">
+          <div class="pilar-separator-num">02</div>
+          <div><div class="font-bold text-sm" style="color:var(--text)">Contabilidad y CFDI</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Support note -->
+    <div class="card p-5 mt-6 fade-up" style="animation-delay:.14s;border-left:3px solid var(--lime-dim)">
+      <p class="text-sm" style="color:var(--muted);line-height:1.6">
+        Muchas empresas descubren sus riesgos fiscales hasta que reciben una carta invitación, una vigilancia profunda, la restricción de su sello digital o un requerimiento de la autoridad. Este diagnóstico gratuito te ayuda a detectar áreas de oportunidad antes de que se conviertan en contingencias o créditos fiscales.
+      </p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="card p-5 mt-4 fade-up" style="animation-delay:.18s;border-left:3px solid var(--g400)">
+      <div class="flex items-start gap-3">
+        <div style="color:var(--g500);font-size:20px;flex-shrink:0;margin-top:2px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <div class="font-bold text-sm mb-1" style="color:var(--g700)">Aviso importante</div>
+          <p class="text-sm" style="color:var(--muted);line-height:1.6">
+            Este diagnóstico está dirigido exclusivamente a personas morales y no sustituye una revisión fiscal o contable especializada ni constituye una opinión profesional definitiva. Su objetivo es ayudarte a identificar posibles áreas de oportunidad que conviene revisar con mayor detalle.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ VIEW: CUESTIONARIO ══ -->
+<div id="view-cuestionario" class="view">
+  <div class="max-w-3xl mx-auto px-4 py-8">
+
+    <!-- Progress sticky -->
+    <div class="card p-4 mb-8 sticky top-16 z-40" style="border-radius:16px">
+      <div class="flex items-center justify-between mb-2">
+        <div class="font-bold text-sm" style="color:var(--text)">Progreso del diagnóstico</div>
+        <div id="prog-pct" class="font-extrabold text-base" style="color:var(--g700)">0%</div>
+      </div>
+      <div class="prog-bar">
+        <div id="prog-fill" class="prog-fill" style="width:0%"></div>
+      </div>
+      <div id="prog-label" class="text-xs mt-1.5" style="color:var(--muted)">0 de 26 preguntas respondidas</div>
+    </div>
+
+    <div id="all-questions"></div>
+
+    <div class="text-center mt-10">
+      <p id="submit-hint" class="text-sm mb-4" style="color:var(--muted)">Responde todas las preguntas para continuar</p>
+      <button id="btn-submit" onclick="submitCuestionario()" class="btn-primary" disabled>
+        Ver mi resultado
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ VIEW: LEAD GATE ══ -->
+<div id="view-leadgate" class="view">
+  <div class="max-w-xl mx-auto px-4 py-10">
+
+    <div class="card-emerald p-7 mb-6 fade-up text-center">
+      <div class="relative z-10">
+        <div class="inline-block px-3 py-1.5 rounded-full text-xs font-bold mb-4" style="background:rgba(184,224,74,.15);color:rgba(184,224,74,.9);border:1px solid rgba(184,224,74,.2)">
+          Diagnóstico completado
+        </div>
+        <h2 class="text-2xl font-extrabold text-white mb-3">Tu resultado está listo</h2>
+        <p class="text-sm" style="color:rgba(255,255,255,.6);line-height:1.6">
+          Para mostrarte el nivel de riesgo fiscal de tu empresa y las áreas que podrían requerir atención, déjanos tus datos de contacto. Un especialista de Lofton podrá ayudarte a interpretar los resultados y definir los siguientes pasos.
+        </p>
+      </div>
+    </div>
+
+    <div class="card p-6 fade-up" style="animation-delay:.08s">
+      <h3 class="font-extrabold text-base mb-4" style="color:var(--text)">Datos de contacto</h3>
+
+      <div class="lead-form-grid grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="form-label">Nombre *</label>
+          <input id="f-nombre" type="text" class="form-input" placeholder="Tu nombre">
+        </div>
+        <div>
+          <label class="form-label">Empresa *</label>
+          <input id="f-empresa" type="text" class="form-input" placeholder="Nombre de la empresa">
+        </div>
+        <div>
+          <label class="form-label">Correo *</label>
+          <input id="f-email" type="email" class="form-input" placeholder="tu@empresa.com">
+        </div>
+        <div>
+          <label class="form-label">Teléfono / WhatsApp *</label>
+          <input id="f-tel" type="tel" class="form-input" placeholder="(55) 0000-0000">
+        </div>
+      </div>
+
+      <div>
+        <label class="form-label">No. de empleados</label>
+        <select id="f-empleados" class="form-select">
+          <option value="">Seleccionar...</option>
+          <option>Menos de 10</option>
+          <option>10 a 50</option>
+          <option>51 a 200</option>
+          <option>201 a 500</option>
+          <option>Más de 500</option>
+        </select>
+      </div>
+
+      <div id="form-error" class="hidden mt-4 p-3 rounded-xl text-sm font-600" style="background:var(--red-bg);color:var(--red)">
+        Por favor completa los campos obligatorios (*)
+      </div>
+
+      <button onclick="submitLeadGate()" class="btn-primary w-full justify-center mt-5">
+        Ver mi resultado
+      </button>
+
+      <p class="text-xs text-center mt-3" style="color:var(--subtle);line-height:1.6">
+        Al dar clic en <strong style="color:var(--muted)">“Ver mi resultado”</strong> autorizas el tratamiento de tus datos
+        personales conforme al
+        <a href="https://loftonsc.com/aviso-de-privacidad/" target="_blank" rel="noopener" style="color:var(--g600);font-weight:700;text-decoration:underline">Aviso de Privacidad</a>
+        de Lofton Servicios Integrales. Tu información será tratada con carácter confidencial y no se compartirá con terceros sin tu consentimiento.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ VIEW: REPORTE ══ -->
+<div id="view-reporte" class="view">
+  <div class="max-w-4xl mx-auto px-4 py-10">
+
+    <!-- Result hero -->
+    <div class="card-emerald p-8 mb-8 fade-up">
+      <div class="result-hero-inner flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10">
+        <div class="flex-shrink-0 text-center">
+          <svg class="gauge-svg" width="160" height="100" viewBox="0 0 160 100">
+            <defs>
+              <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#52b788"/>
+                <stop offset="50%" style="stop-color:#d97706"/>
+                <stop offset="100%" style="stop-color:#b91c1c"/>
+              </linearGradient>
+            </defs>
+            <path d="M 20 90 A 60 60 0 0 1 140 90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10" stroke-linecap="round"/>
+            <path id="gauge-fill" d="M 20 90 A 60 60 0 0 1 140 90" fill="none" stroke="url(#gGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+            <circle id="gauge-dot" cx="20" cy="90" r="6" fill="#b8e04a" style="filter:drop-shadow(0 0 6px rgba(184,224,74,.6));transition:all 1.2s cubic-bezier(.4,0,.2,1)"/>
+          </svg>
+          <div id="result-score-num" class="text-4xl font-extrabold text-white -mt-2">--</div>
+          <div class="text-xs mt-1" style="color:rgba(255,255,255,.45)">de <span id="result-max">--</span> puntos de preparación</div>
+        </div>
+        <div class="flex-1">
+          <div id="result-badge" class="inline-block px-3 py-1.5 rounded-full text-xs font-bold mb-3" style="background:rgba(255,255,255,.1);color:#fff"></div>
+          <h2 id="result-level-title" class="text-2xl font-extrabold text-white mb-3"></h2>
+          <p id="result-level-msg" class="text-sm" style="color:rgba(255,255,255,.7);line-height:1.7"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pilares -->
+    <div class="mb-8 fade-up" style="animation-delay:.1s">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="font-extrabold text-base" style="color:var(--text)">Resultado por pilar</h3>
+        <div class="text-xs font-semibold" style="color:var(--muted)">2 áreas evaluadas</div>
+      </div>
+      <div id="pilares-result" class="pilares-grid"></div>
+    </div>
+
+    <!-- Priority pilares -->
+    <div id="priority-section" class="card p-6 mb-8 fade-up" style="animation-delay:.15s;border-left:4px solid var(--amber)">
+      <div class="flex items-start gap-3 mb-4">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <h3 class="font-extrabold text-base mb-1" style="color:var(--text)">Pilares con mayor oportunidad de mejora</h3>
+          <p class="text-sm" style="color:var(--muted)">Áreas donde conviene enfocar una revisión especializada.</p>
+        </div>
+      </div>
+      <div id="priority-list" class="space-y-3"></div>
+    </div>
+
+    <!-- CTA — estilo isotipo -->
+    <div class="cta-section fade-up" style="animation-delay:.2s">
+      <div class="cta-isotipo">
+        <img src="Lofton Logos/IsotipoLogos a color.png" alt="Lofton">
+      </div>
+      <h3 id="cta-title" class="text-2xl font-extrabold mb-3" style="color:var(--g900);letter-spacing:-.01em">
+        Tu empresa tiene áreas fiscales por fortalecer
+      </h3>
+      <p id="cta-msg" class="text-sm max-w-md mx-auto mb-8" style="color:var(--muted);line-height:1.7">
+        Detectar áreas de oportunidad es solo el primer paso. En una llamada inicial, nuestro equipo puede ayudarte a entender qué puntos conviene revisar con mayor prioridad.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button id="cta-button" onclick="agendarLlamada()" class="btn-primary" style="background:linear-gradient(145deg,var(--g700),var(--g900));color:#fff;box-shadow:0 4px 14px rgba(0,62,28,.35)">
+          Agendar llamada con Lofton
+        </button>
+      </div>
+    </div>
+
+    <!-- Secondary actions -->
+    <div class="flex flex-wrap gap-3 justify-center mt-8 fade-up" style="animation-delay:.25s">
+      <button onclick="window.print()" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir / guardar PDF
+      </button>
+      <button onclick="reiniciar()" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Reiniciar diagnóstico
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SCRIPT ══ -->
+<script>
+/* ─── DATA ─── */
+const PILARES = [
+  { id:1, nombre:"Situación Legal Fiscal", desc:"Situación ante autoridades, contingencias, materialidad, proveedores (EFOS) y partes relacionadas" },
+  { id:2, nombre:"Contabilidad y CFDI",     desc:"Registro contable, conciliaciones mensuales y control de CFDI (PUE/PPD y complementos de pago)" },
+];
+
+/*
+  Cada pregunta tiene un "tipo" que define la polaridad del riesgo:
+   - cumplimiento → la respuesta segura es "Sí"  (Sí=2, No sé=1, No=0)
+   - contingencia → la respuesta segura es "No"  (No=2, No sé=1, Sí=0)
+   - contexto     → no se puntúa (sirve de contexto o detona dependencias)
+  "depende" excluye la pregunta del cálculo si la pregunta padre no tuvo el valor indicado.
+*/
+const PREGUNTAS = [
+  // ── PILAR 1: Situación Legal Fiscal ──
+  { id:1,  pilar:1, tipo:"cumplimiento", texto:"¿Cuenta con opinión de cumplimiento positiva y vigente?" },
+  { id:2,  pilar:1, tipo:"contingencia", texto:"¿Ha recibido cartas invitación u oficios de vigilancia profunda en los últimos 5 años?" },
+  { id:3,  pilar:1, tipo:"cumplimiento", depende:{ q:2, valor:"si" }, texto:"Si la respuesta anterior fue afirmativa, ¿se han contestado en tiempo y forma?" },
+  { id:4,  pilar:1, tipo:"contingencia", texto:"¿El SAT, IMSS o la Secretaría de Finanzas la ha auditado? (revisión de gabinete, visita domiciliaria o revisión electrónica)" },
+  { id:5,  pilar:1, tipo:"contingencia", texto:"¿Tiene determinado algún crédito fiscal?" },
+  { id:6,  pilar:1, tipo:"contingencia", texto:"¿Tiene algún juicio o recurso fiscal pendiente de resolución?" },
+  { id:7,  pilar:1, tipo:"contingencia", texto:"¿Le han restringido o cancelado el uso del Certificado de Sello Digital (CSD)?" },
+  { id:8,  pilar:1, tipo:"cumplimiento", texto:"¿Cuenta con la documentación comprobatoria de la materialidad de sus operaciones?" },
+  { id:9,  pilar:1, tipo:"contexto",      texto:"¿Forma parte de un grupo empresarial?" },
+  { id:10, pilar:1, tipo:"contingencia", depende:{ q:9, valor:"si" }, texto:"¿Alguna de las empresas del grupo ha tenido una contingencia fiscal? (cartas invitación, vigilancias profundas, auditorías, créditos fiscales firmes, juicios o restricción de CSD)" },
+  { id:11, pilar:1, tipo:"contingencia", texto:"¿Los socios de la empresa han tenido alguna contingencia fiscal? (cartas invitación, vigilancias profundas, auditorías, créditos fiscales firmes, juicios o restricción de CSD)" },
+  { id:12, pilar:1, tipo:"cumplimiento", texto:"¿El domicilio fiscal de la empresa aparece como “localizado” en el sistema del SAT?" },
+  { id:13, pilar:1, tipo:"contingencia", texto:"¿Uno o varios de sus proveedores fueron calificados como EFOS?" },
+  { id:14, pilar:1, tipo:"cumplimiento", texto:"¿Verifica periódicamente que sus proveedores no aparezcan en los listados del artículo 69-B del CFF (EFOS)?" },
+  { id:15, pilar:1, tipo:"contexto",      texto:"¿Realiza operaciones con partes relacionadas?" },
+  { id:16, pilar:1, tipo:"cumplimiento", depende:{ q:15, valor:"si" }, texto:"¿Cuenta con estudios de precios de transferencia?" },
+  { id:17, pilar:1, tipo:"cumplimiento", texto:"¿Considera que cuenta con toda la documentación comprobatoria de la materialidad e indispensabilidad de sus deducciones?" },
+  { id:18, pilar:1, tipo:"contexto",      texto:"¿La empresa está obligada a presentar dictámenes fiscales o dictámenes en materia de seguridad social?" },
+  { id:19, pilar:1, tipo:"contexto",      texto:"¿La empresa realiza frecuentemente solicitudes de devolución de IVA?" },
+
+  // ── PILAR 2: Contabilidad y CFDI ──
+  { id:20, pilar:2, tipo:"cumplimiento", texto:"¿La contabilidad de la empresa se encuentra registrada en un sistema y actualizada mensualmente?" },
+  { id:21, pilar:2, tipo:"cumplimiento", texto:"¿Los registros contables de sus operaciones son perfectamente identificables y pueden explicarse abiertamente a las autoridades fiscales?" },
+  { id:22, pilar:2, tipo:"cumplimiento", texto:"¿Se realizan conciliaciones mensuales entre la contabilidad, los CFDI emitidos/recibidos y las declaraciones presentadas?" },
+  { id:23, pilar:2, tipo:"cumplimiento", texto:"¿Se identifican y documentan adecuadamente las operaciones inusuales o relevantes (préstamos, aportaciones de capital, etc.)?" },
+  { id:24, pilar:2, tipo:"cumplimiento", texto:"¿Se revisa que los CFDI emitidos como PUE no correspondan a operaciones que debieron facturarse como PPD?" },
+  { id:25, pilar:2, tipo:"cumplimiento", texto:"¿Cuenta con controles para identificar facturas PPD cobradas que aún no han sido relacionadas con un complemento de pago?" },
+  { id:26, pilar:2, tipo:"cumplimiento", texto:"¿Cuenta con un procedimiento para revisar los estatus de cancelación, sustitución y vigencia de los CFDI emitidos y recibidos?" },
+];
+
+/*
+  SCORING (preparación fiscal — más puntos = mejor preparación = menor riesgo):
+   - cumplimiento: Sí=2 | No sé=1 | No=0
+   - contingencia: No=2 | No sé=1 | Sí=0
+   - contexto: no puntúa
+   - No aplica ('na'): excluida del cálculo
+*/
+function getScore(q, respuesta) {
+  if (!respuesta || respuesta === 'na') return null;
+  if (q.tipo === 'contexto') return null;
+  if (q.tipo === 'contingencia') return ({ no:2, nose:1, si:0 })[respuesta] ?? null;
+  // cumplimiento (default)
+  return ({ si:2, nose:1, no:0 })[respuesta] ?? null;
+}
+
+/* ─── STATE ─── */
+let answers = {};
+let leadData = {};
+
+/* ─── DEPENDENCIES ─── */
+function isApplicable(q) {
+  if (!q.depende) return true;
+  return answers[q.depende.q] === q.depende.valor;
+}
+
+/* ─── NAVIGATION ─── */
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function reiniciar() {
+  answers = {};
+  showView('view-intro');
+}
+
+/* ─── RENDER ALL QUESTIONS ─── */
+function startDiagnostico() {
+  answers = {};
+  renderAllQuestions();
+  refreshDependencies();
+  showView('view-cuestionario');
+  updateProgress();
+}
+
+function renderAllQuestions() {
+  const container = document.getElementById('all-questions');
+  let html = '';
+  let currentPilar = 0;
+
+  PREGUNTAS.forEach(q => {
+    const pilar = PILARES.find(p => p.id === q.pilar);
+
+    if (q.pilar !== currentPilar) {
+      currentPilar = q.pilar;
+      html += `
+        <div class="pilar-separator">
+          <div class="pilar-separator-num">${String(q.pilar).padStart(2,'0')}</div>
+          <div>
+            <div class="font-bold text-sm" style="color:var(--text)">${pilar.nombre}</div>
+            <div class="text-xs" style="color:var(--muted)">${pilar.desc}</div>
+          </div>
+          <div class="pilar-separator-line"></div>
+        </div>
+      `;
+    }
+
+    const opts = buildOptions(q);
+    const dependTag = q.depende
+      ? `<div class="q-depend-tag">Solo si respondiste “${q.depende.valor === 'si' ? 'Sí' : q.depende.valor}” en la pregunta ${q.depende.q}</div>`
+      : '';
+    html += `
+      <div class="q-block card p-5" id="qblock-${q.id}">
+        ${dependTag}
+        <div class="flex items-start gap-3 mb-4">
+          <div class="q-num-inline">${q.id}</div>
+          <p class="font-semibold text-sm leading-relaxed flex-1" style="color:var(--text)">${q.texto}</p>
+        </div>
+        <div class="options-row" id="opts-${q.id}">
+          ${opts}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function buildOptions(q) {
+  const options = [
+    { value:'si',   label:'Sí',        cls:'selected-si'   },
+    { value:'no',   label:'No',        cls:'selected-no'   },
+    { value:'nose', label:'No sé',     cls:'selected-nose' },
+    { value:'na',   label:'No aplica', cls:'selected-na'   },
+  ];
+
+  return options.map(o => `
+    <label class="q-option" onclick="selectOption(${q.id}, '${o.value}', '${o.cls}', this)">
+      <input type="radio" name="q${q.id}" value="${o.value}" style="display:none">
+      <span>${o.label}</span>
+    </label>
+  `).join('');
+}
+
+function selectOption(qId, value, selCls, el) {
+  answers[qId] = value;
+  const container = document.getElementById('opts-' + qId);
+  container.querySelectorAll('.q-option').forEach(opt => { opt.className = 'q-option'; });
+  el.classList.add(selCls);
+  document.getElementById('qblock-' + qId).style.borderColor = '';
+  refreshDependencies();
+  updateProgress();
+}
+
+/* Muestra u oculta las preguntas dependientes según la respuesta del padre */
+function refreshDependencies() {
+  PREGUNTAS.forEach(q => {
+    if (!q.depende) return;
+    const block = document.getElementById('qblock-' + q.id);
+    if (!block) return;
+    if (isApplicable(q)) {
+      block.style.display = '';
+    } else {
+      block.style.display = 'none';
+      if (answers[q.id] !== undefined) {
+        delete answers[q.id];
+        const cont = document.getElementById('opts-' + q.id);
+        if (cont) cont.querySelectorAll('.q-option').forEach(o => o.className = 'q-option');
+      }
+    }
+  });
+}
+
+function updateProgress() {
+  const applicable = PREGUNTAS.filter(isApplicable);
+  const total = applicable.length;
+  const answered = applicable.filter(q => answers[q.id] !== undefined).length;
+  const pct = total ? Math.round((answered / total) * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-label').textContent = `${answered} de ${total} preguntas respondidas`;
+
+  const btn = document.getElementById('btn-submit');
+  const hint = document.getElementById('submit-hint');
+  if (answered === total) {
+    btn.disabled = false;
+    hint.textContent = 'Todo listo. Puedes ver tu resultado.';
+    hint.style.color = 'var(--g600)';
+  } else {
+    btn.disabled = true;
+    const faltan = total - answered;
+    hint.textContent = `Faltan ${faltan} pregunta${faltan !== 1 ? 's' : ''} por responder`;
+    hint.style.color = 'var(--muted)';
+  }
+}
+
+function submitCuestionario() {
+  const missing = PREGUNTAS.filter(q => isApplicable(q) && !answers[q.id]);
+  if (missing.length > 0) {
+    missing.forEach(q => {
+      const block = document.getElementById('qblock-' + q.id);
+      block.style.borderColor = 'rgba(185,28,28,.3)';
+    });
+    document.getElementById('qblock-' + missing[0].id).scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  showView('view-leadgate');
+}
+
+/* ─── LEAD GATE ─── */
+function submitLeadGate() {
+  const nombre  = document.getElementById('f-nombre').value.trim();
+  const empresa = document.getElementById('f-empresa').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const tel     = document.getElementById('f-tel').value.trim();
+
+  if (!nombre || !empresa || !email || !tel) {
+    document.getElementById('form-error').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('form-error').classList.add('hidden');
+
+  leadData = {
+    nombre, empresa, email, tel,
+    empleados:  document.getElementById('f-empleados').value,
+    timestamp:  new Date().toISOString(),
+    answers:    { ...answers },
+  };
+
+  // Future: POST to CRM
+  // fetch('/api/leads', { method:'POST', body:JSON.stringify(leadData), headers:{'Content-Type':'application/json'} });
+
+  buildReport();
+  showView('view-reporte');
+}
+
+/* ─── SCORING ─── */
+function calcScore() {
+  let total = 0, maxTotal = 0;
+  const pilarScores = {};
+  PILARES.forEach(p => { pilarScores[p.id] = { total:0, counted:0 }; });
+
+  PREGUNTAS.forEach(q => {
+    if (!isApplicable(q)) return;
+    const pts = getScore(q, answers[q.id]);
+    if (pts === null) return;
+    total += pts; maxTotal += 2;
+    pilarScores[q.pilar].total += pts;
+    pilarScores[q.pilar].counted++;
+  });
+
+  PILARES.forEach(p => {
+    const ps = pilarScores[p.id];
+    // % de preparación del pilar: puntos obtenidos / (preguntas contadas × 2)
+    ps.pct = ps.counted ? Math.round((ps.total / (ps.counted * 2)) * 100) : 0;
+  });
+
+  // Nivel general por % de preparación (más alto = menor riesgo)
+  const pct = maxTotal ? Math.round((total / maxTotal) * 100) : 0;
+  let nivel;
+  if (pct >= 75)      nivel = 1; // Riesgo bajo
+  else if (pct >= 40) nivel = 2; // Riesgo medio
+  else                nivel = 3; // Riesgo alto
+
+  return { total, maxTotal, pct, pilarScores, nivel };
+}
+
+const NIVELES = {
+  1: {
+    badge:"Riesgo fiscal bajo",
+    title:"Riesgo fiscal bajo",
+    msg:"Tu empresa muestra una situación fiscal y contable ordenada. Mantener al día la documentación comprobatoria, las conciliaciones mensuales y la revisión de proveedores es clave para conservar esta posición y responder con tranquilidad ante cualquier revisión de la autoridad.",
+    ctaTitle:"Tu empresa mantiene una posición fiscal sólida",
+    ctaMsg:"Agenda una revisión preventiva para confirmar que tu situación fiscal y contable siga blindada conforme cambian tus operaciones y la normatividad.",
+    ctaButton:"Solicitar revisión preventiva",
+  },
+  2: {
+    badge:"Riesgo fiscal medio",
+    title:"Riesgo fiscal medio",
+    msg:"Tu empresa cumple con varios aspectos fiscales y contables, pero se identifican áreas que podrían representar exposición ante una revisión del SAT, IMSS o la Secretaría de Finanzas. Conviene atenderlas antes de que deriven en un requerimiento o crédito fiscal.",
+    ctaTitle:"Tu empresa tiene áreas fiscales por fortalecer",
+    ctaMsg:"Es recomendable revisar las prioridades fiscales y contables detectadas, ordenar la documentación clave y cerrar brechas antes de que se conviertan en contingencias.",
+    ctaButton:"Agendar asesoría fiscal especializada",
+  },
+  3: {
+    badge:"Riesgo fiscal alto",
+    title:"Riesgo fiscal alto",
+    msg:"Se identifican áreas que podrían representar una exposición fiscal importante para tu empresa. Conviene una revisión especializada para ordenar la documentación, evaluar posibles contingencias y definir un plan de acción preventivo antes de una auditoría o requerimiento.",
+    ctaTitle:"Tu empresa requiere una revisión fiscal integral",
+    ctaMsg:"Es importante realizar una revisión fiscal y contable integral para identificar contingencias, ordenar la documentación comprobatoria y definir un plan de acción que reduzca tu exposición.",
+    ctaButton:"Solicitar diagnóstico fiscal con Lofton",
+  },
+};
+
+/* Mensajes por pilar según banda de preparación */
+const PILAR_MSG = {
+  1: {
+    bajo:  "Tu empresa parece mantener una situación regular ante las autoridades fiscales, con documentación comprobatoria y controles adecuados sobre proveedores y operaciones.",
+    medio: "Se identifican posibles áreas de oportunidad en tu situación ante las autoridades, la materialidad de operaciones o el control de proveedores que conviene revisar.",
+    alto:  "Tu empresa podría tener contingencias fiscales relevantes —ante autoridades, proveedores o partes relacionadas— que conviene atender con una revisión especializada.",
+  },
+  2: {
+    bajo:  "Tu contabilidad parece estar ordenada, actualizada y conciliada con tus CFDI y declaraciones, lo que facilita responder ante una revisión.",
+    medio: "Existen posibles áreas de mejora en el registro contable, las conciliaciones mensuales o el control de CFDI (PUE/PPD y complementos de pago).",
+    alto:  "Tu empresa podría estar expuesta por falta de registros contables conciliados, controles de CFDI o documentación de operaciones relevantes.",
+  },
+};
+
+/* Estado del pilar según % de preparación (más alto = menor riesgo) */
+function pilarStatus(pct) {
+  if (pct >= 75) return { label:'Riesgo bajo',  cls:'chip-adecuado',    band:'bajo',  bar:'linear-gradient(90deg,var(--g600),var(--lime))' };
+  if (pct >= 40) return { label:'Riesgo medio', cls:'chip-revision',    band:'medio', bar:'linear-gradient(90deg,#d97706,#fcd34d)' };
+  return            { label:'Riesgo alto',  cls:'chip-prioritario', band:'alto',  bar:'linear-gradient(90deg,#b91c1c,#f87171)' };
+}
+
+/* ─── BUILD REPORT ─── */
+function buildReport() {
+  const { total, maxTotal, pilarScores, nivel } = calcScore();
+  const N = NIVELES[nivel];
+
+  // Hero
+  document.getElementById('result-score-num').textContent = total;
+  document.getElementById('result-max').textContent = maxTotal;
+  document.getElementById('result-badge').textContent = N.badge;
+  document.getElementById('result-level-title').textContent = N.title;
+  document.getElementById('result-level-msg').textContent = N.msg;
+
+  // Gauge — la aguja representa el RIESGO (inverso a la preparación)
+  setTimeout(() => {
+    const riskRatio = maxTotal ? 1 - (total / maxTotal) : 0;
+    document.getElementById('gauge-fill').style.strokeDashoffset = 188 * (1 - Math.min(riskRatio, 1));
+    const angle = Math.PI * riskRatio;
+    const cx = 80 + Math.cos(Math.PI - angle) * 60;
+    const cy = 90 - Math.sin(Math.PI - angle) * 60;
+    document.getElementById('gauge-dot').setAttribute('cx', cx.toFixed(1));
+    document.getElementById('gauge-dot').setAttribute('cy', cy.toFixed(1));
+  }, 200);
+
+  // Pilares
+  document.getElementById('pilares-result').innerHTML = PILARES.map(p => {
+    const ps = pilarScores[p.id];
+    const st = pilarStatus(ps.pct);
+    const maxPilar = ps.counted * 2;
+    const msg = PILAR_MSG[p.id][st.band];
+    return `
+      <div class="pc-card">
+        <div class="pc-accent-bar" style="background:${st.bar}"></div>
+        <div class="pc-inner">
+          <div class="pc-top">
+            <div class="pc-num">${String(p.id).padStart(2,'0')}</div>
+            <div class="pc-name">${p.nombre}</div>
+            <div class="pc-status-chip ${st.cls}">${st.label}</div>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <div class="pc-score-big">${ps.pct}%</div>
+              <div class="pc-score-label">${ps.total} de ${maxPilar} pts · preparación</div>
+            </div>
+            <div class="flex-1 max-w-16">
+              <div class="level-bar-wrap">
+                <div class="level-bar" style="width:${ps.pct}%;background:${st.bar}"></div>
+              </div>
+            </div>
+          </div>
+          <p class="pc-msg">${msg}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Priority list — pilares con MENOR preparación (solo medio/alto)
+  const sorted = PILARES
+    .map(p => ({ ...p, pct:pilarScores[p.id].pct, st:pilarStatus(pilarScores[p.id].pct) }))
+    .filter(p => p.pct < 75)
+    .sort((a,b) => a.pct - b.pct);
+
+  const prioritySection = document.getElementById('priority-section');
+  if (sorted.length === 0) {
+    prioritySection.style.display = 'none';
+  } else {
+    prioritySection.style.display = '';
+    document.getElementById('priority-list').innerHTML = sorted.map((p, i) => `
+      <div class="priority-item flex items-center gap-4 p-4 rounded-2xl" style="background:var(--surface)">
+        <div class="text-2xl font-extrabold" style="color:var(--border-2);width:28px;flex-shrink:0">${i+1}</div>
+        <div class="flex-1">
+          <div class="font-bold text-sm mb-0.5" style="color:var(--text)">${p.nombre}</div>
+          <div class="text-xs" style="color:var(--muted)">${p.desc}</div>
+        </div>
+        <div class="pc-status-chip ${p.st.cls} flex-shrink-0">${p.st.label}</div>
+      </div>
+    `).join('');
+  }
+
+  // CTA adapta título, mensaje y botón al nivel
+  document.getElementById('cta-title').textContent = N.ctaTitle;
+  document.getElementById('cta-msg').textContent = N.ctaMsg;
+  document.getElementById('cta-button').textContent = N.ctaButton;
+}
+
+/* ─── CTA ─── */
+function agendarLlamada() {
+  alert('Próximamente: enlace a agenda de Lofton');
+}
+</script>
+</body>
+</html>
