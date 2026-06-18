@@ -633,7 +633,6 @@ function renderQuestions() {
       <div class="question-section" id="q-${idx}">
         <div class="question-number">${idx + 1}</div>
         <div class="question-text">${q.texto}</div>
-        <div class="question-meta">Respuesta que genera sanción: <strong>${q.respuesta_sancion}</strong></div>
         <div class="flex gap-3">
           <button class="q-option ${respuestas[idx] === 'SI' ? 'selected' : ''}" onclick="answerQuestion(${idx}, 'SI')">
             <span class="material-symbols-outlined" style="font-size:18px">check_circle</span> SÍ
