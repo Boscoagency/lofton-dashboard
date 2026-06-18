@@ -433,58 +433,58 @@
     <div class="card p-6 fade-up" style="animation-delay:.08s">
       <h3 class="font-extrabold text-base mb-4" style="color:var(--text)">Datos de contacto</h3>
 
-      <div class=”lead-form-grid grid grid-cols-2 gap-4 mb-4”>
+      <div class="lead-form-grid grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label class=”form-label”>Nombre *</label>
-          <input id=”f-nombre” type=”text” class=”form-input” placeholder=”Tu nombre completo”>
+          <label class="form-label">Nombre *</label>
+          <input id="f-nombre" type="text" class="form-input" placeholder="Tu nombre completo">
         </div>
         <div>
-          <label class=”form-label”>Teléfono / WhatsApp *</label>
-          <input id=”f-tel” type=”tel” class=”form-input” placeholder=”(55) 0000-0000”>
+          <label class="form-label">Teléfono / WhatsApp *</label>
+          <input id="f-tel" type="tel" class="form-input" placeholder="(55) 0000-0000">
         </div>
         <div>
-          <label class=”form-label”>Correo corporativo *</label>
-          <input id=”f-email” type=”email” class=”form-input” placeholder=”tu@empresa.com”>
+          <label class="form-label">Correo corporativo *</label>
+          <input id="f-email" type="email" class="form-input" placeholder="tu@empresa.com">
         </div>
         <div>
-          <label class=”form-label”>Empresa *</label>
-          <input id=”f-empresa” type=”text” class=”form-input” placeholder=”Nombre de la empresa”>
+          <label class="form-label">Empresa *</label>
+          <input id="f-empresa" type="text" class="form-input" placeholder="Nombre de la empresa">
         </div>
         <div>
-          <label class=”form-label”>Cargo *</label>
-          <input id=”f-cargo” type=”text” class=”form-input” placeholder=”Ej. Director, Gerente de RH...”>
+          <label class="form-label">Cargo *</label>
+          <input id="f-cargo" type="text" class="form-input" placeholder="Ej. Director, Gerente de RH...">
         </div>
         <div>
-          <label class=”form-label”>No. de colaboradores</label>
-          <select id=”f-colaboradores” class=”form-select”>
-            <option value=””>Seleccionar...</option>
-            <option value=”1-10”>1 a 10</option>
-            <option value=”11-25”>11 a 25</option>
-            <option value=”26-50”>26 a 50</option>
-            <option value=”51-100”>51 a 100</option>
-            <option value=”100+”>Más de 100</option>
+          <label class="form-label">No. de colaboradores</label>
+          <select id="f-colaboradores" class="form-select">
+            <option value="">Seleccionar...</option>
+            <option value="1-10">1 a 10</option>
+            <option value="11-25">11 a 25</option>
+            <option value="26-50">26 a 50</option>
+            <option value="51-100">51 a 100</option>
+            <option value="100+">Más de 100</option>
           </select>
         </div>
       </div>
 
-      <div class=”mt-2 mb-2 flex items-start gap-3”>
-        <input id=”f-aviso” type=”checkbox” style=”width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer”>
-        <label for=”f-aviso” class=”text-xs” style=”color:var(--muted);line-height:1.6;cursor:pointer”>
-          He leído y acepto el <a href=”https://loftonsc.com/aviso-de-privacidad/” target=”_blank” rel=”noopener” style=”color:var(--g600);font-weight:700;text-decoration:underline”>Aviso de Privacidad</a> de Lofton Servicios Integrales. <span style=”color:var(--red)”>*</span>
+      <div class="mt-2 mb-2 flex items-start gap-3">
+        <input id="f-aviso" type="checkbox" style="width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer">
+        <label for="f-aviso" class="text-xs" style="color:var(--muted);line-height:1.6;cursor:pointer">
+          He leído y acepto el <a href="https://loftonsc.com/aviso-de-privacidad/" target="_blank" rel="noopener" style="color:var(--g600);font-weight:700;text-decoration:underline">Aviso de Privacidad</a> de Lofton Servicios Integrales. <span style="color:var(--red)">*</span>
         </label>
       </div>
-      <div class=”mb-2 flex items-start gap-3”>
-        <input id=”f-comercial” type=”checkbox” style=”width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer”>
-        <label for=”f-comercial” class=”text-xs” style=”color:var(--muted);line-height:1.6;cursor:pointer”>
+      <div class="mb-2 flex items-start gap-3">
+        <input id="f-comercial" type="checkbox" style="width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer">
+        <label for="f-comercial" class="text-xs" style="color:var(--muted);line-height:1.6;cursor:pointer">
           Acepto recibir información comercial y comunicaciones institucionales de Lofton.
         </label>
       </div>
 
-      <div id=”form-error” class=”hidden mt-4 p-3 rounded-xl text-sm font-600” style=”background:var(--red-bg);color:var(--red)”>
+      <div id="form-error" class="hidden mt-4 p-3 rounded-xl text-sm font-600" style="background:var(--red-bg);color:var(--red)">
         Por favor completa los campos obligatorios (*)
       </div>
 
-      <button onclick=”submitLeadGate()” class=”btn-primary w-full justify-center mt-5”>
+      <button onclick="submitLeadGate()" class="btn-primary w-full justify-center mt-5">
         Ver mi resultado
       </button>
     </div>
@@ -605,7 +605,7 @@ const PREGUNTAS = [
   { id:9,  pilar:1, tipo:"contexto",      texto:"¿Forma parte de un grupo empresarial?" },
   { id:10, pilar:1, tipo:"contingencia", depende:{ q:9, valor:"si" }, texto:"¿Alguna de las empresas del grupo ha tenido una contingencia fiscal? (cartas invitación, vigilancias profundas, auditorías, créditos fiscales firmes, juicios o restricción de CSD)" },
   { id:11, pilar:1, tipo:"contingencia", texto:"¿Los socios de la empresa han tenido alguna contingencia fiscal? (cartas invitación, vigilancias profundas, auditorías, créditos fiscales firmes, juicios o restricción de CSD)" },
-  { id:12, pilar:1, tipo:"cumplimiento", texto:"¿El domicilio fiscal de la empresa aparece como “localizado” en el sistema del SAT?" },
+  { id:12, pilar:1, tipo:"cumplimiento", texto:"¿El domicilio fiscal de la empresa aparece como \"localizado\" en el sistema del SAT?" },
   { id:13, pilar:1, tipo:"contingencia", texto:"¿Uno o varios de sus proveedores fueron calificados como EFOS?" },
   { id:14, pilar:1, tipo:"cumplimiento", texto:"¿Verifica periódicamente que sus proveedores no aparezcan en los listados del artículo 69-B del CFF (EFOS)?" },
   { id:15, pilar:1, tipo:"contexto",      texto:"¿Realiza operaciones con partes relacionadas?" },
@@ -694,7 +694,7 @@ function renderAllQuestions() {
 
     const opts = buildOptions(q);
     const dependTag = q.depende
-      ? `<div class="q-depend-tag">Solo si respondiste “${q.depende.valor === 'si' ? 'Sí' : q.depende.valor}” en la pregunta ${q.depende.q}</div>`
+      ? `<div class="q-depend-tag">Solo si respondiste "${q.depende.valor === 'si' ? 'Sí' : q.depende.valor}" en la pregunta ${q.depende.q}</div>`
       : '';
     html += `
       <div class="q-block card p-5" id="qblock-${q.id}">
