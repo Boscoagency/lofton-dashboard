@@ -1123,7 +1123,7 @@
       <h3 class="text-xl font-extrabold mb-2" style="color:var(--g700)">Tu empresa tiene áreas de mejora importantes</h3>
       <p class="text-sm mb-5 max-w-lg mx-auto" style="color:var(--muted)">Lofton Servicios Integrales puede ayudarte a mitigar estos riesgos, proteger tu empresa y garantizar el cumplimiento legal. Agenda una sesión de consultoría personalizada.</p>
       <div class="flex justify-center gap-3 flex-wrap">
-        <button class="btn-primary">Agendar Diagnóstico Completo</button>
+        <button onclick="agendarLlamada()" class="btn-primary">Agendar Diagnóstico Completo</button>
       </div>
     </div>
 
@@ -1673,6 +1673,12 @@ function setView(v) {
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (v === 'reporte') setTimeout(refreshReport, 80);
+}
+
+// ── WHATSAPP CTA ──
+function agendarLlamada() {
+  const msg = encodeURIComponent('Hola, acabo de completar el Diagnóstico de Riesgos Laborales de Lofton. Me gustaría agendar una asesoría con un especialista.');
+  window.open('https://wa.me/525568018766?text=' + msg, '_blank');
 }
 
 // ── LEAD FORM SUBMIT ──

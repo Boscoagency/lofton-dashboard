@@ -999,7 +999,8 @@ function buildReport() {
 
 /* ─── CTA ─── */
 function agendarLlamada() {
-  alert('Próximamente: enlace a agenda de Lofton');
+  const msg = encodeURIComponent('Hola, acabo de completar el Diagnóstico Fiscal para Personas Morales de Lofton. Me gustaría agendar una asesoría con un especialista.');
+  window.open('https://wa.me/525568018766?text=' + msg, '_blank');
 }
 </script>
 </body>
