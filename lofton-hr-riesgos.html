@@ -511,6 +511,23 @@
     body { background: white; }
     .card, .pilar-card { box-shadow: none; border: 1px solid #ddd; }
   }
+  /* ── Unified lead form ── */
+  .form-input {
+    width:100%; padding:10px 14px; border-radius:10px;
+    border:1.5px solid var(--border); background:var(--card);
+    color:var(--ink); font-size:14px; outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .form-input:focus { border-color:var(--g500); box-shadow:0 0 0 3px rgba(45,106,79,.1); }
+  .form-label { font-size:12px; font-weight:700; color:var(--muted); margin-bottom:5px; display:block; text-transform:uppercase; letter-spacing:.04em; }
+  .form-select {
+    width:100%; padding:10px 14px; border-radius:10px;
+    border:1.5px solid var(--border); background:var(--card);
+    color:var(--ink); font-size:14px; outline:none;
+    transition:border-color .2s, box-shadow .2s; appearance:none;
+  }
+  .form-select:focus { border-color:var(--g500); box-shadow:0 0 0 3px rgba(45,106,79,.1); }
+  @media (max-width:600px) { .lead-form-grid { grid-template-columns: 1fr !important; } }
 </style>
 </head>
 <body class="min-h-screen">
@@ -791,34 +808,62 @@
         <span class="material-symbols-outlined" style="font-size:48px; color:var(--g700)">assignment_ind</span>
       </div>
       <h2 class="text-2xl font-extrabold mb-2" style="color:var(--g700)">Ya casi terminas</h2>
-      <p class="text-sm mb-8" style="color:var(--muted)">Para enviarte tu diagnóstico personalizado, necesitamos algunos datos</p>
-      <form id="lead-form" onsubmit="submitLeadForm(event)" novalidate>
-        <div class="mb-4 text-left">
-          <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color:var(--g700)">Nombre completo</label>
-          <input id="lead-nombre" type="text" required placeholder="Juan García López"
-            style="width:100%; padding:12px 16px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); color:var(--ink); font-size:14px; outline:none; transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--g500)'" onblur="this.style.borderColor='var(--border)'">
+      <p class="text-sm mb-6" style="color:var(--muted)">Para enviarte tu diagnóstico personalizado, necesitamos algunos datos</p>
+
+      <div class="lead-form-grid grid grid-cols-2 gap-4 mb-4 text-left">
+        <div>
+          <label class="form-label">Nombre *</label>
+          <input id="f-nombre" type="text" class="form-input" placeholder="Tu nombre completo">
         </div>
-        <div class="mb-4 text-left">
-          <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color:var(--g700)">Empresa</label>
-          <input id="lead-empresa" type="text" required placeholder="Mi Empresa S.A. de C.V."
-            style="width:100%; padding:12px 16px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); color:var(--ink); font-size:14px; outline:none; transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--g500)'" onblur="this.style.borderColor='var(--border)'">
+        <div>
+          <label class="form-label">Teléfono / WhatsApp *</label>
+          <input id="f-tel" type="tel" class="form-input" placeholder="(55) 0000-0000">
         </div>
-        <div class="mb-4 text-left">
-          <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color:var(--g700)">Correo electrónico</label>
-          <input id="lead-correo" type="email" required placeholder="juan@empresa.com"
-            style="width:100%; padding:12px 16px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); color:var(--ink); font-size:14px; outline:none; transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--g500)'" onblur="this.style.borderColor='var(--border)'">
+        <div>
+          <label class="form-label">Correo corporativo *</label>
+          <input id="f-email" type="email" class="form-input" placeholder="tu@empresa.com">
         </div>
-        <div class="mb-8 text-left">
-          <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color:var(--g700)">Teléfono</label>
-          <input id="lead-tel" type="tel" required placeholder="55 1234 5678"
-            style="width:100%; padding:12px 16px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); color:var(--ink); font-size:14px; outline:none; transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--g500)'" onblur="this.style.borderColor='var(--border)'">
+        <div>
+          <label class="form-label">Empresa *</label>
+          <input id="f-empresa" type="text" class="form-input" placeholder="Nombre de la empresa">
         </div>
-        <button type="submit" class="btn-primary w-full" style="width:100%; justify-content:center;">Ver mi Diagnóstico</button>
-      </form>
+        <div>
+          <label class="form-label">Cargo *</label>
+          <input id="f-cargo" type="text" class="form-input" placeholder="Ej. Director, Gerente de RH...">
+        </div>
+        <div>
+          <label class="form-label">No. de colaboradores</label>
+          <select id="f-colaboradores" class="form-select">
+            <option value="">Seleccionar...</option>
+            <option value="1-10">1 a 10</option>
+            <option value="11-25">11 a 25</option>
+            <option value="26-50">26 a 50</option>
+            <option value="51-100">51 a 100</option>
+            <option value="100+">Más de 100</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-2 mb-2 flex items-start gap-3 text-left">
+        <input id="f-aviso" type="checkbox" style="width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer">
+        <label for="f-aviso" class="text-xs" style="color:var(--muted);line-height:1.6;cursor:pointer">
+          He leído y acepto el <a href="https://loftonsc.com/aviso-de-privacidad/" target="_blank" rel="noopener" style="color:var(--g600);font-weight:700;text-decoration:underline">Aviso de Privacidad</a> de Lofton Servicios Integrales. <span style="color:var(--red)">*</span>
+        </label>
+      </div>
+      <div class="mb-2 flex items-start gap-3 text-left">
+        <input id="f-comercial" type="checkbox" style="width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer">
+        <label for="f-comercial" class="text-xs" style="color:var(--muted);line-height:1.6;cursor:pointer">
+          Acepto recibir información comercial y comunicaciones institucionales de Lofton.
+        </label>
+      </div>
+
+      <div id="form-error" class="hidden mt-4 p-3 rounded-xl text-sm font-600" style="background:var(--red-bg);color:var(--red)">
+        Por favor completa los campos obligatorios (*)
+      </div>
+
+      <button onclick="submitLeadGate()" class="btn-primary w-full justify-center mt-5">
+        Ver mi resultado
+      </button>
     </div>
   </div>
 </div>
@@ -1631,18 +1676,36 @@ function setView(v) {
 }
 
 // ── LEAD FORM SUBMIT ──
-function submitLeadForm(e) {
-  e.preventDefault();
-  const nombre = document.getElementById('lead-nombre').value.trim();
-  const empresa = document.getElementById('lead-empresa').value.trim();
-  const correo = document.getElementById('lead-correo').value.trim();
-  const telefono = document.getElementById('lead-tel').value.trim();
-  if (!nombre || !empresa || !correo || !telefono) {
-    alert('Por favor completa todos los campos.');
+const FREE_MAIL_DOMAINS = ['gmail.com','googlemail.com','hotmail.com','hotmail.es','yahoo.com','yahoo.com.mx','yahoo.es','outlook.com','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','mail.com','msn.com','ymail.com'];
+
+function submitLeadGate() {
+  const nombre  = document.getElementById('f-nombre').value.trim();
+  const tel     = document.getElementById('f-tel').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const empresa = document.getElementById('f-empresa').value.trim();
+  const cargo   = document.getElementById('f-cargo').value.trim();
+  const aviso   = document.getElementById('f-aviso').checked;
+  const errEl   = document.getElementById('form-error');
+
+  if (!nombre || !tel || !email || !empresa || !cargo || !aviso) {
+    errEl.textContent = 'Por favor completa los campos obligatorios (*)';
+    errEl.classList.remove('hidden');
     return;
   }
+  const domain = email.split('@')[1]?.toLowerCase() || '';
+  if (FREE_MAIL_DOMAINS.includes(domain)) {
+    errEl.textContent = 'Por favor ingresa tu correo corporativo (no se aceptan Gmail, Hotmail, Yahoo, etc.)';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  errEl.classList.add('hidden');
+
   window.leadSubmitted = true;
-  window.leadData = { nombre, empresa, correo, telefono };
+  window.leadData = {
+    nombre, tel, email, empresa, cargo,
+    colaboradores: document.getElementById('f-colaboradores').value,
+    comercial:     document.getElementById('f-comercial').checked,
+  };
   setView('reporte');
 }
 

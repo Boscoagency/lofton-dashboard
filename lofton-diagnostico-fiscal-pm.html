@@ -433,51 +433,60 @@
     <div class="card p-6 fade-up" style="animation-delay:.08s">
       <h3 class="font-extrabold text-base mb-4" style="color:var(--text)">Datos de contacto</h3>
 
-      <div class="lead-form-grid grid grid-cols-2 gap-4 mb-4">
+      <div class=”lead-form-grid grid grid-cols-2 gap-4 mb-4”>
         <div>
-          <label class="form-label">Nombre *</label>
-          <input id="f-nombre" type="text" class="form-input" placeholder="Tu nombre">
+          <label class=”form-label”>Nombre *</label>
+          <input id=”f-nombre” type=”text” class=”form-input” placeholder=”Tu nombre completo”>
         </div>
         <div>
-          <label class="form-label">Empresa *</label>
-          <input id="f-empresa" type="text" class="form-input" placeholder="Nombre de la empresa">
+          <label class=”form-label”>Teléfono / WhatsApp *</label>
+          <input id=”f-tel” type=”tel” class=”form-input” placeholder=”(55) 0000-0000”>
         </div>
         <div>
-          <label class="form-label">Correo *</label>
-          <input id="f-email" type="email" class="form-input" placeholder="tu@empresa.com">
+          <label class=”form-label”>Correo corporativo *</label>
+          <input id=”f-email” type=”email” class=”form-input” placeholder=”tu@empresa.com”>
         </div>
         <div>
-          <label class="form-label">Teléfono / WhatsApp *</label>
-          <input id="f-tel" type="tel" class="form-input" placeholder="(55) 0000-0000">
+          <label class=”form-label”>Empresa *</label>
+          <input id=”f-empresa” type=”text” class=”form-input” placeholder=”Nombre de la empresa”>
+        </div>
+        <div>
+          <label class=”form-label”>Cargo *</label>
+          <input id=”f-cargo” type=”text” class=”form-input” placeholder=”Ej. Director, Gerente de RH...”>
+        </div>
+        <div>
+          <label class=”form-label”>No. de colaboradores</label>
+          <select id=”f-colaboradores” class=”form-select”>
+            <option value=””>Seleccionar...</option>
+            <option value=”1-10”>1 a 10</option>
+            <option value=”11-25”>11 a 25</option>
+            <option value=”26-50”>26 a 50</option>
+            <option value=”51-100”>51 a 100</option>
+            <option value=”100+”>Más de 100</option>
+          </select>
         </div>
       </div>
 
-      <div>
-        <label class="form-label">No. de empleados</label>
-        <select id="f-empleados" class="form-select">
-          <option value="">Seleccionar...</option>
-          <option>Menos de 10</option>
-          <option>10 a 50</option>
-          <option>51 a 200</option>
-          <option>201 a 500</option>
-          <option>Más de 500</option>
-        </select>
+      <div class=”mt-2 mb-2 flex items-start gap-3”>
+        <input id=”f-aviso” type=”checkbox” style=”width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer”>
+        <label for=”f-aviso” class=”text-xs” style=”color:var(--muted);line-height:1.6;cursor:pointer”>
+          He leído y acepto el <a href=”https://loftonsc.com/aviso-de-privacidad/” target=”_blank” rel=”noopener” style=”color:var(--g600);font-weight:700;text-decoration:underline”>Aviso de Privacidad</a> de Lofton Servicios Integrales. <span style=”color:var(--red)”>*</span>
+        </label>
+      </div>
+      <div class=”mb-2 flex items-start gap-3”>
+        <input id=”f-comercial” type=”checkbox” style=”width:16px;height:16px;accent-color:var(--g500);flex-shrink:0;margin-top:2px;cursor:pointer”>
+        <label for=”f-comercial” class=”text-xs” style=”color:var(--muted);line-height:1.6;cursor:pointer”>
+          Acepto recibir información comercial y comunicaciones institucionales de Lofton.
+        </label>
       </div>
 
-      <div id="form-error" class="hidden mt-4 p-3 rounded-xl text-sm font-600" style="background:var(--red-bg);color:var(--red)">
+      <div id=”form-error” class=”hidden mt-4 p-3 rounded-xl text-sm font-600” style=”background:var(--red-bg);color:var(--red)”>
         Por favor completa los campos obligatorios (*)
       </div>
 
-      <button onclick="submitLeadGate()" class="btn-primary w-full justify-center mt-5">
+      <button onclick=”submitLeadGate()” class=”btn-primary w-full justify-center mt-5”>
         Ver mi resultado
       </button>
-
-      <p class="text-xs text-center mt-3" style="color:var(--subtle);line-height:1.6">
-        Al dar clic en <strong style="color:var(--muted)">“Ver mi resultado”</strong> autorizas el tratamiento de tus datos
-        personales conforme al
-        <a href="https://loftonsc.com/aviso-de-privacidad/" target="_blank" rel="noopener" style="color:var(--g600);font-weight:700;text-decoration:underline">Aviso de Privacidad</a>
-        de Lofton Servicios Integrales. Tu información será tratada con carácter confidencial y no se compartirá con terceros sin tu consentimiento.
-      </p>
     </div>
 
   </div>
@@ -786,23 +795,36 @@ function submitCuestionario() {
 }
 
 /* ─── LEAD GATE ─── */
+const FREE_MAIL_DOMAINS = ['gmail.com','googlemail.com','hotmail.com','hotmail.es','yahoo.com','yahoo.com.mx','yahoo.es','outlook.com','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','mail.com','msn.com','ymail.com'];
+
 function submitLeadGate() {
   const nombre  = document.getElementById('f-nombre').value.trim();
-  const empresa = document.getElementById('f-empresa').value.trim();
-  const email   = document.getElementById('f-email').value.trim();
   const tel     = document.getElementById('f-tel').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const empresa = document.getElementById('f-empresa').value.trim();
+  const cargo   = document.getElementById('f-cargo').value.trim();
+  const aviso   = document.getElementById('f-aviso').checked;
+  const errEl   = document.getElementById('form-error');
 
-  if (!nombre || !empresa || !email || !tel) {
-    document.getElementById('form-error').classList.remove('hidden');
+  if (!nombre || !tel || !email || !empresa || !cargo || !aviso) {
+    errEl.textContent = 'Por favor completa los campos obligatorios (*)';
+    errEl.classList.remove('hidden');
     return;
   }
-  document.getElementById('form-error').classList.add('hidden');
+  const domain = email.split('@')[1]?.toLowerCase() || '';
+  if (FREE_MAIL_DOMAINS.includes(domain)) {
+    errEl.textContent = 'Por favor ingresa tu correo corporativo (no se aceptan Gmail, Hotmail, Yahoo, etc.)';
+    errEl.classList.remove('hidden');
+    return;
+  }
+  errEl.classList.add('hidden');
 
   leadData = {
-    nombre, empresa, email, tel,
-    empleados:  document.getElementById('f-empleados').value,
-    timestamp:  new Date().toISOString(),
-    answers:    { ...answers },
+    nombre, tel, email, empresa, cargo,
+    colaboradores: document.getElementById('f-colaboradores').value,
+    comercial:     document.getElementById('f-comercial').checked,
+    timestamp:     new Date().toISOString(),
+    answers:       { ...answers },
   };
 
   // Future: POST to CRM
