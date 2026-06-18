@@ -409,11 +409,8 @@
 
     <!-- BOTONES DE NAVEGACIÓN -->
     <div class="flex gap-3 mt-12 no-print">
-      <button onclick="previousQuestion()" class="btn-outline flex-1" id="btn-prev" disabled>
-        <span class="material-symbols-outlined">chevron_left</span> Anterior
-      </button>
-      <button onclick="nextQuestion()" class="btn-primary flex-1" id="btn-next">
-        Siguiente <span class="material-symbols-outlined">chevron_right</span>
+      <button onclick="switchView('lead')" class="btn-primary flex-1" id="btn-enviar">
+        Enviar datos <span class="material-symbols-outlined">arrow_forward</span>
       </button>
     </div>
   </div>
@@ -633,7 +630,7 @@ function renderQuestions() {
     }
 
     html += `
-      <div class="question-section ${idx === currentQuestionIndex ? '' : 'hidden'}" id="q-${idx}">
+      <div class="question-section" id="q-${idx}">
         <div class="question-number">${idx + 1}</div>
         <div class="question-text">${q.texto}</div>
         <div class="question-meta">Respuesta que genera sanción: <strong>${q.respuesta_sancion}</strong></div>
@@ -680,37 +677,12 @@ function switchView(view) {
   }
 }
 
-function nextQuestion() {
-  if (currentQuestionIndex < preguntas.length - 1) {
-    document.getElementById(`q-${currentQuestionIndex}`).classList.add('hidden');
-    currentQuestionIndex++;
-    document.getElementById(`q-${currentQuestionIndex}`).classList.remove('hidden');
-    updateProgress();
-  } else {
-    switchView('lead');
-  }
-  window.scrollTo(0, 0);
-}
-
-function previousQuestion() {
-  if (currentQuestionIndex > 0) {
-    document.getElementById(`q-${currentQuestionIndex}`).classList.add('hidden');
-    currentQuestionIndex--;
-    document.getElementById(`q-${currentQuestionIndex}`).classList.remove('hidden');
-    updateProgress();
-  }
-  window.scrollTo(0, 0);
-}
 
 function updateProgress() {
-  const actual = currentQuestionIndex + 1;
   const total = preguntas.length;
-  document.getElementById('progress-actual').textContent = actual;
-  document.getElementById('progress-fill').style.width = (actual / total * 100) + '%';
-
-  document.getElementById('btn-prev').disabled = currentQuestionIndex === 0;
-  document.getElementById('btn-next').textContent = currentQuestionIndex === total - 1 ? 'Enviar datos >' : 'Siguiente >';
-  document.getElementById('btn-next').innerHTML = currentQuestionIndex === total - 1 ? 'Enviar datos <span class="material-symbols-outlined">arrow_forward</span>' : 'Siguiente <span class="material-symbols-outlined">chevron_right</span>';
+  const respondidas = Object.values(respuestas).filter(r => r !== null && r !== undefined).length;
+  document.getElementById('progress-actual').textContent = respondidas;
+  document.getElementById('progress-fill').style.width = (respondidas / total * 100) + '%';
 }
 
 function validateEmail(email) {
