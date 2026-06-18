@@ -499,6 +499,64 @@
   /* Hide old mini chart divs inside pc-cards */
   .pc-mini-chart { display: none; }
 
+  /* ── SANCTIONS DETAIL ── */
+  .sanction-detail {
+    margin-top: 12px;
+    display: none;
+  }
+  .sanction-detail.has-items {
+    display: block;
+  }
+  .sanction-detail-title {
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    margin-bottom: 6px;
+  }
+  .sanction-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .sanction-item:last-child { border-bottom: none; }
+  .sanction-tipo {
+    font-size: .72rem;
+    color: rgba(255,255,255,.55);
+    flex: 1;
+    line-height: 1.3;
+  }
+  .sanction-monto {
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--lime);
+    white-space: nowrap;
+  }
+  .sanction-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(184,224,74,.25);
+  }
+  .sanction-total-label {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+  }
+  .sanction-total-monto {
+    font-size: .82rem;
+    font-weight: 800;
+    color: var(--lime);
+  }
+
   /* Conforme state */
   .pc-card.conforme .pc-big { color: #6ee7b7; }
   .pc-card.conforme .pc-amount { color: #6ee7b7; }
@@ -880,6 +938,7 @@
             <p class="pc-bar-label chart-label">58% en riesgo alto · 42% medio</p>
           </div>
           <div class="pc-mini-chart" id="chart-p1"></div>
+          <div class="sanction-detail" id="sd-p1"></div>
         </div>
       </div>
 
@@ -911,6 +970,7 @@
             <p class="pc-bar-label chart-label">63% alto · 25% medio · 12% bajo</p>
           </div>
           <div class="pc-mini-chart" id="chart-p2"></div>
+          <div class="sanction-detail" id="sd-p2"></div>
         </div>
       </div>
 
@@ -942,6 +1002,7 @@
             <p class="pc-bar-label chart-label">67% en riesgo medio</p>
           </div>
           <div class="pc-mini-chart" id="chart-p3"></div>
+          <div class="sanction-detail" id="sd-p3"></div>
         </div>
       </div>
 
@@ -973,6 +1034,7 @@
             <p class="pc-bar-label chart-label">100% en riesgo alto</p>
           </div>
           <div class="pc-mini-chart" id="chart-p4"></div>
+          <div class="sanction-detail" id="sd-p4"></div>
         </div>
       </div>
 
@@ -1004,6 +1066,7 @@
             <p class="pc-bar-label chart-label">24% alto · 57% medio · 19% bajo</p>
           </div>
           <div class="pc-mini-chart" id="chart-p5"></div>
+          <div class="sanction-detail" id="sd-p5"></div>
         </div>
       </div>
 
@@ -1035,6 +1098,7 @@
             <p class="pc-bar-label chart-label">75% alto · 25% medio</p>
           </div>
           <div class="pc-mini-chart" id="chart-p6"></div>
+          <div class="sanction-detail" id="sd-p6"></div>
         </div>
       </div>
 
@@ -1269,33 +1333,33 @@ window.addEventListener('load', () => {
 // ═══════════════════════════════════════════════════════
 const RISK_MAP = {
   // ── PILAR 1: Cumplimiento General
-  q1:  { pilar:1, level:'medio', exp:296207,  risk_if:'no' },  // CCRL
-  q2:  { pilar:1, level:'medio', exp:296207,  risk_if:'no' },  // 100% contratos firmados
-  q3:  { pilar:1, level:'medio', exp:296207,  risk_if:'no' },  // comisiones mixtas
-  q4:  { pilar:1, level:'medio', exp:296207,  risk_if:'no' },  // control asistencia
-  q5:  { pilar:1, level:'alto',  exp:586550,  risk_if:'no' },  // jornada extra < 10h
+  q1:  { pilar:1, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
+  q2:  { pilar:1, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
+  q3:  { pilar:1, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
+  q4:  { pilar:1, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
+  q5:  { pilar:1, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa + prisión + sanción penal' },
   // ── PILAR 2: Pago y Prestaciones
-  q6:  { pilar:2, level:'alto',  exp:586550,  risk_if:'no' },  // pago prestaciones
-  q7:  { pilar:2, level:'alto',  exp:586550,  risk_if:'no' },  // tiempo extraordinario LFT
-  q8:  { pilar:2, level:'alto',  exp:586550,  risk_if:'si' },  // descuentos por multas/sanciones
-  q9:  { pilar:2, level:'medio', exp:586550,  risk_if:'no' },  // INFONACOT
+  q6:  { pilar:2, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa + delito + rescisión' },
+  q7:  { pilar:2, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa + prisión + sanción penal' },
+  q8:  { pilar:2, level:'alto',  exp:586550, risk_if:'si', tipo:'Multa + reintegro' },
+  q9:  { pilar:2, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
   // ── PILAR 3: Sindical — Colectivo
-  q10: { pilar:3, level:'medio', exp:175965,  risk_if:'no' },  // permiso actividades sindicales
+  q10: { pilar:3, level:'medio', exp:90915,  risk_if:'no', tipo:'Multa' },
   // ── PILAR 4: Capacitación
-  q11: { pilar:4, level:'alto',  exp:586550,  risk_if:'no' },  // capacitación herramientas
-  q12: { pilar:4, level:'alto',  exp:586550,  risk_if:'no' },  // capacitación riesgos puesto
-  q13: { pilar:4, level:'alto',  exp:586550,  risk_if:'no' },  // capacitación funciones
+  q11: { pilar:4, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa' },
+  q12: { pilar:4, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa' },
+  q13: { pilar:4, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa' },
   // ── PILAR 5: Seguridad y Salud
-  q14: { pilar:5, level:'medio', exp:586550,  risk_if:'no' },  // NOM-STPS
-  q15: { pilar:5, level:'medio', exp:586550,  risk_if:'no' },  // diagnóstico SST
-  q16: { pilar:5, level:'alto',  exp:586550,  risk_if:'no' },  // EPP
-  q17: { pilar:5, level:'alto',  exp:586550,  risk_if:'no' },  // protocolo discriminación/violencia
-  q18: { pilar:5, level:'alto',  exp:586550,  risk_if:'no' },  // programa prevención violencia
-  q19: { pilar:5, level:'medio', exp:586550,  risk_if:'no' },  // mecanismos actuación violencia
-  q20: { pilar:5, level:'medio', exp:586550,  risk_if:'no' },  // política descansos programados
+  q14: { pilar:5, level:'medio', exp:307939, risk_if:'no', tipo:'Multa + clausura' },
+  q15: { pilar:5, level:'medio', exp:307939, risk_if:'no', tipo:'Multa + clausura' },
+  q16: { pilar:5, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa + clausura' },
+  q17: { pilar:5, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa + responsabilidad' },
+  q18: { pilar:5, level:'alto',  exp:586550, risk_if:'no', tipo:'Multa' },
+  q19: { pilar:5, level:'medio', exp:296208, risk_if:'no', tipo:'Multa + responsabilidad penal + rescisión + daños y perjuicios' },
+  q20: { pilar:5, level:'medio', exp:296208, risk_if:'no', tipo:'Multa' },
   // ── PILAR 6: Protección Familiar
-  q21: { pilar:6, level:'alto',  exp:586550,  risk_if:'si' },  // actos intimidatorios/coacción
-  q22: { pilar:6, level:'alto',  exp:586550,  risk_if:'si' },  // despido en estado de gravidez
+  q21: { pilar:6, level:'alto',  exp:586550, risk_if:'si', tipo:'Multa + indemnización' },
+  q22: { pilar:6, level:'alto',  exp:586550, risk_if:'si', tipo:'Multa + indemnización' },
 };
 
 const PILAR_META = {
@@ -1546,10 +1610,53 @@ function updateGlobalKPIs(pilares) {
   }
 }
 
+// ── Build per-pilar sanctions detail from current answers ──
+function updateSanctionDetail(pilarNum) {
+  const el = document.getElementById('sd-p' + pilarNum);
+  if (!el) return;
+
+  const answers = {};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r => { answers[r.name] = r.value; });
+
+  const triggered = [];
+  Object.entries(RISK_MAP).forEach(([qId, meta]) => {
+    if (meta.pilar !== pilarNum) return;
+    if (answers[qId] === meta.risk_if) {
+      triggered.push({ tipo: meta.tipo, exp: meta.exp });
+    }
+  });
+
+  if (triggered.length === 0) {
+    el.innerHTML = '';
+    el.classList.remove('has-items');
+    return;
+  }
+
+  const total = triggered.reduce((s, t) => s + t.exp, 0);
+  const rows = triggered.map(t =>
+    `<div class="sanction-item">
+      <span class="sanction-tipo">${t.tipo}</span>
+      <span class="sanction-monto">${fmtMXN(t.exp)}</span>
+    </div>`
+  ).join('');
+
+  el.innerHTML = `
+    <p class="sanction-detail-title">Sanciones aplicables</p>
+    ${rows}
+    <div class="sanction-total-row">
+      <span class="sanction-total-label">Total exposición</span>
+      <span class="sanction-total-monto">${fmtMXN(total)}</span>
+    </div>`;
+  el.classList.add('has-items');
+}
+
 // ── MAIN: refresh report with current answers ──
 function refreshReport() {
   const pilares = calcResults();
-  for (let p=1; p<=6; p++) updatePilarCard(p, pilares[p]);
+  for (let p=1; p<=6; p++) {
+    updatePilarCard(p, pilares[p]);
+    updateSanctionDetail(p);
+  }
   updateGlobalKPIs(pilares);
 }
 
