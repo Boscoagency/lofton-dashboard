@@ -1,0 +1,21 @@
+Pieza,Campaña,Formato,Descripción,Especificación,Estado,Prioridad,Fecha Límite,Asignado,Link Diseño,Link Referencias,Notas
+1,Always On Brand,Reel 30seg,Reel identidad de marca,Video 30seg con hook empresa/directores/documentos,Pendiente,Alta,2026-04-15,Oriana,,https://lofton.mx,
+2,Always On Brand,Reel 15seg,Reel servicios - Flash de áreas,Video 15seg con iconografía 7 áreas,Pendiente,Alta,2026-04-15,Oriana,,https://lofton.mx,
+3,Always On Brand,Carrusel,Carrusel 5 Riesgos (7 tarjetas),T1 Hook + T2-T6 Riesgos + T7 CTA,Pendiente,Alta,2026-04-12,Oriana,,https://lofton.mx,Cada tarjeta termina con arrow "→ Siguiente"
+4,Always On Brand,Estático,Frase de marca (Feed),Estático 1 línea brand value + servicios,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,"Headline: No vendemos servicios. Vendemos certeza."
+5,Always On Brand,Estático,Pain + CTA (Feed),Estático con dolor operacional,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,"Headline: Tu empresa puede estar expuesta sin que lo sepas."
+6,Always On Remarketing,Estático,Seguimiento directo (Visitantes 90d),Estático post-visit,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,"Headline: Visitaste Lofton. ¿Ya tienes certeza?"
+7,Always On Remarketing,Estático,Miedo a pérdida - UIF (SCJN noticia),Estático SCJN abril 2026,Pendiente,Alta,2026-04-12,Oriana,,https://lofton.mx,"Headline: La UIF puede congelar tus cuentas sin aviso"
+8,Always On Remarketing,Carrusel,Carrusel Portafolio por dolor (6 tarjetas),T1 Hook + T2-T6 Por área (Auditoría/Fiscal/Nómina/Laboral/Corporativo) + T7 CTA,Pendiente,Alta,2026-04-12,Oriana,,https://lofton.mx,Reconexión por área de riesgo
+9,PTU Reparto Utilidades,Carrusel,Carrusel 5 Errores PTU (7 tarjetas),T1 Hook + T2-T6 Errores + T7 CTA,Pendiente,Alta,2026-04-20,Oriana,,https://lofton.mx,Deadline abril 30 - Campaña urgente
+10,PTU Reparto Utilidades,Estático,Urgencia + Deadline Mayo,Estático con fecha límite PTU 30 mayo,Pendiente,Alta,2026-04-20,Oriana,,https://lofton.mx,"Headline: Mayo es mes de PTU. ¿Tu cálculo está bien?"
+11,PTU Reparto Utilidades,Estático,Ahorro + Beneficio fiscal,Estático con beneficio disminución ISR,Pendiente,Alta,2026-04-20,Oriana,,https://lofton.mx,"Headline: ¿Sabes que puedes disminuir el PTU?"
+12,Defensa Fiscal / Bloqueo UIF,Reel 30seg,Reel cascada de consecuencias UIF/SAT,Video 30seg con preguntas progresivas + SCJN 6 abril,Pendiente,Máxima,2026-04-10,Oriana,,https://lofton.mx,PRIORIDAD MÁXIMA - Evento de interés actualizado
+13,Defensa Fiscal / Bloqueo UIF,Estático,Noticia como anzuelo (SCJN 6 abril),Estático con fallo SCJN 2026,Pendiente,Máxima,2026-04-10,Oriana,,https://lofton.mx,Headline: SCJN 6 abril 2026 - UIF puede congelar sin orden judicial
+14,Defensa Fiscal / Bloqueo UIF,Estático,Autoridad + Proceso (Recurso de revocación),Estático con estrategia proceso legal,Pendiente,Alta,2026-04-10,Oriana,,https://lofton.mx,"Headline: ¿Recibes comunicados del SAT?"
+15,Google Ads Display,Banner 728x90,Leaderboard,Estático noticia UIF,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,Max 150KB - Noticia UIF como elemento urgencia
+16,Google Ads Display,Banner 300x250,Medium Rectangle,Estático riesgo bloqueo cuentas,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,Max 150KB - Prioridad media
+17,Google Ads Display,Banner 336x280,Large Rectangle,Estático deadlines + servicios,Pendiente,Alta,2026-04-15,Oriana,,https://lofton.mx,"Max 150KB - Piezas de mayor impacto, priorizar"
+18,Google Ads Display,Banner 300x600,Half Page,Estático 5 riesgos,Pendiente,Alta,2026-04-15,Oriana,,https://lofton.mx,"Max 150KB - Piezas de mayor impacto, priorizar"
+19,Google Ads Display,Banner 160x600,Wide Skyscraper,Estático brand value,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,Max 150KB
+20,Google Ads Display,Banner 970x250,Billboard,Estático noticia UIF,Pendiente,Media,2026-04-15,Oriana,,https://lofton.mx,Max 150KB
