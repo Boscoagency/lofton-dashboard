@@ -842,7 +842,7 @@ function buildInformeWebflow(sc) {
     const msg = (PILAR_MSG[p.id] && PILAR_MSG[p.id][st.band]) || '';
     lines.push('• ' + p.nombre + ' — ' + st.label + ' (' + (ps.pct || 0) + '% de preparación)' + (msg ? ': ' + msg : ''));
   });
-  return lines.join('\n');
+  return lines.join('\n\n');
 }
 
 /* ─── LEAD GATE ─── */

@@ -892,7 +892,7 @@ function buildInformeWebflow(sc) {
     const ps = sc.pilarScores[p.id] || {};
     lines.push('• ' + p.nombre + ' — ' + pilarStatus(ps.pct || 0).label);
   });
-  return lines.join('\n');
+  return lines.join('\n\n');
 }
 
 /* ─── LEAD GATE ─── */

@@ -1732,7 +1732,7 @@ function buildInformeWebflow() {
   lines.push('Exposición total estimada: ' + fmtMXN(exp) + ' (' + numToES(exp) + ')');
   lines.push(Object.values(pilares).filter(p => p.alto > 0).length + ' de 6 pilares con riesgos detectados');
   lines.push('Riesgos detectados: ' + alto + ' altos, ' + medio + ' medios, ' + bajo + ' bajos');
-  return lines.join('\n');
+  return lines.join('\n\n');
 }
 
 // ── LEAD FORM SUBMIT ──

@@ -2002,7 +2002,7 @@ function buildInformeInternoText() {
       hallazgos.filter(h => h.meta.level === nivel).forEach(h => L.push('  - ' + (h.meta.desc || h.qId)));
     });
   }
-  return L.join('\n');
+  return L.join('\n\n');
 }
 
 function renderInformeInternoHTML() {

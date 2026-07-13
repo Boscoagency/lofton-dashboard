@@ -1882,7 +1882,7 @@ function buildInformeInternoText() {
   } else {
     hallazgos.forEach(h => L.push('• ' + (h.meta.tematica || h.qId) + ': ' + (h.meta.reco || '')));
   }
-  return L.join('\n');
+  return L.join('\n\n');
 }
 
 function renderInformeInternoHTML() {
