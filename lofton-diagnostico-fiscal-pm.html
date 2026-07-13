@@ -794,6 +794,57 @@ function submitCuestionario() {
   showView('view-leadgate');
 }
 
+/* ─── ENVÍO DE LEAD A WEBFLOW (loftonsc.com) ─── */
+const WEBFLOW_SITE_ID = '69ef868642f652e8baf12ec2';
+const WEBFLOW_FORM_NAME = 'Leads Diagnósticos';
+const WEBFLOW_DIAGNOSTICO = 'Diagnóstico Fiscal PM';
+
+function enviarLeadWebflow(ld, extra) {
+  const fields = Object.assign({
+    'Diagnóstico': WEBFLOW_DIAGNOSTICO,
+    'Nombre': ld.nombre || '',
+    'Teléfono': ld.tel || '',
+    'Correo': ld.email || '',
+    'Empresa': ld.empresa || '',
+    'Cargo': ld.cargo || '',
+    'Colaboradores': ld.colaboradores || '',
+    'Acepta información comercial': ld.comercial ? 'Sí' : 'No',
+  }, extra || {});
+  const body = new URLSearchParams({ name: WEBFLOW_FORM_NAME, source: location.href, test: 'false' });
+  Object.entries(fields).forEach(([k, v]) => body.append('fields[' + k + ']', v == null ? '' : String(v)));
+  return fetch('https://webflow.com/api/v1/form/' + WEBFLOW_SITE_ID, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+}
+
+// Informe completo (resultado por pilar + todas las respuestas) para el lead de Webflow
+const ANSWER_LABELS = { si:'Sí', no:'No', nose:'No sé', ns:'No estoy seguro', parcial:'Parcialmente', na:'No aplica' };
+
+function buildInformeWebflow(sc) {
+  const lines = ['RESULTADO GLOBAL: ' + NIVELES[sc.nivel].badge + ' — ' + sc.pct + '% de preparación (' + sc.total + '/' + sc.maxTotal + ' pts)', ''];
+  PILARES.forEach(p => {
+    const ps = sc.pilarScores[p.id] || {};
+    lines.push('── ' + p.nombre.toUpperCase() + (ps.pct != null ? ' (' + ps.pct + '% de preparación)' : '') + ' ──');
+    PREGUNTAS.filter(q => q.pilar === p.id).forEach(q => {
+      lines.push('Q' + String(q.id).padStart(2, '0') + '. ' + q.texto);
+      lines.push('    R: ' + (ANSWER_LABELS[answers[q.id]] || 'Sin respuesta'));
+    });
+    lines.push('');
+  });
+  lines.push('RESUMEN DEL REPORTE:');
+  lines.push(NIVELES[sc.nivel].title + ' — ' + NIVELES[sc.nivel].msg);
+  lines.push('');
+  PILARES.forEach(p => {
+    const ps = sc.pilarScores[p.id] || {};
+    const st = pilarStatus(ps.pct || 0);
+    const msg = (PILAR_MSG[p.id] && PILAR_MSG[p.id][st.band]) || '';
+    lines.push('• ' + p.nombre + ' — ' + st.label + ' (' + (ps.pct || 0) + '% de preparación)' + (msg ? ': ' + msg : ''));
+  });
+  return lines.join('\n');
+}
+
 /* ─── LEAD GATE ─── */
 const FREE_MAIL_DOMAINS = ['gmail.com','googlemail.com','hotmail.com','hotmail.es','yahoo.com','yahoo.com.mx','yahoo.es','outlook.com','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','mail.com','msn.com','ymail.com'];
 
@@ -827,11 +878,21 @@ function submitLeadGate() {
     answers:       { ...answers },
   };
 
-  // Future: POST to CRM
-  // fetch('/api/leads', { method:'POST', body:JSON.stringify(leadData), headers:{'Content-Type':'application/json'} });
-
   buildReport();
   showView('view-reporte');
+
+  // Envío silencioso del lead a Webflow (no bloquea al prospecto)
+  setTimeout(() => {
+    let extra = null;
+    try {
+      const sc = calcScore();
+      extra = {
+        'Resultado': NIVELES[sc.nivel].badge + ' — ' + sc.pct + '% de preparación',
+        'Informe': buildInformeWebflow(sc),
+      };
+    } catch (e) {}
+    enviarLeadWebflow(leadData, extra).catch(() => {});
+  }, 300);
 }
 
 /* ─── SCORING ─── */

@@ -1681,6 +1681,60 @@ function agendarLlamada() {
   window.open('https://wa.me/525568018766?text=' + msg, '_blank');
 }
 
+// ── ENVÍO DE LEAD A WEBFLOW (loftonsc.com) ──
+const WEBFLOW_SITE_ID = '69ef868642f652e8baf12ec2';
+const WEBFLOW_FORM_NAME = 'Leads Diagnósticos';
+const WEBFLOW_DIAGNOSTICO = 'Diagnóstico de Riesgos Laborales';
+
+function enviarLeadWebflow(ld, extra) {
+  const fields = Object.assign({
+    'Diagnóstico': WEBFLOW_DIAGNOSTICO,
+    'Nombre': ld.nombre || '',
+    'Teléfono': ld.tel || '',
+    'Correo': ld.email || '',
+    'Empresa': ld.empresa || '',
+    'Cargo': ld.cargo || '',
+    'Colaboradores': ld.colaboradores || '',
+    'Acepta información comercial': ld.comercial ? 'Sí' : 'No',
+  }, extra || {});
+  const body = new URLSearchParams({ name: WEBFLOW_FORM_NAME, source: location.href, test: 'false' });
+  Object.entries(fields).forEach(([k, v]) => body.append('fields[' + k + ']', v == null ? '' : String(v)));
+  return fetch('https://webflow.com/api/v1/form/' + WEBFLOW_SITE_ID, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+}
+
+// Informe completo (resultado por pilar + todas las respuestas) para el lead de Webflow
+function buildInformeWebflow() {
+  const pilares = calcResults();
+  let alto = 0, medio = 0, bajo = 0, exp = 0;
+  Object.values(pilares).forEach(p => { alto += p.alto; medio += p.medio; bajo += p.bajo; exp += p.exp; });
+  const lines = ['RESULTADO GLOBAL: ' + alto + ' riesgos altos, ' + medio + ' medios, ' + bajo + ' bajos — exposición estimada ' + fmtMXN(exp), ''];
+  lines.push('POR PILAR:');
+  Object.entries(pilares).forEach(([num, p]) => {
+    const meta = PILAR_META[num] || {};
+    lines.push('  ' + (meta.name || 'Pilar ' + num) + ': ' + p.alto + ' altos, ' + p.medio + ' medios, ' + p.bajo + ' bajos — exposición ' + fmtMXN(p.exp));
+  });
+  lines.push('', 'RESPUESTAS:');
+  Object.keys(RISK_MAP).forEach(qId => {
+    const radios = document.querySelectorAll('input[name="' + qId + '"]');
+    const block = radios[0] ? radios[0].closest('.q-block') : null;
+    const pEl = block ? block.querySelector('p') : null;
+    const texto = pEl ? pEl.textContent.replace(/^\d+\.\s*/, '').trim() : qId;
+    let answer = 'Sin respuesta';
+    radios.forEach(r => { if (r.checked) answer = r.value === 'si' ? 'Sí' : r.value === 'no' ? 'No' : 'No aplica'; });
+    lines.push(texto + '\n    R: ' + answer);
+  });
+  lines.push('', 'RESUMEN DEL REPORTE:');
+  lines.push('Nivel de riesgo global: ' + (alto > 3 ? 'Riesgo Alto' : alto > 0 ? 'Riesgo Medio' : 'Riesgo Bajo'));
+  lines.push('Exposición total estimada: ' + fmtMXN(exp) + ' (' + numToES(exp) + ')');
+  lines.push(Object.values(pilares).filter(p => p.alto > 0).length + ' de 6 pilares con riesgos detectados');
+  lines.push('Riesgos detectados: ' + alto + ' altos, ' + medio + ' medios, ' + bajo + ' bajos');
+  return lines.join('\n');
+}
+
 // ── LEAD FORM SUBMIT ──
 const FREE_MAIL_DOMAINS = ['gmail.com','googlemail.com','hotmail.com','hotmail.es','yahoo.com','yahoo.com.mx','yahoo.es','outlook.com','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','mail.com','msn.com','ymail.com'];
 
@@ -1713,6 +1767,20 @@ function submitLeadGate() {
     comercial:     document.getElementById('f-comercial').checked,
   };
   setView('reporte');
+  // Envío silencioso del lead a Webflow (no bloquea al prospecto)
+  setTimeout(() => {
+    let extra = null;
+    try {
+      const pilares = calcResults();
+      let alto = 0, medio = 0, bajo = 0;
+      Object.values(pilares).forEach(p => { alto += p.alto; medio += p.medio; bajo += p.bajo; });
+      extra = {
+        'Resultado': alto + ' riesgos altos, ' + medio + ' medios, ' + bajo + ' bajos',
+        'Informe': buildInformeWebflow(),
+      };
+    } catch (e) {}
+    enviarLeadWebflow(window.leadData, extra).catch(() => {});
+  }, 300);
 }
 
 // ── PROGRESS TRACKER ──

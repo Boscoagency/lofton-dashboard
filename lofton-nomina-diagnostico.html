@@ -436,32 +436,50 @@
     box-shadow: none;
   }
 
-  /* Hero row */
-  .pc-hero {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    gap: 12px; margin-bottom: 16px;
+  /* Level breakdown rows — count + exposure per risk level */
+  .pc-levels {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-bottom: 16px;
   }
-  .pc-hero-left { flex-shrink: 0; }
-  .pc-big {
-    font-size: clamp(2.8rem, 5vw, 3.6rem);
-    font-weight: 800; color: #fff;
-    line-height: 1; letter-spacing: -.02em;
+  .pc-level-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; padding: 7px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.04);
+    transition: opacity .2s;
   }
-  .pc-big-label {
-    font-size: 10px; font-weight: 600; color: rgba(255,255,255,.38);
-    text-transform: uppercase; letter-spacing: .07em; margin-top: 3px;
+  .pc-level-row.zero { opacity: .32; }
+  .pc-level-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10px; font-weight: 700; color: rgba(255,255,255,.6);
+    text-transform: uppercase; letter-spacing: .06em;
+    flex: 1;
   }
-  .pc-hero-right { flex: 1; text-align: right; }
-  .pc-amount {
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    font-weight: 800; color: var(--lime);
-    line-height: 1.2;
+  .pc-level-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .lvl-alto  .pc-level-dot { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,.6); }
+  .lvl-medio .pc-level-dot { background: #f59e0b; box-shadow: 0 0 5px rgba(245,158,11,.5); }
+  .lvl-bajo  .pc-level-dot { background: #52b788; box-shadow: 0 0 5px rgba(82,183,136,.5); }
+  .pc-level-count {
+    font-size: 15px; font-weight: 800; color: #fff;
+    min-width: 16px; text-align: center;
   }
-  .pc-amount-text {
-    font-size: 9px; color: rgba(255,255,255,.35);
-    line-height: 1.35; margin-top: 3px;
-    display: -webkit-box; -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; overflow: hidden;
+  .lvl-alto  .pc-level-count { color: #f87171; }
+  .lvl-medio .pc-level-count { color: #fbbf24; }
+  .lvl-bajo  .pc-level-count { color: #95d5b2; }
+  .pc-level-amount {
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,.75);
+    text-align: right; min-width: 74px;
+  }
+  .pc-level-total {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 2px; padding-top: 9px;
+    border-top: 1px solid rgba(184,224,74,.2);
+    font-size: 10px; font-weight: 700; letter-spacing: .05em;
+    color: rgba(255,255,255,.45); text-transform: uppercase;
+  }
+  .pc-level-total .exp-num {
+    font-size: 15px; font-weight: 800; color: var(--lime);
+    text-transform: none; letter-spacing: 0;
   }
 
   /* Segmented progress bar */
@@ -493,8 +511,9 @@
   .pc-card.conforme .pc-seg-bar {
     background: rgba(255,255,255,.05);
   }
-  .pc-card.conforme .pc-big { color: rgba(255,255,255,.55) !important; }
-  .pc-card.conforme .pc-amount { color: rgba(255,255,255,.35) !important; }
+  .pc-card.conforme .pc-level-count,
+  .pc-card.conforme .pc-level-amount,
+  .pc-card.conforme .pc-level-total .exp-num { color: rgba(255,255,255,.4) !important; }
 
   /* Hide old mini chart divs inside pc-cards */
   .pc-mini-chart { display: none; }
@@ -557,14 +576,11 @@
     color: var(--lime);
   }
 
-  /* Conforme state */
-  .pc-card.conforme .pc-big { color: #6ee7b7; }
-  .pc-card.conforme .pc-amount { color: #6ee7b7; }
-
   /* ── PRINT ── */
   @media print {
-    .app-header, .tab-pill, #view-empresa, #view-cuestionario, #view-lead, .btn-outline, .no-print { display: none !important; }
-    #view-reporte { display: block !important; }
+    .app-header, .tab-pill, .btn-outline, .no-print { display: none !important; }
+    .view { display: none !important; }
+    .view.active { display: block !important; }
     .card-emerald, .pc-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { background: white; }
     .card, .pilar-card { box-shadow: none; border: 1px solid #ddd; }
@@ -1081,14 +1097,25 @@
             <span class="pc-name">Carga<br>Social</span>
             <span class="pc-chip status-chip">Crítico</span>
           </div>
-          <div class="pc-hero">
-            <div class="pc-hero-left">
-              <p class="pc-big val-alto">—</p>
-              <p class="pc-big-label">con riesgo alto</p>
+          <div class="pc-levels">
+            <div class="pc-level-row lvl-alto">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Alto</span>
+              <span class="pc-level-count val-alto">0</span>
+              <span class="pc-level-amount exp-alto">$0</span>
             </div>
-            <div class="pc-hero-right">
-              <p class="pc-amount exp-num">—</p>
-              <p class="pc-amount-text exp-text">exposición estimada</p>
+            <div class="pc-level-row lvl-medio">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Medio</span>
+              <span class="pc-level-count val-medio">0</span>
+              <span class="pc-level-amount exp-medio">$0</span>
+            </div>
+            <div class="pc-level-row lvl-bajo">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Bajo</span>
+              <span class="pc-level-count val-bajo">0</span>
+              <span class="pc-level-amount exp-bajo">$0</span>
+            </div>
+            <div class="pc-level-total">
+              <span>Exposición total del pilar</span>
+              <span class="exp-num">$0</span>
             </div>
           </div>
           <div class="pc-bar-wrap">
@@ -1113,14 +1140,25 @@
             <span class="pc-name">Sueldos y<br>Salarios</span>
             <span class="pc-chip status-chip">Crítico</span>
           </div>
-          <div class="pc-hero">
-            <div class="pc-hero-left">
-              <p class="pc-big val-alto">—</p>
-              <p class="pc-big-label">con riesgo alto</p>
+          <div class="pc-levels">
+            <div class="pc-level-row lvl-alto">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Alto</span>
+              <span class="pc-level-count val-alto">0</span>
+              <span class="pc-level-amount exp-alto">$0</span>
             </div>
-            <div class="pc-hero-right">
-              <p class="pc-amount exp-num">—</p>
-              <p class="pc-amount-text exp-text">exposición estimada</p>
+            <div class="pc-level-row lvl-medio">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Medio</span>
+              <span class="pc-level-count val-medio">0</span>
+              <span class="pc-level-amount exp-medio">$0</span>
+            </div>
+            <div class="pc-level-row lvl-bajo">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Bajo</span>
+              <span class="pc-level-count val-bajo">0</span>
+              <span class="pc-level-amount exp-bajo">$0</span>
+            </div>
+            <div class="pc-level-total">
+              <span>Exposición total del pilar</span>
+              <span class="exp-num">$0</span>
             </div>
           </div>
           <div class="pc-bar-wrap">
@@ -1145,14 +1183,25 @@
             <span class="pc-name">PTU</span>
             <span class="pc-chip status-chip pc-chip-medio">Moderado</span>
           </div>
-          <div class="pc-hero">
-            <div class="pc-hero-left">
-              <p class="pc-big val-alto">—</p>
-              <p class="pc-big-label">con riesgo alto</p>
+          <div class="pc-levels">
+            <div class="pc-level-row lvl-alto">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Alto</span>
+              <span class="pc-level-count val-alto">0</span>
+              <span class="pc-level-amount exp-alto">$0</span>
             </div>
-            <div class="pc-hero-right">
-              <p class="pc-amount exp-num">—</p>
-              <p class="pc-amount-text exp-text">exposición estimada</p>
+            <div class="pc-level-row lvl-medio">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Medio</span>
+              <span class="pc-level-count val-medio">0</span>
+              <span class="pc-level-amount exp-medio">$0</span>
+            </div>
+            <div class="pc-level-row lvl-bajo">
+              <span class="pc-level-label"><span class="pc-level-dot"></span>Bajo</span>
+              <span class="pc-level-count val-bajo">0</span>
+              <span class="pc-level-amount exp-bajo">$0</span>
+            </div>
+            <div class="pc-level-total">
+              <span>Exposición total del pilar</span>
+              <span class="exp-num">$0</span>
             </div>
           </div>
           <div class="pc-bar-wrap">
@@ -1180,9 +1229,33 @@
       <p class="text-sm mb-5 max-w-lg mx-auto" style="color:var(--muted)">Lofton Servicios Integrales puede ayudarte a mitigar estos riesgos, proteger tu empresa y garantizar el cumplimiento legal. Agenda una sesión de consultoría personalizada.</p>
       <div class="flex justify-center gap-3 flex-wrap">
         <button onclick="agendarLlamada()" class="btn-primary">Agendar Diagnóstico Completo</button>
+        <button onclick="agendarWhatsApp()" class="btn-primary">
+          <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle">chat</span> Agendar por WhatsApp
+        </button>
+        <button onclick="agendarLlamadaOutlook()" class="btn-outline">
+          <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle">calendar_month</span> Agendar llamada
+        </button>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ══════════ INFORME INTERNO (uso exclusivo Lofton) ══════════ -->
+<div id="view-informe-interno" class="view">
+  <div class="max-w-4xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-6 no-print flex-wrap gap-3">
+      <button onclick="setView('reporte')" class="btn-outline" style="font-size:12px; padding:6px 14px">← Volver al reporte</button>
+      <div class="flex gap-2">
+        <button onclick="enviarInformeInterno()" class="btn-primary" style="font-size:12px; padding:6px 14px">Enviar informe interno</button>
+        <button onclick="window.print()" class="btn-outline" style="font-size:12px; padding:6px 14px">Imprimir / PDF</button>
+      </div>
+    </div>
+    <div class="card p-8 mb-4">
+      <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:var(--red)">Uso exclusivo Lofton — no compartir con el prospecto</p>
+      <h2 class="text-2xl font-extrabold mb-6" style="color:var(--g700)">Informe Interno — Diagnóstico de Riesgos de Nómina</h2>
+      <div id="informe-interno-content"></div>
+    </div>
   </div>
 </div>
 
@@ -1190,9 +1263,12 @@
 
 <!-- FOOTER -->
 <footer class="mt-4 px-6 py-5 border-t" style="border-top:1px solid var(--border); background:var(--card)">
-  <div class="max-w-6xl mx-auto flex justify-between items-center text-xs" style="color:var(--muted)">
+  <div class="max-w-6xl mx-auto flex justify-between items-center text-xs flex-wrap gap-2" style="color:var(--muted)">
     <span>Lofton Servicios Integrales · Diagnóstico de Riesgos de Nómina</span>
-    <span>Fundamento: LSS · LINFONAVIT · LFT · LISR · CFF · RMF 2026</span>
+    <span class="flex items-center gap-3">
+      Fundamento: LSS · LINFONAVIT · LFT · LISR · CFF · RMF 2026
+      <a href="#" onclick="setView('informe-interno'); return false;" class="no-print" style="opacity:.4; text-decoration:underline">Panel interno</a>
+    </span>
   </div>
 </footer>
 
@@ -1434,6 +1510,13 @@ const PILAR_META = {
   3: { name:'PTU',               chartId:'chart-p3' },
 };
 
+// Recomendación general por nivel de riesgo (Matriz de Prioridades Lofton)
+const RECO_BY_LEVEL = {
+  alto:  'Prioridad ALTA — Afectación inmediata en cumplimiento, finanzas y continuidad del negocio. Requiere regularizar de inmediato el registro/pago ante la autoridad correspondiente (IMSS, INFONAVIT, SAT) para evitar sanción, recargo o actualización.',
+  medio: 'Prioridad MEDIA — Afecta la eficiencia y la exposición fiscal-laboral sin detener la operación. Se recomienda un plan de acción programado, con revisión de políticas, documentación y controles de nómina en el corto plazo.',
+  bajo:  'Prioridad BAJA — Riesgo moderado de exposición. Se recomienda mejorar el control documental y los procesos internos una vez atendidas las prioridades altas y medias.',
+};
+
 // ── Number to Spanish words ──
 function numToES(n) {
   n = Math.round(n);
@@ -1469,7 +1552,7 @@ function calcResults() {
 
   const pilares = {};
   for (let p=1; p<=3; p++) {
-    pilares[p] = { alto:0, medio:0, bajo:0, safe:0, exp:0, totalQ:0 };
+    pilares[p] = { alto:0, medio:0, bajo:0, safe:0, exp:0, expAlto:0, expMedio:0, expBajo:0, totalQ:0 };
   }
 
   Object.entries(RISK_MAP).forEach(([qName, meta]) => {
@@ -1481,9 +1564,9 @@ function calcResults() {
     if (ans === 'na') {
       // "No aplica" — neutral, excluded from all scoring
     } else if (isRisk) {
-      if (meta.level==='alto') p.alto++;
-      else if (meta.level==='medio') p.medio++;
-      else if (meta.level==='bajo') p.bajo++;
+      if (meta.level==='alto')       { p.alto++;  p.expAlto  += meta.exp; }
+      else if (meta.level==='medio') { p.medio++; p.expMedio += meta.exp; }
+      else if (meta.level==='bajo')  { p.bajo++;  p.expBajo  += meta.exp; }
       p.exp += meta.exp;
     } else if (ans) {
       p.safe++;
@@ -1516,19 +1599,23 @@ function updatePilarCard(pilarNum, data) {
   const _ref = document.getElementById('pilar-report-' + pilarNum); const card = _ref ? _ref.parentElement : null;
   if (!card) return;
 
-  // Counts
-  const alto  = card.querySelector('.val-alto');
-  const medio = card.querySelector('.val-medio');
-  const bajo  = card.querySelector('.val-bajo');
-  if (alto)  alto.textContent  = data.alto;
-  if (medio) medio.textContent = data.medio;
-  if (bajo)  bajo.textContent  = data.bajo;
+  // Per-level breakdown: count + exposure for alto / medio / bajo
+  [
+    { key: 'alto',  count: data.alto,  exp: data.expAlto  },
+    { key: 'medio', count: data.medio, exp: data.expMedio },
+    { key: 'bajo',  count: data.bajo,  exp: data.expBajo  },
+  ].forEach(({ key, count, exp }) => {
+    const countEl = card.querySelector('.val-' + key);
+    const expEl   = card.querySelector('.exp-' + key);
+    const rowEl   = card.querySelector('.lvl-' + key);
+    if (countEl) countEl.textContent = count;
+    if (expEl)   expEl.textContent   = fmtMXN(exp);
+    if (rowEl)   rowEl.classList.toggle('zero', count === 0);
+  });
 
-  // Exposure
+  // Total exposure of the pilar
   const expNum  = card.querySelector('.exp-num');
-  const expText = card.querySelector('.exp-text');
-  if (expNum)  expNum.textContent  = fmtMXN(data.exp);
-  if (expText) expText.textContent = numToES(data.exp);
+  if (expNum) expNum.textContent = fmtMXN(data.exp);
 
   // Status chip
   const chip = card.querySelector('.status-chip');
@@ -1561,27 +1648,6 @@ function updatePilarCard(pilarNum, data) {
   if (segAlto)  segAlto.style.width  = altoW  + '%';
   if (segMedio) segMedio.style.width = medioW + '%';
   if (segBajo)  segBajo.style.width  = bajoW  + '%';
-
-  // Update amount color + big number color based on level
-  const expNumEl = card.querySelector('.exp-num');
-  if (expNumEl) {
-    expNumEl.style.color = data.alto > 0 ? 'var(--lime)' : data.medio > 0 ? 'var(--amber)' : 'rgba(255,255,255,.4)';
-  }
-  const bigNum = card.querySelector('.pc-big');
-  if (bigNum) {
-    bigNum.style.color = data.alto > 0 ? '#ffffff' : data.medio > 0 ? '#fbbf24' : 'rgba(255,255,255,.6)';
-  }
-  // Update big label dynamically
-  const bigLabel = card.querySelector('.pc-big-label');
-  if (bigLabel) {
-    if (data.alto === 0 && data.medio === 0 && data.bajo === 0) {
-      bigLabel.textContent = 'sin riesgos';
-      if (bigNum) { bigNum.textContent = '✓'; bigNum.style.fontSize = '2.2rem'; }
-    } else {
-      bigLabel.textContent = 'con riesgo alto';
-      if (bigNum) bigNum.style.fontSize = '';
-    }
-  }
 
   // (mini chart retired — using segmented bar)
 
@@ -1738,6 +1804,7 @@ function setView(v) {
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (v === 'reporte') setTimeout(refreshReport, 80);
+  if (v === 'informe-interno') setTimeout(renderInformeInternoHTML, 80);
 }
 
 // ── EMPRESA DATA STORAGE ──
@@ -1761,6 +1828,15 @@ function submitEmpresa() {
     actREPSE: document.getElementById('emp-repse').value.trim() || 'N/A',
   };
   setView('cuestionario');
+}
+
+function agendarWhatsApp() {
+  const msg = encodeURIComponent('Hola, realice el diagnostico de Riesgos de Nómina y me gustaría revisar con un asesor la revisión de mis resultados');
+  window.open('https://wa.me/5215539332396?text=' + msg, '_blank');
+}
+
+function agendarLlamadaOutlook() {
+  window.open('https://outlook.office.com/bookwithme/user/fae689a6765541c19cbb2cc8461f32cf@loftonsc.com?anonymous&ismsaljsauthenabled&ep=pcard', '_blank');
 }
 
 // ── WHATSAPP CTA ──
@@ -1822,6 +1898,195 @@ function agendarLlamada() {
   window.open('https://wa.me/525568018766?text='+encodeURIComponent(lines.join('\n')),'_blank');
 }
 
+// ══════════ INFORME INTERNO (uso exclusivo Lofton) ══════════
+// Los leads se envían al panel de Forms del sitio Webflow de Lofton (loftonsc.com)
+const WEBFLOW_SITE_ID = '69ef868642f652e8baf12ec2';
+const WEBFLOW_FORM_NAME = 'Leads Diagnósticos';
+const WEBFLOW_DIAGNOSTICO = 'Diagnóstico de Riesgos de Nómina';
+
+function enviarLeadWebflow(ld, extra) {
+  const fields = Object.assign({
+    'Diagnóstico': WEBFLOW_DIAGNOSTICO,
+    'Nombre': ld.nombre || '',
+    'Teléfono': ld.tel || '',
+    'Correo': ld.email || '',
+    'Empresa': ld.empresa || '',
+    'Cargo': ld.cargo || '',
+    'Colaboradores': ld.colaboradores || '',
+    'Acepta información comercial': ld.comercial ? 'Sí' : 'No',
+  }, extra || {});
+  const body = new URLSearchParams({ name: WEBFLOW_FORM_NAME, source: location.href, test: 'false' });
+  Object.entries(fields).forEach(([k, v]) => body.append('fields[' + k + ']', v == null ? '' : String(v)));
+  return fetch('https://webflow.com/api/v1/form/' + WEBFLOW_SITE_ID, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+}
+
+function getQuestionText(qId) {
+  const radio = document.querySelector(`input[name="${qId}"]`);
+  const block = radio ? radio.closest('.q-block') : null;
+  const p = block ? block.querySelector('p') : null;
+  return p ? p.textContent.replace(/^\d+\.\s*/, '').trim() : qId;
+}
+
+function buildInformeInternoData() {
+  const ld = window.leadData || {};
+  const ed = empresaData || {};
+  const answers = {};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r => { answers[r.name] = r.value; });
+
+  const respuestas = Object.entries(RISK_MAP).map(([qId, meta]) => ({
+    qId, pilar: meta.pilar, pregunta: getQuestionText(qId),
+    respuesta: answers[qId] === 'si' ? 'Sí' : answers[qId] === 'no' ? 'No' : answers[qId] === 'na' ? 'No aplica' : 'Sin responder',
+    meta,
+  }));
+
+  const hallazgos = respuestas.filter(r => answers[r.qId] === r.meta.risk_if);
+
+  const marcoLegal = [];
+  const seenNorm = new Set();
+  respuestas.forEach(r => {
+    const key = r.meta.desc + '|' + r.meta.norm;
+    if (r.meta.norm && r.meta.norm !== 'N/A' && !seenNorm.has(key)) { seenNorm.add(key); marcoLegal.push({ desc: r.meta.desc, norm: r.meta.norm, pilar: r.pilar }); }
+  });
+
+  return { ld, ed, answers, respuestas, hallazgos, marcoLegal };
+}
+
+function buildInformeInternoText() {
+  const { ld, ed, respuestas, hallazgos, marcoLegal } = buildInformeInternoData();
+  const L = [];
+  L.push('INFORME INTERNO — DIAGNÓSTICO DE RIESGOS DE NÓMINA (Lofton)');
+  L.push('');
+  L.push('1) DATOS DEL PROSPECTO');
+  L.push('Nombre: ' + (ld.nombre || '—'));
+  L.push('Empresa: ' + (ld.empresa || ed.razonSocial || '—'));
+  L.push('Cargo: ' + (ld.cargo || '—'));
+  L.push('Teléfono: ' + (ld.tel || '—'));
+  L.push('Correo: ' + (ld.email || '—'));
+  L.push('No. de colaboradores: ' + (ld.colaboradores || '—'));
+  L.push('Sector: ' + (ed.sector || '—') + '  ·  Giro: ' + (ed.giro || '—'));
+  L.push('Actividad SAT: ' + (ed.actSAT || '—') + '  ·  Actividad IMSS: ' + (ed.actIMSS || '—') + '  ·  REPSE: ' + (ed.actREPSE || '—'));
+  L.push('');
+  L.push('2) FUNDAMENTO DE LAS OBLIGACIONES (marco legal aplicable)');
+  marcoLegal.forEach(m => L.push('• [Pilar ' + m.pilar + '] ' + m.desc + ' — ' + m.norm));
+  L.push('');
+  L.push('3) RESPUESTAS DEL PROSPECTO');
+  Object.keys(PILAR_META).forEach(p => {
+    L.push('— Pilar ' + p + ': ' + PILAR_META[p].name + ' —');
+    respuestas.filter(r => String(r.pilar) === p).forEach(r => {
+      L.push('  ' + r.qId.replace('q','') + '. ' + r.pregunta + '  → ' + r.respuesta);
+    });
+  });
+  L.push('');
+  L.push('4) HALLAZGOS Y FUNDAMENTO DE SANCIONES');
+  if (!hallazgos.length) {
+    L.push('Sin hallazgos de riesgo con las respuestas actuales.');
+  } else {
+    hallazgos.forEach(h => {
+      L.push('• ' + (h.meta.desc || h.qId) + ' [Riesgo ' + h.meta.level.toUpperCase() + ']');
+      L.push('  Fundamento: ' + h.meta.norm + ' — Sanción: ' + h.meta.tipo);
+      L.push('  Exposición estimada: ' + fmtMXN(h.meta.exp));
+    });
+  }
+  L.push('');
+  L.push('5) RECOMENDACIONES');
+  if (!hallazgos.length) {
+    L.push('No se identificaron puntos de acción.');
+  } else {
+    const niveles = [...new Set(hallazgos.map(h => h.meta.level))];
+    niveles.forEach(nivel => {
+      L.push('· ' + RECO_BY_LEVEL[nivel]);
+      hallazgos.filter(h => h.meta.level === nivel).forEach(h => L.push('  - ' + (h.meta.desc || h.qId)));
+    });
+  }
+  return L.join('\n');
+}
+
+function renderInformeInternoHTML() {
+  const container = document.getElementById('informe-interno-content');
+  if (!container) return;
+  const { ld, ed, respuestas, hallazgos, marcoLegal } = buildInformeInternoData();
+  let html = '';
+
+  html += '<div class="mb-8"><h3 class="text-sm font-extrabold uppercase tracking-wide mb-3" style="color:var(--g600)">1. Datos del prospecto</h3>';
+  html += '<div class="grid grid-cols-2 gap-3 text-sm mb-3">' + [
+    ['Nombre', ld.nombre], ['Empresa', ld.empresa || ed.razonSocial], ['Cargo', ld.cargo],
+    ['Teléfono', ld.tel], ['Correo', ld.email], ['Colaboradores', ld.colaboradores],
+  ].map(([k, v]) => `<div><span style="color:var(--muted)">${k}:</span> <strong>${v || '—'}</strong></div>`).join('') + '</div>';
+  html += '<div class="grid grid-cols-2 gap-3 text-sm">' + [
+    ['Sector', ed.sector], ['Giro', ed.giro], ['Actividad SAT', ed.actSAT], ['Actividad IMSS', ed.actIMSS], ['REPSE', ed.actREPSE],
+  ].map(([k, v]) => `<div><span style="color:var(--muted)">${k}:</span> <strong>${v || '—'}</strong></div>`).join('') + '</div></div>';
+
+  html += '<div class="mb-8"><h3 class="text-sm font-extrabold uppercase tracking-wide mb-3" style="color:var(--g600)">2. Fundamento de las obligaciones (marco legal)</h3><div class="text-sm space-y-1">';
+  marcoLegal.forEach(m => { html += `<div>• <strong>${m.desc}</strong> — ${m.norm}</div>`; });
+  html += '</div></div>';
+
+  html += '<div class="mb-8"><h3 class="text-sm font-extrabold uppercase tracking-wide mb-3" style="color:var(--g600)">3. Respuestas del prospecto</h3>';
+  Object.keys(PILAR_META).forEach(p => {
+    html += `<p class="text-xs font-bold uppercase mt-4 mb-2" style="color:var(--subtle)">Pilar ${p} — ${PILAR_META[p].name}</p><div class="text-sm">`;
+    respuestas.filter(r => String(r.pilar) === p).forEach(r => {
+      const color = r.respuesta === 'Sí' ? 'var(--g600)' : r.respuesta === 'No' ? 'var(--red)' : 'var(--muted)';
+      html += `<div class="flex justify-between gap-4 py-1.5" style="border-bottom:1px solid var(--border)"><span>${r.qId.replace('q','')}. ${r.pregunta}</span><strong style="color:${color}; white-space:nowrap">${r.respuesta}</strong></div>`;
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="mb-8"><h3 class="text-sm font-extrabold uppercase tracking-wide mb-3" style="color:var(--g600)">4. Hallazgos y fundamento de sanciones</h3>';
+  if (!hallazgos.length) {
+    html += '<p class="text-sm" style="color:var(--muted)">Sin hallazgos de riesgo con las respuestas actuales.</p>';
+  } else {
+    html += '<div class="text-sm space-y-3">';
+    hallazgos.forEach(h => {
+      html += `<div class="p-3 rounded-xl" style="background:var(--surface-2)">
+        <div class="flex justify-between items-start gap-2">
+          <strong>${h.meta.desc || h.qId}</strong>
+          <span class="risk-chip risk-${h.meta.level}">${h.meta.level.toUpperCase()}</span>
+        </div>
+        <div style="color:var(--muted)">Fundamento: ${h.meta.norm} — Sanción: ${h.meta.tipo}</div>
+        <div class="font-bold" style="color:var(--g700)">Exposición estimada: ${fmtMXN(h.meta.exp)}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  html += '<div><h3 class="text-sm font-extrabold uppercase tracking-wide mb-3" style="color:var(--g600)">5. Recomendaciones</h3>';
+  if (!hallazgos.length) {
+    html += '<p class="text-sm" style="color:var(--muted)">No se identificaron puntos de acción.</p>';
+  } else {
+    const niveles = [...new Set(hallazgos.map(h => h.meta.level))];
+    niveles.forEach(nivel => {
+      html += `<div class="mb-3"><p class="text-sm font-bold mb-1" style="color:var(--g700)">${RECO_BY_LEVEL[nivel]}</p><ul class="text-sm pl-5" style="list-style:disc; color:var(--muted)">`;
+      hallazgos.filter(h => h.meta.level === nivel).forEach(h => { html += `<li>${h.meta.desc || h.qId}</li>`; });
+      html += '</ul></div>';
+    });
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+async function enviarInformeInterno(silent) {
+  const ld = window.leadData || {};
+  const ed = empresaData || {};
+  const text = buildInformeInternoText();
+  try {
+    const res = await enviarLeadWebflow(ld, {
+      'Empresa': ld.empresa || ed.razonSocial || '',
+      'Asunto': 'Informe interno — Diagnóstico Nómina — ' + (ld.empresa || ed.razonSocial || 'Prospecto'),
+      'Informe': text,
+    });
+    const data = await res.json();
+    if (!silent) alert(data && data.code === 200 ? 'Informe interno enviado correctamente.' : 'No se pudo enviar el informe interno. Intenta de nuevo.');
+  } catch (e) {
+    if (!silent) alert('Error de conexión al enviar el informe interno.');
+  }
+}
+
 // ── LEAD FORM SUBMIT ──
 const FREE_MAIL_DOMAINS = ['gmail.com','googlemail.com','hotmail.com','hotmail.es','yahoo.com','yahoo.com.mx','yahoo.es','outlook.com','live.com','live.com.mx','icloud.com','me.com','aol.com','protonmail.com','proton.me','mail.com','msn.com','ymail.com'];
 
@@ -1854,6 +2119,8 @@ function submitLeadGate() {
     comercial:     document.getElementById('f-comercial').checked,
   };
   setView('reporte');
+  // Envío silencioso del informe interno a Lofton (no bloquea al prospecto)
+  setTimeout(() => { enviarInformeInterno(true).catch(() => {}); }, 300);
 }
 
 // ── PROGRESS TRACKER ──
