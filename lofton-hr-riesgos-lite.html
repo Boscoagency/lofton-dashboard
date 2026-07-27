@@ -1784,13 +1784,13 @@ function agendarLlamadaOutlook() {
 
 // ══════════ INFORME INTERNO (uso exclusivo Lofton) ══════════
 // Los leads se envían al panel de Forms del sitio Webflow de Lofton (loftonsc.com)
-const WEBFLOW_SITE_ID = '69ef868642f652e8baf12ec2';
-const WEBFLOW_FORM_NAME = 'Leads Diagnósticos';
-const WEBFLOW_DIAGNOSTICO = 'Diagnóstico Laboral (Lite)';
+/* ─── ENVÍO DE LEAD (Web3Forms → kvelazquez@loftonsc.com) ─── */
+const WEB3FORMS_ACCESS_KEY = '5edbbbc0-a97f-43d4-9e7e-9f32d26da5ae';
+const DIAGNOSTICO_NOMBRE = 'Diagnóstico Laboral (Lite)';
 
-function enviarLeadWebflow(ld, extra) {
+async function enviarLead(ld, extra) {
   const fields = Object.assign({
-    'Diagnóstico': WEBFLOW_DIAGNOSTICO,
+    'Diagnóstico': DIAGNOSTICO_NOMBRE,
     'Nombre': ld.nombre || '',
     'Teléfono': ld.tel || '',
     'Correo': ld.email || '',
@@ -1799,13 +1799,36 @@ function enviarLeadWebflow(ld, extra) {
     'Colaboradores': ld.colaboradores || '',
     'Acepta información comercial': ld.comercial ? 'Sí' : 'No',
   }, extra || {});
-  const body = new URLSearchParams({ name: WEBFLOW_FORM_NAME, source: location.href, test: 'false' });
-  Object.entries(fields).forEach(([k, v]) => body.append('fields[' + k + ']', v == null ? '' : String(v)));
-  return fetch('https://webflow.com/api/v1/form/' + WEBFLOW_SITE_ID, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body.toString(),
-  });
+
+  const payload = Object.assign({
+    access_key: WEB3FORMS_ACCESS_KEY,
+    from_name: 'Diagnósticos Lofton',
+    subject: DIAGNOSTICO_NOMBRE + ' — ' + (ld.empresa || 'Sin empresa')
+             + (fields['Resultado'] ? ' — ' + fields['Resultado'] : ''),
+  }, fields);
+
+  // Dos intentos. Si aun así falla, se grita en consola: nunca en silencio.
+  let ultimoError = null;
+  for (let intento = 1; intento <= 2; intento++) {
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        console.info('[Lofton] Lead enviado ✓', DIAGNOSTICO_NOMBRE, ld.email || '');
+        return data;
+      }
+      ultimoError = new Error('Web3Forms respondió ' + res.status + ' ' + (data.message || ''));
+    } catch (e) {
+      ultimoError = e;
+    }
+    if (intento === 1) await new Promise(r => setTimeout(r, 1200));
+  }
+  console.error('[Lofton] ✗ NO SE ENVIÓ EL LEAD —', DIAGNOSTICO_NOMBRE, ultimoError);
+  throw ultimoError;
 }
 
 function getQuestionText(qId) {
@@ -1945,12 +1968,13 @@ async function enviarInformeInterno(silent) {
   const ld = window.leadData || {};
   const text = buildInformeInternoText();
   try {
-    const res = await enviarLeadWebflow(ld, {
-      'Asunto': 'Informe interno — Diagnóstico Laboral — ' + (ld.empresa || 'Prospecto'),
+    const { hallazgos } = buildInformeInternoData();
+    const totalExp = hallazgos.reduce((s, h) => s + ((h.meta && h.meta.exp) || 0), 0);
+    await enviarLead(ld, {
       'Informe': text,
+      'Resultado': hallazgos.length + ' hallazgos — exposición estimada ' + fmtMXN(totalExp),
     });
-    const data = await res.json();
-    if (!silent) alert(data && data.code === 200 ? 'Informe interno enviado correctamente.' : 'No se pudo enviar el informe interno. Intenta de nuevo.');
+    if (!silent) alert('Informe interno enviado correctamente.');
   } catch (e) {
     if (!silent) alert('Error de conexión al enviar el informe interno.');
   }
