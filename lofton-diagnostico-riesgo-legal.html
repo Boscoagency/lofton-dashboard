@@ -1045,14 +1045,15 @@ function buildReport() {
 }
 
 /* ─── CTA ─── */
+// Contacto responsable: Alejandra Ortiz — Legal Empresarial (encargado.juridico@loftonsc.com)
+// Agenda: calendario de Gabriel Salas. WhatsApp directo Gabriel: +52 55 4810 9071 (no se usa aquí,
+// el CTA mantiene la línea general de Lofton).
 function agendarWhatsApp() {
   const msg = encodeURIComponent('Buen día. Completé el Diagnóstico de Riesgo Legal Empresarial gratuito de Lofton y me interesa recibir información para agendar una asesoría con un especialista.');
   window.open('https://wa.me/525568018766?text=' + msg, '_blank');
 }
-// TODO: reemplazar por el link de agenda de Alejandra Ortiz cuando esté disponible.
-// Por ahora "Agendar llamada" también abre WhatsApp.
 function agendarLlamada() {
-  agendarWhatsApp();
+  window.open('https://outlook.office.com/bookwithme/user/37da6bd33c2f4ed99b2f0d5c801cffeb@loftonsc.com/meetingtype/dNfQASUd60mzU1mfOlJjBA2?anonymous&ismsaljsauthenabled&ep=mcard', '_blank');
 }
 </script>
 </body>
