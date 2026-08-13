@@ -143,6 +143,11 @@
     width: 24px; height: 24px; border-radius: 7px; font-size: 11px; font-weight: 800;
     background: var(--surface-2); color: var(--muted); flex-shrink: 0;
   }
+  /* Nota aclaratoria de tecnicismos (SUA, EMA, EBA, SBC, REPSE...) */
+  .q-nota {
+    margin-top: 6px; font-size: 12px; line-height: 1.55; color: var(--muted);
+    border-left: 2px solid var(--border-2); padding-left: 9px;
+  }
 
   /* ── BUTTONS ── */
   .btn-primary {
@@ -620,7 +625,7 @@
             <circle id="gauge-dot" cx="20" cy="90" r="6" fill="#b8e04a" style="filter:drop-shadow(0 0 6px rgba(184,224,74,.6));transition:all 1.2s cubic-bezier(.4,0,.2,1)"/>
           </svg>
           <div id="result-score-num" class="text-4xl font-extrabold text-white -mt-2">--</div>
-          <div class="text-xs mt-1" style="color:rgba(255,255,255,.45)">puntos de exposición</div>
+          <div class="text-xs mt-1" style="color:rgba(255,255,255,.45)">nivel de exposición</div>
         </div>
         <!-- Text -->
         <div class="flex-1">
@@ -701,53 +706,74 @@ const PILARES = [
   { id:5, nombre:"Preparación ante revisión o fiscalización",   desc:"Procesos de respuesta, documentación y prevención" },
 ];
 
+/*
+  PESO = ponderación de exposición de cada pregunta (sugerencia de Ismael, ronda ago-2026).
+    3 = exposición alta   → deriva en cuotas omitidas, créditos fiscales o capitales constitutivos
+    2 = exposición media  → debilita la defensa ante una revisión, sin generar por sí sola el crédito
+    1 = exposición baja   → orden y control documental
+    0 = pregunta de contexto (no puntúa; solo abre o cierra otras preguntas)
+*/
 const PREGUNTAS = [
-  { id:1,  pilar:1, texto:"¿Tu empresa tiene identificados todos sus registros patronales activos?",                                                  hasNa:false, modo:'cumplimiento' },
-  { id:2,  pilar:1, texto:"¿La información de cada registro patronal está actualizada y documentada?",                                               hasNa:false, modo:'cumplimiento' },
-  { id:3,  pilar:1, texto:"¿Cuentan con un expediente organizado de la información presentada ante IMSS e Infonavit?",                               hasNa:false, modo:'cumplimiento' },
-  { id:4,  pilar:1, texto:"¿Conservan respaldos de pagos, líneas de captura y documentos relacionados con SIPARE?",                                  hasNa:false, modo:'cumplimiento' },
-  { id:5,  pilar:1, texto:"¿La empresa resguarda de forma periódica los archivos SUA, EMAS y EBAS?",                                                 hasNa:false, modo:'cumplimiento' },
-  { id:6,  pilar:2, texto:"¿Existe una persona o equipo responsable de validar la nómina antes de su cierre?",                                       hasNa:false, modo:'cumplimiento' },
-  { id:7,  pilar:2, texto:"¿La empresa cuenta con controles para registrar incidencias como ausencias, incapacidades, vacaciones o bajas?",           hasNa:false, modo:'cumplimiento' },
-  { id:8,  pilar:2, texto:"¿Se revisa que las prestaciones y percepciones estén correctamente registradas en nómina?",                               hasNa:false, modo:'cumplimiento' },
-  { id:9,  pilar:2, texto:"¿Se realizan conciliaciones entre nómina, registros contables y CFDI?",                                                   hasNa:false, modo:'cumplimiento' },
-  { id:10, pilar:2, texto:"¿El sistema de nómina permite exportar o respaldar información para revisión interna?",                                    hasNa:false, modo:'cumplimiento' },
-  { id:11, pilar:3, texto:"¿La empresa lleva control actualizado de altas, bajas y modificaciones salariales?",                                       hasNa:false, modo:'cumplimiento' },
-  { id:12, pilar:3, texto:"¿Se revisa que los movimientos ante IMSS correspondan con la información real de nómina?",                                 hasNa:false, modo:'cumplimiento' },
-  { id:13, pilar:3, texto:"¿La empresa identifica a los trabajadores que cuentan con crédito Infonavit?",                                             hasNa:false, modo:'cumplimiento' },
-  { id:14, pilar:3, texto:"¿Se valida periódicamente que las retenciones de Infonavit estén aplicándose correctamente?",                              hasNa:false, modo:'cumplimiento' },
-  { id:15, pilar:3, texto:"¿Ha cambiado la actividad principal de la empresa desde su constitución o registro original?",                             hasNa:false, modo:'cumplimiento' },
+  { id:1,  pilar:1, peso:2, texto:"¿Tu empresa tiene identificados todos sus registros patronales activos?", hasNa:false, modo:'cumplimiento' },
+  { id:2,  pilar:1, peso:1, texto:"¿La información de cada registro patronal está actualizada y documentada?", hasNa:false, modo:'cumplimiento' },
+  { id:3,  pilar:1, peso:1, texto:"¿Cuentan con un expediente organizado de la información presentada ante IMSS e Infonavit?", hasNa:false, modo:'cumplimiento' },
+  { id:4,  pilar:1, peso:2, texto:"¿Conservan respaldos de pagos, líneas de captura y documentos relacionados con SIPARE?", hasNa:false, modo:'cumplimiento',
+    nota:"SIPARE: el portal del IMSS donde se pagan las cuotas obrero-patronales." },
+  { id:5,  pilar:1, peso:2, texto:"¿La empresa resguarda de forma periódica los archivos SUA, EMA y EBA?", hasNa:false, modo:'cumplimiento',
+    nota:"SUA: sistema con el que se calculan y envían las cuotas al IMSS. EMA: Emisión Mensual Anticipada, lo que el IMSS te cobra cada mes. EBA: Emisión Bimestral Anticipada, lo correspondiente a Infonavit y retiro." },
 
-  // ── PILAR 4: Preguntas de existencia (No = neutral, no penaliza) ──
-  // Q16: si responde No → no tienen proveedores especializados → sin riesgo en Q17 y Q19
-  { id:16, pilar:4, texto:"¿La empresa contrata proveedores de servicios especializados relacionados con personal, operación o administración?",       hasNa:false, modo:'existencia' },
-  // Q17: depende de Q16 — si Q16=No, se excluye automáticamente del cálculo
-  { id:17, pilar:4, texto:"Si contrata proveedores especializados, ¿cuenta con documentación que respalde la relación y el servicio recibido?",       hasNa:true,  modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no' } },
-  // Q18: si responde No → no hacen pagos a personas físicas → sin riesgo adicional
-  { id:18, pilar:4, texto:"¿La empresa realiza pagos recurrentes a personas físicas por servicios relacionados con la operación?",                     hasNa:false, modo:'existencia' },
-  // Q19: depende de Q16 y Q18 — si ambas son No, se excluye del cálculo
-  { id:19, pilar:4, texto:"¿Existe un proceso para revisar que los proveedores vinculados con servicios especializados cumplan con sus obligaciones?", hasNa:true,  modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no', yTambien:{ id:18, excluirSiRespuesta:'no' } } },
-  // Q20: si responde No → no prestan servicios especializados → sin obligación adicional
-  { id:20, pilar:4, texto:"¿La empresa presta servicios especializados a terceros?",                                                                  hasNa:false, modo:'existencia' },
+  { id:6,  pilar:2, peso:2, texto:"¿Existe una persona o equipo responsable de validar la nómina antes de su cierre?", hasNa:false, modo:'cumplimiento' },
+  { id:7,  pilar:2, peso:2, texto:"¿La empresa cuenta con controles para registrar incidencias como ausencias, incapacidades, vacaciones o bajas?", hasNa:false, modo:'cumplimiento' },
+  { id:8,  pilar:2, peso:3, texto:"¿La empresa revisa que las prestaciones y percepciones pagadas a los trabajadores estén correctamente integradas o excluidas del Salario Base de Cotización ante el IMSS?", hasNa:false, modo:'cumplimiento',
+    nota:"SBC (Salario Base de Cotización): el salario sobre el que se calculan tus cuotas al IMSS. No es el sueldo bruto: incluye o excluye ciertas prestaciones según la Ley." },
+  { id:9,  pilar:2, peso:3, texto:"¿La empresa concilia periódicamente la nómina, los CFDI, el SUA y la información reportada al IMSS e INFONAVIT para identificar posibles diferencias?", hasNa:false, modo:'cumplimiento',
+    nota:"CFDI: los recibos de nómina timbrados ante el SAT. Conciliar es cruzar las cuatro fuentes para que no existan diferencias entre lo pagado, lo timbrado y lo reportado." },
+  { id:10, pilar:2, peso:3, texto:"¿La empresa identifica a los trabajadores con salarios variables o mixtos y actualiza correctamente su Salario Base de Cotización ante el IMSS?", hasNa:false, modo:'cumplimiento',
+    nota:"Salario variable o mixto: cuando además del sueldo fijo se pagan comisiones, bonos, horas extra o destajo. Obliga a recalcular el SBC cada bimestre." },
 
-  { id:21, pilar:5, texto:"¿La empresa ha recibido alguna visita, requerimiento o revisión del IMSS en los últimos cinco años?",                      hasNa:false, modo:'cumplimiento' },
-  { id:22, pilar:5, texto:"¿Cuentan con un proceso definido para responder ante requerimientos de IMSS o Infonavit?",                                 hasNa:false, modo:'cumplimiento' },
-  { id:23, pilar:5, texto:"¿La documentación necesaria para una revisión puede localizarse rápidamente?",                                             hasNa:false, modo:'cumplimiento' },
-  { id:24, pilar:5, texto:"¿La empresa realiza revisiones preventivas antes de recibir una visita o requerimiento?",                                  hasNa:false, modo:'cumplimiento' },
-  { id:25, pilar:5, texto:"¿Consideras que tu empresa podría comprobar correctamente sus pagos, movimientos y registros si fuera revisada hoy?",      hasNa:false, modo:'cumplimiento' },
+  { id:11, pilar:3, peso:3, texto:"¿Las altas, bajas y modificaciones salariales de los trabajadores se presentan oportunamente ante el IMSS y se conserva evidencia de su aceptación?", hasNa:false, modo:'cumplimiento',
+    nota:"El plazo legal es de 5 días hábiles. La evidencia de aceptación es el acuse que emite el IMSS." },
+  { id:12, pilar:3, peso:3, texto:"¿La empresa revisa anualmente los riesgos de trabajo ocurridos y determina correctamente la prima del Seguro de Riesgos de Trabajo que le corresponde?", hasNa:false, modo:'cumplimiento',
+    nota:"Cada febrero se presenta la declaración anual de prima de riesgo. Una prima mal determinada genera diferencias de cuotas por todo el ejercicio." },
+  { id:13, pilar:3, peso:0, texto:"¿La empresa tiene trabajadores con crédito Infonavit vigente?", hasNa:false, modo:'existencia',
+    nota:"Pregunta de contexto: no genera riesgo por sí misma, sirve para saber si aplica la siguiente." },
+  { id:14, pilar:3, peso:3, texto:"¿Se valida periódicamente que las retenciones de Infonavit estén aplicándose correctamente?", hasNa:true, modo:'cumplimiento', dependeDe:{ id:13, excluirSiRespuesta:'no' } },
+  { id:15, pilar:3, peso:3, texto:"¿La empresa ha validado que la actividad, clase y fracción registradas ante el IMSS correspondan actualmente con la operación real de la empresa?", hasNa:false, modo:'cumplimiento',
+    nota:"Clase y fracción determinan tu prima de riesgo. Si la operación cambió y el registro no, el IMSS puede reclasificarte y cobrar diferencias retroactivas. Si hubo un cambio de actividad, debe existir el soporte documental que lo respalde." },
+
+  { id:16, pilar:4, peso:0, texto:"¿La empresa contrata proveedores de servicios especializados relacionados con personal, operación o administración?", hasNa:false, modo:'existencia',
+    nota:"Servicios especializados: los que requieren registro REPSE, el padrón de la STPS que deben tener los proveedores de personal o servicios especializados." },
+  { id:17, pilar:4, peso:3, texto:"Si contrata proveedores especializados, ¿cuenta con documentación que respalde la relación y el servicio recibido?", hasNa:true, modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no' },
+    nota:"Contrato, registro REPSE vigente del proveedor, CFDI y evidencia del servicio efectivamente prestado." },
+  { id:18, pilar:4, peso:3, texto:"¿Existen personas que prestan servicios de forma recurrente para la empresa, con horario, supervisión o herramientas de la empresa, a las que se les paga por honorarios o asimilados en lugar de tenerlas en nómina?", hasNa:true, modo:'riesgo',
+    nota:"Cuando existe subordinación, la autoridad puede reclasificar la relación como laboral y determinar cuotas omitidas retroactivas." },
+  { id:19, pilar:4, peso:2, texto:"¿Existe un proceso para revisar que los proveedores vinculados con servicios especializados cumplan con sus obligaciones?", hasNa:true, modo:'cumplimiento', dependeDe:{ id:16, excluirSiRespuesta:'no' } },
+  { id:20, pilar:4, peso:0, texto:"¿La empresa presta servicios especializados a terceros?", hasNa:false, modo:'existencia',
+    nota:"Pregunta de contexto: no genera riesgo por sí misma, sirve para saber si aplica la siguiente." },
+  { id:21, pilar:4, peso:3, texto:"Si presta servicios especializados, ¿cuenta con registro REPSE vigente y presenta en tiempo sus informes ante la STPS, IMSS e Infonavit?", hasNa:true, modo:'cumplimiento', dependeDe:{ id:20, excluirSiRespuesta:'no' },
+    nota:"Los informes son el ICSOE (ante el IMSS) y el SISUB (ante el Infonavit), de presentación cuatrimestral." },
+
+  { id:22, pilar:5, peso:2, texto:"¿Cuentan con un proceso definido para responder ante requerimientos de IMSS o Infonavit?", hasNa:false, modo:'cumplimiento' },
+  { id:23, pilar:5, peso:1, texto:"¿La documentación necesaria para una revisión puede localizarse rápidamente?", hasNa:false, modo:'cumplimiento' },
+  { id:24, pilar:5, peso:2, texto:"¿La empresa realiza revisiones preventivas antes de recibir una visita o requerimiento?", hasNa:false, modo:'cumplimiento' },
+  { id:25, pilar:5, peso:2, texto:"¿Consideras que tu empresa podría comprobar correctamente sus pagos, movimientos y registros si fuera revisada hoy?", hasNa:false, modo:'cumplimiento' },
 ];
 
 /*
-  MODOS DE SCORING:
-  - 'cumplimiento': Sí=0 | Parcial=1 | NS=2 | No=3   (No responder bien = riesgo)
-  - 'existencia':   Sí=0 | Parcial=1 | NS=2 | No=0   (No tener esa figura = neutral, sin riesgo)
+  MODOS DE SCORING (los puntos se multiplican por el peso de la pregunta):
+  - 'cumplimiento': Sí=0 | Parcial=1 | NS=2 | No=3   (no cumplir = riesgo)
+  - 'riesgo':       Sí=3 | Parcial=2 | NS=2 | No=0   (polaridad invertida: el "Sí" es el hallazgo)
+  - 'existencia':   no puntúa (peso 0). Solo determina si otras preguntas aplican.
 
   DEPENDENCIAS:
   - dependeDe: si la pregunta de referencia tiene la respuesta indicada, ésta se excluye del score (= na)
   - yTambien: condición adicional (ambas deben cumplirse para excluir)
+
+  "No aplica" y las preguntas excluidas por dependencia NUNCA suman puntos de riesgo.
 */
 
-function getScore(q, respuesta) {
+// Puntos crudos (antes de ponderar). Devuelve null si la pregunta no debe contar.
+function getRawScore(q, respuesta) {
   if (!respuesta || respuesta === 'na') return null;
 
   // Verificar dependencias: si aplica, excluir pregunta del cálculo
@@ -764,15 +790,22 @@ function getScore(q, respuesta) {
     }
   }
 
-  // Scoring según modo
-  if (q.modo === 'existencia') {
-    const tabla = { si:0, parcial:1, ns:2, no:0 };
-    return tabla[respuesta] ?? null;
-  } else {
-    // cumplimiento (default)
-    const tabla = { si:0, parcial:1, ns:2, no:3 };
+  // Las preguntas de contexto no puntúan
+  if (q.modo === 'existencia' || !q.peso) return null;
+
+  if (q.modo === 'riesgo') {
+    const tabla = { si:3, parcial:2, ns:2, no:0 };
     return tabla[respuesta] ?? null;
   }
+  // cumplimiento (default)
+  const tabla = { si:0, parcial:1, ns:2, no:3 };
+  return tabla[respuesta] ?? null;
+}
+
+// Puntos ya ponderados por el peso de la pregunta
+function getScore(q, respuesta) {
+  const raw = getRawScore(q, respuesta);
+  return raw === null ? null : raw * (q.peso || 0);
 }
 
 /* ─── STATE ─── */
@@ -827,7 +860,10 @@ function renderAllQuestions() {
       <div class="q-block card p-5" id="qblock-${q.id}">
         <div class="flex items-start gap-3 mb-4">
           <div class="q-num-inline">${q.id}</div>
-          <p class="font-semibold text-sm leading-relaxed flex-1" style="color:var(--text)">${q.texto}</p>
+          <div class="flex-1">
+            <p class="font-semibold text-sm leading-relaxed" style="color:var(--text)">${q.texto}</p>
+            ${q.nota ? `<p class="q-nota">${q.nota}</p>` : ''}
+          </div>
         </div>
         <div class="options-row${q.hasNa ? ' has-na' : ''}" id="opts-${q.id}">
           ${opts}
@@ -953,7 +989,7 @@ async function enviarLead(ld, extra) {
 const ANSWER_LABELS = { si:'Sí', no:'No', nose:'No sé', ns:'No estoy seguro', parcial:'Parcialmente', na:'No aplica' };
 
 function buildInformeWebflow(sc) {
-  const lines = ['RESULTADO GLOBAL: ' + NIVELES[sc.nivel].badge + ' — ' + sc.total + ' pts', ''];
+  const lines = ['RESULTADO GLOBAL: ' + NIVELES[sc.nivel].badge + ' — ' + Math.round(sc.expPct * 100) + '% de exposición (' + sc.total + ' de ' + sc.maxTotal + ' pts ponderados)', ''];
   PILARES.forEach(p => {
     const ps = sc.pilarScores[p.id] || {};
     lines.push('── ' + p.nombre.toUpperCase() + ' — ' + pilarStatus(ps.pct || 0).label + ' ──');
@@ -1015,7 +1051,7 @@ function submitLeadGate() {
     try {
       const sc = calcScore();
       extra = {
-        'Resultado': NIVELES[sc.nivel].badge + ' — ' + sc.total + ' pts',
+        'Resultado': NIVELES[sc.nivel].badge + ' — ' + Math.round(sc.expPct * 100) + '% de exposición',
         'Informe': buildInformeWebflow(sc),
       };
     } catch (e) {}
@@ -1025,35 +1061,40 @@ function submitLeadGate() {
 
 /* ─── SCORING ─── */
 function calcScore() {
-  let total = 0, nsCount = 0, counted = 0;
+  let total = 0, maxTotal = 0, nsCount = 0, counted = 0;
   const pilarScores = {};
-  PILARES.forEach(p => { pilarScores[p.id] = { total:0, counted:0 }; });
+  PILARES.forEach(p => { pilarScores[p.id] = { total:0, max:0, counted:0 }; });
 
   PREGUNTAS.forEach(q => {
     const a = answers[q.id];
-    const pts = getScore(q, a);   // usa lógica de modo + dependencias
-    if (pts === null) return;     // excluida del cálculo (na o dependencia)
-    total += pts; counted++;
+    const pts = getScore(q, a);   // ya ponderado; usa lógica de modo + dependencias
+    if (pts === null) return;     // excluida del cálculo (contexto, na o dependencia)
+    // Máximo alcanzable por esta pregunta: 3 puntos crudos × su peso
+    const maxPts = 3 * (q.peso || 0);
+    total += pts; maxTotal += maxPts; counted++;
     if (a === 'ns') nsCount++;
     pilarScores[q.pilar].total += pts;
+    pilarScores[q.pilar].max   += maxPts;
     pilarScores[q.pilar].counted++;
   });
 
   PILARES.forEach(p => {
     const ps = pilarScores[p.id];
-    // max posible por pilar: preguntas contadas × 3
-    ps.pct = ps.counted ? Math.round((ps.total / (ps.counted * 3)) * 100) : 0;
+    // % de exposición sobre el máximo ponderado realmente aplicable al cliente
+    ps.pct = ps.max ? Math.round((ps.total / ps.max) * 100) : 0;
   });
 
-  // Nivel general
-  const nsPct = counted ? nsCount / counted : 0;
+  // Nivel general — proporcional, no por puntos absolutos:
+  // así el resultado no se distorsiona cuando hay preguntas excluidas por "no aplica".
+  const expPct = maxTotal ? (total / maxTotal) : 0;
+  const nsPct  = counted ? nsCount / counted : 0;
   let nivel;
-  if (nsPct > 0.35)       nivel = 4;
-  else if (total >= 36)   nivel = 3;
-  else if (total >= 16)   nivel = 2;
-  else                    nivel = 1;
+  if (nsPct > 0.35)        nivel = 4;
+  else if (expPct >= 0.48) nivel = 3;
+  else if (expPct >= 0.21) nivel = 2;
+  else                     nivel = 1;
 
-  return { total, pilarScores, nivel };
+  return { total, maxTotal, expPct, pilarScores, nivel };
 }
 
 const NIVELES = {
@@ -1071,19 +1112,19 @@ function pilarStatus(pct) {
 
 /* ─── BUILD REPORT ─── */
 function buildReport() {
-  const { total, pilarScores, nivel } = calcScore();
+  const { total, maxTotal, expPct, pilarScores, nivel } = calcScore();
   const N = NIVELES[nivel];
-  const maxScore = PREGUNTAS.length * 3;
 
-  // Hero
-  document.getElementById('result-score-num').textContent = total;
+  // Hero — se muestra el % de exposición sobre el máximo ponderado que sí le aplica
+  // al cliente (las preguntas de contexto y las "no aplica" quedan fuera del máximo).
+  document.getElementById('result-score-num').textContent = Math.round(expPct * 100) + '%';
   document.getElementById('result-badge').textContent = N.badge;
   document.getElementById('result-level-title').textContent = N.title;
   document.getElementById('result-level-msg').textContent = N.msg;
 
   // Gauge
   setTimeout(() => {
-    const pct = total / maxScore;
+    const pct = expPct;
     document.getElementById('gauge-fill').style.strokeDashoffset = 188 * (1 - Math.min(pct, 1));
     const angle = Math.PI * pct;
     const cx = 80 + Math.cos(Math.PI - angle) * 60;
