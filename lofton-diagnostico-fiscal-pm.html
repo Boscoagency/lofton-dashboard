@@ -300,9 +300,57 @@
     .pilar-separator > div:nth-child(2) { display: none; }
   }
 
-  /* Print */
-  @page { size: letter; margin: 14mm; }
-  @media print { .app-header, .btn-primary, .btn-outline, .btn-ghost { display:none!important; } }
+  /* ══════════ IMPRESIÓN / PDF — HOJA CARTA ══════════ */
+  .print-only { display: none; }
+  @page { size: letter portrait; margin: 15mm 14mm 16mm 14mm; }
+  @media print {
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body { background: #fff !important; width: auto !important; margin: 0 !important; }
+    body { font-size: 10pt; line-height: 1.45; }
+
+    .app-header, .no-print, button, .btn-primary, .btn-outline, .btn-ghost { display: none !important; }
+    .print-only { display: block !important; }
+    .view { display: none !important; }
+    .view.active { display: block !important; min-height: 0 !important; }
+
+    .fade-up, [class*="fade"] { animation: none !important; opacity: 1 !important; transform: none !important; }
+    * { transition: none !important; }
+
+    .max-w-6xl, .max-w-5xl, .max-w-4xl, .max-w-3xl { max-width: 100% !important; margin: 0 !important; }
+    .px-6, .px-4 { padding-left: 0 !important; padding-right: 0 !important; }
+    .py-10, .py-8 { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+    .card, .card-emerald, .pilares-grid > *, .pc-card, .pilar-card,
+    .print-block, table, tr, img, svg {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    h1, h2, h3, h4 { break-after: avoid !important; page-break-after: avoid !important; }
+    .print-break { break-before: page !important; page-break-before: always !important; }
+
+    .card, .pc-card, .pilar-card {
+      box-shadow: none !important;
+      border: 1px solid #cfd6d1 !important;
+      margin-bottom: 10px !important;
+      padding: 14px !important;
+    }
+    .card-emerald { box-shadow: none !important; margin-bottom: 12px !important; padding: 16px !important; }
+
+    .pilares-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+
+    img, svg { max-width: 100% !important; height: auto !important; }
+    h2 { font-size: 16pt !important; }
+    h3 { font-size: 12pt !important; }
+  }
+
+  .legal-note {
+    font-size: 11px; line-height: 1.6; color: var(--muted);
+    background: rgba(0,62,28,.04); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 15px;
+  }
 </style>
 </head>
 <body>

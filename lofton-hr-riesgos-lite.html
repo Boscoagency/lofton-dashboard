@@ -576,15 +576,74 @@
     color: var(--lime);
   }
 
-  /* ── PRINT ── */
-  @page { size: letter; margin: 14mm; }
+  /* ══════════ IMPRESIÓN / PDF — HOJA CARTA ══════════ */
+  .print-only { display: none; }
+  @page { size: letter portrait; margin: 15mm 14mm 16mm 14mm; }
   @media print {
-    .app-header, .tab-pill, .btn-outline, .no-print { display: none !important; }
+    /* Colores fieles (fondos verdes, chips, barras) */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body { background: #fff !important; width: auto !important; margin: 0 !important; }
+    body { font-size: 10pt; line-height: 1.45; }
+
+    /* Fuera todo lo que no es contenido del reporte */
+    .app-header, .tab-pill, .no-print, button, .btn-primary, .btn-outline, .btn-ghost,
+    #audit-panel, .conf-note { display: none !important; }
+    .print-only { display: block !important; }
     .view { display: none !important; }
-    .view.active { display: block !important; }
-    .card-emerald, .pc-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body { background: white; }
-    .card, .pilar-card { box-shadow: none; border: 1px solid #ddd; }
+    .view.active { display: block !important; min-height: 0 !important; }
+
+    /* Las animaciones dejan opacity:0 → al imprimir salían bloques en blanco */
+    .fade-up, [class*="fade"] { animation: none !important; opacity: 1 !important; transform: none !important; }
+    * { transition: none !important; }
+
+    /* Aprovechar el ancho útil de la carta */
+    .max-w-6xl, .max-w-5xl, .max-w-4xl, .max-w-3xl { max-width: 100% !important; margin: 0 !important; }
+    .px-6, .px-4 { padding-left: 0 !important; padding-right: 0 !important; }
+    .py-10, .py-8 { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+    /* Nada se parte a la mitad entre hojas */
+    .card, .card-emerald, .pc-card, .pilar-card, .q-block,
+    .sanction-detail, .sanction-item, .sanction-total-row,
+    .print-block, table, tr, img, svg {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    h1, h2, h3, h4, .sanction-detail-title, .pc-top {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+    .print-break { break-before: page !important; page-break-before: always !important; }
+
+    /* Tarjetas legibles en papel */
+    .card, .pc-card, .pilar-card {
+      box-shadow: none !important;
+      border: 1px solid #cfd6d1 !important;
+      margin-bottom: 10px !important;
+      padding: 14px !important;
+    }
+    .card-emerald { box-shadow: none !important; margin-bottom: 12px !important; padding: 16px !important; }
+
+    /* Los pilares caben 2 por renglón sin desbordar */
+    .pilares-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+    .pc-inner { padding: 12px !important; }
+
+    /* Imágenes y gráficas nunca más anchas que la hoja */
+    img, svg { max-width: 100% !important; height: auto !important; }
+
+    /* Tipografía fluida (clamp con vw) se congela a un tamaño de papel */
+    #banner-total-num { font-size: 26pt !important; }
+    h2 { font-size: 16pt !important; }
+    h3 { font-size: 12pt !important; }
+  }
+
+  /* ── Bloques que solo existen para el papel / pantalla del reporte ── */
+  .legal-note {
+    font-size: 11px; line-height: 1.6; color: var(--muted);
+    background: rgba(0,62,28,.04); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 15px;
   }
   /* ── Unified lead form ── */
   .form-input {
@@ -656,6 +715,14 @@
       </div>
     </div>
 
+    <!-- NOTA N/A -->
+    <div class="no-print mb-5 fade-up" style="animation-delay:.12s">
+      <div class="legal-note" style="display:flex;gap:10px;align-items:flex-start">
+        <span class="material-symbols-outlined" style="font-size:17px;color:var(--g600);flex-shrink:0">info</span>
+        <span>Algunas preguntas incluyen la opción <strong style="color:var(--g700)">No aplica</strong>. Úsala cuando el supuesto no exista en tu empresa (por ejemplo, si tu operación no requiere tiempo extra o equipo de protección personal). Es una respuesta neutra: <strong style="color:var(--g700)">no suma riesgo ni contingencia económica</strong>.</span>
+      </div>
+    </div>
+
     <!-- ─── PILAR 1: CUMPLIMIENTO GENERAL ─── -->
     <div class="card p-6 mb-5 fade-up" style="animation-delay:.15s">
       <div class="flex items-center gap-3 mb-5 pb-4 border-b" style="border-color:var(--border)">
@@ -717,7 +784,7 @@
       <div class="space-y-5">
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">6. ¿Realizas en tiempo y forma el pago de las prestaciones laborales como aguinaldo, vacaciones, prima vacacional, PTU?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q6" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q6" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q6" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">7. ¿Cuando se presenta tiempo extraordinario, se calcula y paga conforme a la Ley?</p><div class="flex flex-wrap gap-2"><label class="q-option q-option-si flex-1"><input type="radio" name="q7" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q7" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q7" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">8. ¿Existen descuentos por multas, sanciones o similares?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q8" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q8" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-1" style="color:var(--ink-2)">8. ¿Existen descuentos por multas, sanciones o similares?</p><p class="text-xs mb-3" style="color:var(--muted)">Por ejemplo, descuentos por faltantes, daños a herramienta o equipo, retardos u otras causas disciplinarias.</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q8" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q8" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">9. ¿Tu empresa se encuentra afiliada al INFONACOT?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q9" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q9" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
     </div>
@@ -746,7 +813,7 @@
         </div>
       </div>
       <div class="space-y-5">
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">11. ¿Los trabajadores fueron capacitados sobre el uso de herramientas, equipo y materiales?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q11" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q11" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">11. ¿Los trabajadores fueron capacitados sobre el uso de herramientas, equipo y materiales para realizar sus actividades laborales?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q11" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q11" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">12. ¿Los trabajadores fueron capacitados sobre los riesgos a los que están expuestos conforme su puesto de trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q12" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q12" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">13. ¿Proporcionas capacitación a tus trabajadores para desempeñar sus funciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q13" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q13" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
       </div>
@@ -764,7 +831,7 @@
       <div class="space-y-5">
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">14. ¿Conoces las NOM-STPS que le son aplicables a tu centro de trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q14" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q14" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">15. ¿Cuentas con un diagnóstico de seguridad y salud en el trabajo?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q15" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q15" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
-        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">16. ¿Se proporciona equipo de protección personal (EPP) adecuado para cada puesto y actividad?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q16" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q16" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
+        <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">16. ¿Se proporciona equipo de protección personal (EPP) adecuado para cada puesto y actividad?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q16" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q16" value="no" onchange="updateProgress()"><span>No</span></label><label class="q-option q-option-na flex-1"><input type="radio" name="q16" value="na" onchange="updateProgress()"><span>No aplica</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">17. ¿Tienes instituido un protocolo para prevenir y erradicar la discriminación, la violencia laboral, trato digno, libre de violencia, discriminación y humillaciones?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q17" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q17" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">18. ¿Mantienes un programa activo de prevención de violencia laboral?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q18" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q18" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
         <div class="q-block"><p class="text-sm font-semibold mb-3" style="color:var(--ink-2)">19. ¿Se han activado los mecanismos de actuación de prevención, contención y actuación al suscitarse violencia en tu organización?</p><div class="flex gap-3"><label class="q-option q-option-si flex-1"><input type="radio" name="q19" value="si" onchange="updateProgress()"><span>Sí</span></label><label class="q-option q-option-no flex-1"><input type="radio" name="q19" value="no" onchange="updateProgress()"><span>No</span></label></div></div>
@@ -872,6 +939,16 @@
 <div id="view-reporte" class="view">
   <div class="max-w-5xl mx-auto px-6 py-10">
 
+    <!-- ENCABEZADO SOLO PARA IMPRESIÓN -->
+    <div class="print-only" style="margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #003e1c">
+      <table style="width:100%;border-collapse:collapse">
+        <tr>
+          <td style="font-size:11pt;font-weight:800;color:#003e1c;text-align:left">Lofton Servicios Integrales</td>
+          <td style="font-size:8.5pt;color:#6b7280;text-align:right" id="print-meta"></td>
+        </tr>
+      </table>
+    </div>
+
     <!-- REPORT HEADER -->
     <div class="card-emerald p-8 mb-8 fade-up">
 
@@ -880,7 +957,7 @@
           <p class="text-xs font-bold uppercase tracking-widest" style="color:var(--lime); opacity:.8">Diagnóstico de Riesgos Laborales</p>
           <div class="flex gap-2 no-print">
             <button onclick="window.print()" class="btn-outline" style="font-size:12px; padding:6px 14px; color:rgba(255,255,255,.8); border-color:rgba(255,255,255,.2); background:rgba(255,255,255,.06);">
-              <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle">download</span> Descargar PDF
+              <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle">print</span> Imprimir / Descargar PDF
             </button>
           </div>
         </div>
@@ -890,9 +967,10 @@
         <!-- EXPOSURE INLINE IN HEADER -->
         <div class="flex items-end justify-between flex-wrap gap-4">
           <div>
-            <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:var(--lime); opacity:.7">Exposición Económica Total</p>
+            <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:var(--lime); opacity:.7">Contingencia económica estimada</p>
             <p id="banner-total-num" class="font-extrabold leading-none" style="color:var(--lime); font-size:clamp(2rem,6vw,3.5rem)">$27,134,345</p>
             <p id="banner-total-text" class="text-xs font-medium mt-1" style="color:var(--lime); opacity:.65">veinte y siete millones ciento treinta y cuatro mil trescientos cuarenta y cinco pesos</p>
+            <p class="text-xs mt-2" style="color:rgba(255,255,255,.55); max-width:32rem; line-height:1.6">Cifra estimada, no un adeudo determinado. Corresponde al escenario máximo de sanción conforme al marco legal vigente.</p>
           </div>
           <!-- GAUGE CHART -->
           <div class="rounded-2xl p-4" style="background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); min-width:260px">
@@ -1188,13 +1266,60 @@
 
     </div>
 
+<!-- ══════════ PLAN DE ACCIÓN POR NIVEL DE PRIORIDAD ══════════ -->
+    <div id="plan-accion-wrapper" class="card p-7 mb-8 fade-up" style="animation-delay:.35s">
+      <h3 class="text-lg font-extrabold mb-1" style="color:var(--g700)">Plan de acción sugerido</h3>
+      <p class="text-xs mb-5" style="color:var(--muted)">Prioridad, impacto y tiempo de atención recomendado según los hallazgos de tu diagnóstico.</p>
+      <div id="plan-accion-content"></div>
+    </div>
+
+<!-- ══════════ CÓMO SE CALCULAN ESTAS CIFRAS ══════════ -->
+    <div class="card p-7 mb-8 fade-up" style="animation-delay:.4s">
+      <h3 class="text-lg font-extrabold mb-4" style="color:var(--g700)">Cómo leer estas cifras</h3>
+
+      <p class="text-sm font-bold mb-2" style="color:var(--ink-2)">Criterio de clasificación del importe</p>
+      <p class="text-sm mb-3" style="color:var(--muted); line-height:1.7">
+        Cada hallazgo se clasifica por la gravedad de la situación, la posibilidad de afectación o vulneración y el riesgo por su posible consecuencia frente al rubro evaluado y la respuesta generada:
+      </p>
+      <div class="grid gap-2 mb-6" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+        <div style="border-left:3px solid #ef4444;padding:9px 13px;background:rgba(239,68,68,.05);border-radius:0 10px 10px 0">
+          <p class="text-xs font-extrabold" style="color:#ef4444">RIESGO ALTO</p>
+          <p class="text-xs" style="color:var(--muted)">Se estima con la <strong>multa máxima</strong> prevista en la norma.</p>
+        </div>
+        <div style="border-left:3px solid #f59e0b;padding:9px 13px;background:rgba(245,158,11,.05);border-radius:0 10px 10px 0">
+          <p class="text-xs font-extrabold" style="color:#b45309">RIESGO MEDIO</p>
+          <p class="text-xs" style="color:var(--muted)">Se estima con la <strong>multa promedio</strong> prevista en la norma.</p>
+        </div>
+        <div style="border-left:3px solid #52b788;padding:9px 13px;background:rgba(82,183,136,.06);border-radius:0 10px 10px 0">
+          <p class="text-xs font-extrabold" style="color:#2d6a4f">RIESGO BAJO</p>
+          <p class="text-xs" style="color:var(--muted)">Se estima con la <strong>multa promedio</strong> prevista en la norma.</p>
+        </div>
+      </div>
+
+      <p class="text-sm font-bold mb-2" style="color:var(--ink-2)">Cómo determina la autoridad el monto real</p>
+      <p class="text-sm mb-3" style="color:var(--muted); line-height:1.7">
+        Para determinar y calcular el monto de una multa, la autoridad aplica criterios de individualización para que la sanción sea proporcional a la falta. Los factores que evalúa son:
+      </p>
+      <ul class="text-sm mb-5" style="color:var(--muted); line-height:1.8; padding-left:18px; list-style:disc">
+        <li><strong style="color:var(--ink-2)">Gravedad de la infracción:</strong> el nivel de daño causado o el peligro generado.</li>
+        <li><strong style="color:var(--ink-2)">Capacidad económica:</strong> los ingresos o el capital del infractor, para que la sanción no sea desproporcionada.</li>
+        <li><strong style="color:var(--ink-2)">Intencionalidad:</strong> si existió dolo o negligencia.</li>
+        <li><strong style="color:var(--ink-2)">Reincidencia:</strong> si se ha cometido la misma falta en el pasado reciente.</li>
+        <li><strong style="color:var(--ink-2)">Trabajadores afectados:</strong> el número de trabajadores alcanzados por el incumplimiento.</li>
+      </ul>
+
+      <div class="legal-note">
+        <strong style="color:var(--g700)">Nota importante.</strong> Los importes de multas y sanciones que aparecen en este reporte son una <strong>estimación</strong> elaborada con base en las respuestas que proporcionaste y en el marco legal vigente. No constituyen una determinación de la autoridad ni un adeudo exigible: el monto real dependerá del tamaño, la operación y la situación específica de cada empresa, así como de los criterios de individualización descritos arriba. Este diagnóstico tiene fines informativos y preventivos, y no sustituye una asesoría legal, fiscal o contable personalizada.
+      </div>
+    </div>
+
 <!-- CTA LOFTON -->
     <div class="card p-7 text-center fade-up" style="animation-delay:.45s; border: 2px solid var(--border)">
       <div class="mx-auto mb-5" style="width:120px; height:120px; border-radius:24px; background:linear-gradient(145deg,#0d0d0d 0%,#1a1a1a 50%,#111111 100%); box-shadow:0 12px 40px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); overflow:hidden; padding:0;">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABDgAAAQ4CAYAAADsEGyPAAAACXBIWXMAAAsSAAALEgHS3X78AAAgAElEQVR4nOzdT25U19bG4Tco1XZmEH9iADhdOtgjwOkjYUYQMoI4I4gzghip+jEjKNOpbswASrJngNtIla9xDgF8DfhPVe2zqp5HsnKTArwaaVz/svfa3/37778BAAAAqOxB6wEAAAAA7kvgAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4AAACgPIEDAAAAKE/gAAAAAMoTOAAAAIDyBA4A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4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAACA8gQOAAAAoDyBAwAAAChP4AAAAADKEzgAAID/b8cOSAAAAAAE/X/djkBnCLAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwJ7gAAAAAPYEBwAAALAnOAAAAIA9wQEAAADsCQ4AAABgT3AAAAAAe4IDAAAA2BMcAAAAwF4KnaZtPh05jQAAAABJRU5ErkJggg==" alt="Lofton" style="width:100%; height:100%; object-fit:contain; transform:scale(2.2); transform-origin:center center;">
       </div>
-      <h3 class="text-xl font-extrabold mb-2" style="color:var(--g700)">Tu empresa tiene áreas de mejora importantes</h3>
-      <p class="text-sm mb-5 max-w-lg mx-auto" style="color:var(--muted)">Lofton Servicios Integrales puede ayudarte a mitigar estos riesgos, proteger tu empresa y garantizar el cumplimiento legal. Agenda una sesión de consultoría personalizada.</p>
+      <h3 id="cta-title" class="text-xl font-extrabold mb-2" style="color:var(--g700)">Tu empresa tiene áreas de mejora importantes</h3>
+      <p id="cta-msg" class="text-sm mb-5 max-w-lg mx-auto" style="color:var(--muted)">Lofton Servicios Integrales puede ayudarte a mitigar estos riesgos, proteger tu empresa y garantizar el cumplimiento legal. Agenda una sesión de consultoría personalizada.</p>
       <div class="flex justify-center gap-3 flex-wrap">
         <button onclick="agendarWhatsApp()" class="btn-primary">
           <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle">chat</span> Agendar por WhatsApp
@@ -1203,6 +1328,32 @@
           <span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle">calendar_month</span> Agendar llamada
         </button>
       </div>
+
+      <!-- DATOS DE CONTACTO — visibles también en el PDF impreso -->
+      <div class="mt-7 pt-6" style="border-top:1px solid var(--border)">
+        <p class="text-xs font-bold uppercase tracking-widest mb-4" style="color:var(--muted); letter-spacing:.1em">¿Prefieres contactarnos después? Guarda estos datos</p>
+        <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm">
+          <span style="color:var(--ink-2)">
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;color:var(--g600)">call</span>
+            <strong style="color:var(--g700)">55 1500-0666</strong>
+          </span>
+          <span style="color:var(--ink-2)">
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;color:var(--g600)">mail</span>
+            <a href="mailto:contacto@loftonsc.com" style="color:var(--g700);font-weight:700;text-decoration:none">contacto@loftonsc.com</a>
+          </span>
+          <span style="color:var(--ink-2)">
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;color:var(--g600)">language</span>
+            <a href="https://loftonsc.com" target="_blank" rel="noopener" style="color:var(--g700);font-weight:700;text-decoration:none">loftonsc.com</a>
+          </span>
+        </div>
+        <p class="text-xs mt-4" style="color:var(--muted)">Menciona que realizaste el <strong>Diagnóstico de Riesgos Laborales</strong> para que te atendamos con el contexto de este reporte.</p>
+      </div>
+    </div>
+
+    <!-- PIE DEL REPORTE (impresión) -->
+    <div class="print-only" style="margin-top:14px;padding-top:10px;border-top:1px solid #cfd6d1;font-size:8.5pt;color:#6b7280;text-align:center">
+      Lofton Servicios Integrales · Diagnóstico de Riesgos Laborales · 55 1500-0666 · contacto@loftonsc.com · loftonsc.com<br>
+      Documento informativo y preventivo. Las cifras son estimaciones basadas en las respuestas proporcionadas y en el marco legal vigente.
     </div>
 
   </div>
@@ -1711,7 +1862,7 @@ function updateSanctionDetail(pilarNum) {
   Object.entries(RISK_MAP).forEach(([qId, meta]) => {
     if (meta.pilar !== pilarNum) return;
     if (answers[qId] === meta.risk_if) {
-      triggered.push({ tipo: meta.tipo, exp: meta.exp });
+      triggered.push({ tipo: meta.tipo, exp: meta.exp, desc: meta.tematica, norm: meta.norm });
     }
   });
 
@@ -1723,20 +1874,125 @@ function updateSanctionDetail(pilarNum) {
 
   const total = triggered.reduce((s, t) => s + t.exp, 0);
   const rows = triggered.map(t =>
-    `<div class="sanction-item">
-      <span class="sanction-tipo">${t.tipo}</span>
-      <span class="sanction-monto">${fmtMXN(t.exp)}</span>
+    `<div class="sanction-item" style="display:block">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <span class="sanction-tipo">${t.desc}</span>
+        <span class="sanction-monto" style="white-space:nowrap">${fmtMXN(t.exp)}</span>
+      </div>
+      <div style="font-size:.62rem;line-height:1.5;margin-top:2px;color:rgba(255,255,255,.45)">
+        ${t.tipo}${t.norm && t.norm !== 'N/A' ? ' · Fundamento: ' + t.norm : ''}
+      </div>
     </div>`
   ).join('');
 
   el.innerHTML = `
-    <p class="sanction-detail-title">Sanciones aplicables</p>
+    <p class="sanction-detail-title">Hallazgos y sanciones aplicables</p>
     ${rows}
     <div class="sanction-total-row">
-      <span class="sanction-total-label">Total exposición</span>
+      <span class="sanction-total-label">Contingencia estimada</span>
       <span class="sanction-total-monto">${fmtMXN(total)}</span>
     </div>`;
   el.classList.add('has-items');
+}
+
+// ── Plan de acción por nivel de prioridad (solo los niveles detectados) ──
+const PLAN_NIVELES_HR = {
+  alto: {
+    prioridad: 'ALTA', tipo: 'Crítica', color: '#ef4444', bg: 'rgba(239,68,68,.05)',
+    impacto: 'Alto impacto: catastrófico',
+    criterio: 'Afectación inmediata en operación, seguridad, cumplimiento y continuidad del negocio.',
+    riesgos: 'Incumplimiento, multa, sanción, clausura, responsabilidad penal, accidentes, pérdidas económicas y reputacionales.',
+    plazo: 'Intervención inmediata · auditoría urgente en un plazo no mayor a 15 días hábiles',
+    resumen: 'Se recomienda una intervención inmediata con auditoría urgente sobre los procesos, documentos y casos que detonan este resultado, para contrarrestar el efecto negativo en la organización mediante revisión, adecuación, gestión de firma, capacitación, implementación y acompañamiento a los líderes de Recursos Humanos, relaciones laborales y áreas internas; todo ello documentado en un informe inicial y final, con el soporte y las evidencias correspondientes por cada rubro valorado. Ante una revisión de la STPS, IMSS, INFONAVIT, Finanzas o una demanda individual de trabajadores ante los Tribunales Laborales, tu organización se encuentra vulnerable, con alto riesgo de ser observada, monitoreada y multada. Conviene considerar que la multa no subsana la situación: el cumplimiento sigue siendo exigible conforme a la legislación de la materia.'
+  },
+  medio: {
+    prioridad: 'MEDIA', tipo: 'Importante', color: '#f59e0b', bg: 'rgba(245,158,11,.05)',
+    impacto: 'Medio impacto: grave / serio',
+    criterio: 'Afecta la eficiencia, la calidad o el clima laboral, pero no detiene la operación ni la continuidad del negocio.',
+    riesgos: 'De no atenderse, puede generar incumplimiento, quejas, riesgo reputacional, multas, observaciones de autoridades e incluso escalar al siguiente nivel.',
+    plazo: 'Intervención programada · auditoría en un plazo no mayor a 30 días hábiles',
+    resumen: 'Se recomienda una intervención programada con auditoría sobre los procesos, documentos y casos que detonan este resultado, para contrarrestar oportunamente el efecto negativo en la organización mediante revisión, adecuación, gestión de firma, capacitación, implementación y acompañamiento, documentado en un informe inicial y final con el soporte y las evidencias correspondientes por cada rubro valorado. Ante una revisión de la autoridad administrativa, tu organización se encuentra expuesta con un riesgo medio de ser observada, monitoreada y multada. Conviene considerar que la multa no subsana la situación: el cumplimiento sigue siendo exigible conforme a la legislación aplicable.'
+  },
+  bajo: {
+    prioridad: 'BAJA', tipo: 'Moderada', color: '#52b788', bg: 'rgba(82,183,136,.06)',
+    impacto: 'Bajo impacto: moderado',
+    criterio: 'Mejora de procesos, orden y control documental. Se atiende una vez controladas las prioridades altas y medias.',
+    riesgos: 'Puede posponerse, ya que los riesgos y sanciones son relativamente bajos y controlables.',
+    plazo: 'Auditoría programada · plazo no mayor a 60 días hábiles',
+    resumen: 'Se recomienda una auditoría programada sobre los procesos, documentos y casos que detonan este resultado, para mitigar el riesgo de forma preventiva mediante revisión, adecuación, gestión de firma, capacitación, implementación y acompañamiento a Recursos Humanos, documentado en un informe inicial y final con el soporte y las evidencias correspondientes por cada rubro valorado. Ante una revisión de la autoridad, tu organización tiene probabilidades de ser observada y multada. Conviene considerar que la multa no subsana la situación: el cumplimiento sigue siendo exigible conforme a la legislación aplicable.'
+  }
+};
+
+function renderPlanAccion(pilares) {
+  const wrap = document.getElementById('plan-accion-wrapper');
+  const cont = document.getElementById('plan-accion-content');
+  if (!cont) return;
+
+  let tAlto = 0, tMedio = 0, tBajo = 0;
+  Object.values(pilares).forEach(p => { tAlto += p.alto; tMedio += p.medio; tBajo += p.bajo; });
+  const counts = { alto: tAlto, medio: tMedio, bajo: tBajo };
+
+  if (tAlto + tMedio + tBajo === 0) {
+    cont.innerHTML = `
+      <div class="legal-note" style="background:rgba(82,183,136,.07);border-color:rgba(82,183,136,.3)">
+        <p class="text-sm font-extrabold mb-2" style="color:var(--g700)">No se detectaron hallazgos que requieran un plan correctivo</p>
+        <p class="text-sm" style="color:var(--muted);line-height:1.7">
+          Con base en tus respuestas, tu empresa cumple en la forma con los rubros evaluados en materia laboral. Te felicitamos por el nivel de cumplimiento alcanzado.
+          <br><br>
+          Ten presente que <strong style="color:var(--g700)">el cumplimiento es constante y no termina</strong>: cambia con cada reforma, con cada movimiento de personal y con cada ejercicio fiscal. Nuestra sugerencia es realizar una <strong style="color:var(--g700)">revisión documental</strong> del contenido de tu información y de tus procesos laborales, para confirmar que lo que hoy está bien planteado en la forma también se encuentra controlado en la práctica y en la operación diaria.
+        </p>
+      </div>`;
+    if (wrap) wrap.style.display = '';
+    return;
+  }
+
+  const bloques = ['alto', 'medio', 'bajo'].filter(k => counts[k] > 0).map(k => {
+    const n = PLAN_NIVELES_HR[k];
+    return `
+      <div class="print-block" style="border:1px solid var(--border);border-left:4px solid ${n.color};background:${n.bg};border-radius:0 14px 14px 0;padding:16px 18px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+          <p class="text-sm font-extrabold" style="color:${n.color};letter-spacing:.04em">PRIORIDAD ${n.prioridad} · ${n.tipo}</p>
+          <p class="text-xs font-bold" style="color:var(--muted)">${counts[k]} ${counts[k] === 1 ? 'hallazgo' : 'hallazgos'}</p>
+        </div>
+        <p class="text-xs font-bold mb-1" style="color:var(--ink-2)">${n.impacto}</p>
+        <p class="text-xs mb-2" style="color:var(--muted);line-height:1.6">${n.criterio}</p>
+        <p class="text-xs mb-3" style="color:var(--muted);line-height:1.6"><strong style="color:var(--ink-2)">Riesgos potenciales:</strong> ${n.riesgos}</p>
+        <p class="text-xs font-bold mb-2" style="color:${n.color}">${n.plazo}</p>
+        <p class="text-xs" style="color:var(--muted);line-height:1.7">${n.resumen}</p>
+      </div>`;
+  }).join('');
+
+  cont.innerHTML = bloques;
+  if (wrap) wrap.style.display = '';
+}
+
+// ── Mensaje de cierre según el resultado ──
+function updateCTA(pilares) {
+  let tAlto = 0, tMedio = 0, tBajo = 0;
+  Object.values(pilares).forEach(p => { tAlto += p.alto; tMedio += p.medio; tBajo += p.bajo; });
+  const title = document.getElementById('cta-title');
+  const msg   = document.getElementById('cta-msg');
+  if (!title || !msg) return;
+
+  if (tAlto + tMedio + tBajo === 0) {
+    title.textContent = '¡Felicidades! Tu empresa cumple con los rubros evaluados';
+    msg.innerHTML = 'Con base en tus respuestas no se identificaron incumplimientos en materia laboral. El cumplimiento, sin embargo, es constante y no termina. En Lofton podemos acompañarte con una revisión documental y de procesos para confirmar que lo que está bien en la forma también está controlado en la práctica.';
+  } else if (tAlto > 0) {
+    title.textContent = 'Tu empresa presenta riesgos que conviene atender pronto';
+    msg.innerHTML = 'Lofton Servicios Integrales puede ayudarte a mitigar estos riesgos, proteger tu empresa y garantizar el cumplimiento legal. Agenda una sesión de consultoría personalizada.';
+  } else {
+    title.textContent = 'Tu empresa tiene áreas de mejora identificadas';
+    msg.innerHTML = 'Los hallazgos detectados son atendibles de forma preventiva. Lofton Servicios Integrales puede acompañarte a ordenarlos antes de que escalen. Agenda una sesión de consultoría personalizada.';
+  }
+}
+
+// ── Encabezado de impresión: empresa + fecha ──
+function updatePrintMeta() {
+  const el = document.getElementById('print-meta');
+  if (!el) return;
+  const fecha = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+  const razon = (typeof empresaData === 'object' && empresaData && empresaData.razonSocial) ? empresaData.razonSocial : '';
+  el.innerHTML = (razon ? razon + ' · ' : '') + fecha;
 }
 
 // ── MAIN: refresh report with current answers ──
@@ -1747,6 +2003,9 @@ function refreshReport() {
     updateSanctionDetail(p);
   }
   updateGlobalKPIs(pilares);
+  renderPlanAccion(pilares);
+  updateCTA(pilares);
+  updatePrintMeta();
 }
 
 // ── VIEW SWITCHER ──
