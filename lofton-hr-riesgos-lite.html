@@ -19,7 +19,7 @@ html.embedded #view-cuestionario{position:relative}
 html.embedded.lf-bloqueado #view-cuestionario>.max-w-3xl>*:not(.lf-candado){opacity:.32;filter:blur(1.5px);pointer-events:none;user-select:none;transition:opacity .32s cubic-bezier(.2,.6,.2,1),filter .32s cubic-bezier(.2,.6,.2,1)}
 .lf-candado{display:none}
 html.embedded.lf-bloqueado .lf-candado{display:block;position:absolute;left:0;right:0;top:0;z-index:45;padding:0 24px}
-.lf-candado-card{max-width:30rem;margin:40px auto 0;padding:28px 26px;border-radius:12px;background:#225b40;color:#fff;text-align:center;box-shadow:0 24px 48px -20px rgba(0,26,12,.55)}
+.lf-candado-card{position:relative;will-change:transform;max-width:30rem;margin:40px auto 0;padding:28px 26px;border-radius:12px;background:#225b40;color:#fff;text-align:center;box-shadow:0 24px 48px -20px rgba(0,26,12,.55)}
 .lf-candado-kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#fdc504;font-weight:700}
 .lf-candado-title{margin:10px 0 8px;font-size:22px;line-height:1.25;font-weight:800;color:#fff}
 .lf-candado-text{margin:0 0 20px;font-size:14px;line-height:1.55;color:#fff}
@@ -2365,6 +2365,18 @@ function emailReport() {
     try{parent.postMessage({loftonScrollTop:true},"*");}catch(e){}
     setTimeout(function(){var q=document.querySelector('#view-cuestionario input[type="radio"]');if(q)try{q.focus({preventScroll:true});}catch(e){}},400);
   }
+  /* La tarjeta flota con el scroll de la página mientras siga bloqueado */
+  function moverCandado(){
+    var card=document.querySelector(".lf-candado-card"), zona=document.getElementById("view-cuestionario");
+    if(!card||!zona) return;
+    card.style.transform="";
+    if(abierto||!vp) return;
+    var natural=card.getBoundingClientRect().top+window.scrollY;
+    var objetivo=vp.offset-vp.top+12;
+    var limite=zona.getBoundingClientRect().bottom+window.scrollY-card.offsetHeight-24;
+    var d=Math.max(0,Math.min(objetivo,limite)-natural);
+    card.style.transform=d>0?"translateY("+d+"px)":"";
+  }
   var bt=document.getElementById("lf-iniciar");
   if(bt) bt.addEventListener("click",function(){abrir("diagnostico");});
   window.addEventListener("message",function(e){ if(e.data&&e.data.loftonStart) abrir(e.data.origen||"pagina"); });
@@ -2391,7 +2403,7 @@ function emailReport() {
     bar.classList.toggle("is-stuck",d>0);
   }
   window.addEventListener("message",function(e){
-    if(e.data&&e.data.loftonViewport){vp=e.data.loftonViewport;fijar();}
+    if(e.data&&e.data.loftonViewport){vp=e.data.loftonViewport;fijar();moverCandado();}
   });
   altura();
 })();
