@@ -3,8 +3,9 @@
 .lfd{--g:#128455;--gd:#225B40;--ink:#1C1E1C;--gy:#5C5B5A;--mint:#C5EFE4;--yl:#FDC504;--w:#fff;
   font-family:"Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--gy);line-height:1.5}
 .lfd *{box-sizing:border-box}
+.lfd{background:var(--w)}
 .lfd-w{max-width:1120px;margin:0 auto;padding:0 24px}
-.lfd-s{padding:56px 0}
+.lfd-s{padding:56px 0;background:var(--w)}
 .lfd-s--mint{background:var(--mint)}
 .lfd h1,.lfd h2,.lfd h3{color:var(--ink);font-weight:700;letter-spacing:-.01em;line-height:1.18;margin:0}
 .lfd h1{font-size:40px;letter-spacing:-.02em;line-height:1.08}
