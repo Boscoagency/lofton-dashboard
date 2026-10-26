@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 190" width="300" height="190" role="img" aria-label="Medidor de nivel de riesgo, resultado de ejemplo">
+  <path d="M30 165 A120 120 0 0 1 66.5 78.5" fill="none" stroke="#C4573C" stroke-width="16" stroke-linecap="round"/>
+  <path d="M88 60.5 A120 120 0 0 1 212 60.5" fill="none" stroke="#FDC504" stroke-width="16" stroke-linecap="round"/>
+  <path d="M233.5 78.5 A120 120 0 0 1 270 165" fill="none" stroke="#225B40" stroke-width="16" stroke-linecap="round"/>
+  <g transform="rotate(-36 150 165)">
+    <line x1="150" y1="165" x2="150" y2="74" stroke="#F7F4F2" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="150" cy="165" r="9" fill="#F7F4F2"/>
+</svg>
