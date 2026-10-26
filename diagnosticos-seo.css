@@ -16,6 +16,7 @@
 
 /* Hero */
 .lfd-hero{background:var(--gd);padding:64px 0 56px}
+#diagnostico{scroll-margin-top:90px}
 .lfd-hero h1{color:var(--w);max-width:17ch}
 .lfd-hero em{color:var(--yl)}
 .lfd-eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);margin-bottom:14px}
@@ -65,7 +66,7 @@
   .lfd h2{font-size:24px}
   .lfd-grid,.lfd-grid--2,.lfd-links{grid-template-columns:1fr}
   .lfd-s{padding:40px 0}
-  .lfd-hero{padding:44px 0 40px}
+  .lfd-hero{padding:86px 0 40px}
   .lfd-lead{font-size:17px}
   .lfd-cierre{padding:30px}
 }
