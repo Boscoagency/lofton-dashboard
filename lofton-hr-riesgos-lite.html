@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="googlebot" content="noindex, indexifembedded">
+<script>try{if(window.self!==window.top)document.documentElement.classList.add("embedded")}catch(e){document.documentElement.classList.add("embedded")}</script>
+<style>
+/* Modo embebido (Webflow): el encabezado vive en la página y el iframe crece a su altura real */
+html.embedded,html.embedded body{min-height:0!important;height:auto!important;background:transparent!important;scroll-behavior:auto}
+html.embedded .app-header{display:none!important}
+html.embedded #view-cuestionario>.max-w-3xl>.card-emerald:first-child{display:none!important}
+html.embedded .view>div:first-child{padding-top:0!important}
+html.embedded #view-cuestionario .card[style*="sticky"]{position:relative!important;top:auto!important;margin-top:0!important;will-change:transform}
+html.embedded #view-cuestionario .card.is-stuck{box-shadow:0 14px 32px -18px rgba(0,62,28,.45)}
+@media (max-width:600px){html.embedded .view>div:first-child{padding-left:0!important;padding-right:0!important}}
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lofton | Diagnóstico de Riesgos Laborales — Lite</title>
 <script src="https://cdn.tailwindcss.com">  // Init charts if reporte is default
@@ -2318,3 +2329,36 @@ function emailReport() {
 
 <!-- Medición de embudo · Google + Meta + Clarity (ver lofton-tracking.js) -->
 <script src="lofton-tracking.js?v=3" defer></script>
+
+<!-- Embebido en Webflow: altura real, subir al cambiar de vista y barra de progreso fija -->
+<script>
+(function(){
+  if(!document.documentElement.classList.contains("embedded")) return;
+  function enviar(m){try{parent.postMessage(m,"*");}catch(e){}}
+  function altura(){enviar({loftonDiagnosticoHeight:Math.ceil(document.documentElement.getBoundingClientRect().height)});}
+  if(window.ResizeObserver) new ResizeObserver(altura).observe(document.body);
+  window.addEventListener("load",altura);
+  if(typeof window.setView==="function"){
+    var original=window.setView;
+    window.setView=function(v){original(v);enviar({loftonScrollTop:true});setTimeout(altura,120);};
+  }
+  var vp=null;
+  function fijar(){
+    var bar=document.querySelector('#view-cuestionario .card[style*="sticky"]');
+    var zona=document.getElementById("view-cuestionario");
+    if(!bar) return;
+    bar.style.transform="";
+    if(!vp||!zona||!zona.classList.contains("active")){bar.classList.remove("is-stuck");return;}
+    var natural=bar.getBoundingClientRect().top+window.scrollY;
+    var objetivo=vp.offset-vp.top;
+    var limite=zona.getBoundingClientRect().bottom+window.scrollY-bar.offsetHeight-24;
+    var d=Math.max(0,Math.min(Math.max(objetivo,natural),limite)-natural);
+    bar.style.transform=d>0?"translateY("+d+"px)":"";
+    bar.classList.toggle("is-stuck",d>0);
+  }
+  window.addEventListener("message",function(e){
+    if(e.data&&e.data.loftonViewport){vp=e.data.loftonViewport;fijar();}
+  });
+  altura();
+})();
+</script>
