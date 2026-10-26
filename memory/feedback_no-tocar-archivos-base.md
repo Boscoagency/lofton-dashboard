@@ -12,6 +12,9 @@ Los archivos HTML de diagnóstico (lofton-hr-riesgos-lite.html, lofton-hr-riesgo
 1. En el `<head>`, un script que agrega la clase `embedded` al `<html>` cuando el archivo corre dentro de un iframe.
 2. CSS bajo `html.embedded` que oculta el encabezado (`.app-header`) y la tarjeta de introducción del cuestionario, porque ese contenido vive en el banner de Webflow.
 3. Al final del archivo, un script que envía `parent.postMessage({loftonDiagnosticoHeight})` con la altura real (ResizeObserver), envía `{loftonScrollTop:true}` al cambiar de vista y recibe `{loftonViewport}` para fijar la barra de progreso.
+4. Bloqueo previo (solo en diagnósticos que abren directo en el cuestionario, como el laboral lite): el cuestionario se ve atenuado y sin poder contestarse hasta hacer clic en "Iniciar diagnóstico", ya sea dentro del diagnóstico o en el banner de Webflow (`postMessage({loftonStart:true, origen:'banner'})`). Los diagnósticos fiscal, IMSS-Infonavit y riesgo legal ya tienen su pantalla de intro con botón; nómina tiene un paso previo de datos de empresa.
+
+Tracking: el clic de inicio dispara el evento nuevo `diag_intro_click` (paso `boton_iniciar`, `origen_boton`) por `window.LOFTON_TRACKING.track`. NO se cambia `diag_start`, que en la familia B sigue disparando con la primera respuesta, para no romper el embudo ni las conversiones que ya existen en GA4 y Meta. Para que `diag_intro_click` llegue a GA4 o Meta se necesita un activador en GTM (GTM-TLWZXPBZ).
 
 Fuera de un iframe el archivo se ve y funciona exactamente igual que antes.
 
