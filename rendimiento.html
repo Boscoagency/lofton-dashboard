@@ -268,11 +268,17 @@ function pintarCampanas() {
 
 function pintarDiario() {
   const caja = document.getElementById('diario');
-  const fechas = [...new Set(PLATAFORMAS.flatMap(p => (datos?.[p.id]?.diario || []).map(d => d.fecha)))].sort();
-  if (!fechas.length) { caja.innerHTML = '<div class="vacio">Sin datos diarios todavía.</div>'; return; }
-  const series = PLATAFORMAS.filter(p => datos?.[p.id]?.diario?.length).map(p => {
+  const conDiario = PLATAFORMAS.filter(p => datos?.[p.id]?.diario?.length);
+  if (!conDiario.length) { caja.innerHTML = '<div class="vacio">Sin datos diarios todavía.</div>'; return; }
+  // Las plataformas no devuelven los días sin gasto: se rellenan en cero para no dejar huecos.
+  const rango = datos[conDiario[0].id].periodos['30d'];
+  const fechas = [];
+  for (let d = new Date(rango.desde + 'T00:00:00Z'); d <= new Date(rango.hasta + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + 1)) {
+    fechas.push(d.toISOString().slice(0, 10));
+  }
+  const series = conDiario.map(p => {
     const porFecha = Object.fromEntries(datos[p.id].diario.map(d => [d.fecha, d.gasto]));
-    return { ...p, valores: fechas.map(f => porFecha[f] ?? null), moneda: datos[p.id].moneda };
+    return { ...p, valores: fechas.map(f => porFecha[f] ?? 0), moneda: datos[p.id].moneda };
   });
   const moneda = series[0].moneda;
   caja.innerHTML = `<div class="chart-box"><canvas id="grafica" role="img" aria-label="Gasto diario por plataforma"></canvas></div>
