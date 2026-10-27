@@ -1,0 +1,13 @@
+{
+  "actualizado": "2026-10-27T16:36-06:00",
+  "meta": {
+    "estado": "sin_llaves",
+    "mensaje": "Faltan los secrets: META_ACCESS_TOKEN.",
+    "fallo": "2026-10-27T16:36-06:00"
+  },
+  "google": {
+    "estado": "sin_llaves",
+    "mensaje": "Faltan los secrets: GOOGLE_REFRESH_TOKEN.",
+    "fallo": "2026-10-27T16:36-06:00"
+  }
+}
