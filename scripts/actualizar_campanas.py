@@ -199,6 +199,8 @@ def google(per):
 
     campanas = {}
     for f in por_campana:
+        if not any(fila(f).values()):
+            continue  # La cuenta tiene decenas de campañas viejas pausadas en ceros.
         nombre = f["campaign"]["name"]
         c = campanas.setdefault(nombre, {"nombre": nombre, "estado": f["campaign"].get("status"), **vacio()})
         for k, v in fila(f).items():
