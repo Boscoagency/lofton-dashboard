@@ -1,13 +1,146 @@
 {
-  "actualizado": "2026-10-27T16:36-06:00",
+  "actualizado": "2026-10-27T17:40-06:00",
   "meta": {
-    "estado": "sin_llaves",
-    "mensaje": "Faltan los secrets: META_ACCESS_TOKEN.",
-    "fallo": "2026-10-27T16:36-06:00"
+    "estado": "ok",
+    "mensaje": null,
+    "consultado": "2026-10-27T17:40-06:00",
+    "periodos": {
+      "mes": {
+        "desde": "2026-10-01",
+        "hasta": "2026-10-26"
+      },
+      "7d": {
+        "desde": "2026-10-20",
+        "hasta": "2026-10-26"
+      },
+      "30d": {
+        "desde": "2026-09-27",
+        "hasta": "2026-10-26"
+      }
+    },
+    "moneda": "MXN",
+    "resultado_etiqueta": "Leads (píxel)",
+    "token_vence": null,
+    "totales": {
+      "mes": {
+        "gasto": 4514.87,
+        "impresiones": 23822,
+        "clics": 714,
+        "resultados": 10.0
+      },
+      "7d": {
+        "gasto": 2352.33,
+        "impresiones": 10722,
+        "clics": 322,
+        "resultados": 3.0
+      }
+    },
+    "campanas": [
+      {
+        "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
+        "gasto": 4514.87,
+        "impresiones": 23822,
+        "clics": 714,
+        "resultados": 10.0
+      }
+    ],
+    "diario": [
+      {
+        "fecha": "2026-10-14",
+        "gasto": 48.89,
+        "impresiones": 1024,
+        "clics": 26,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-15",
+        "gasto": 425.86,
+        "impresiones": 2959,
+        "clics": 125,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-10-16",
+        "gasto": 342.24,
+        "impresiones": 3421,
+        "clics": 94,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-17",
+        "gasto": 359.81,
+        "impresiones": 2056,
+        "clics": 42,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-10-18",
+        "gasto": 528.06,
+        "impresiones": 1688,
+        "clics": 52,
+        "resultados": 2.0
+      },
+      {
+        "fecha": "2026-10-19",
+        "gasto": 457.68,
+        "impresiones": 1952,
+        "clics": 53,
+        "resultados": 3.0
+      },
+      {
+        "fecha": "2026-10-20",
+        "gasto": 433.96,
+        "impresiones": 2774,
+        "clics": 73,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-21",
+        "gasto": 359.9,
+        "impresiones": 2010,
+        "clics": 63,
+        "resultados": 2.0
+      },
+      {
+        "fecha": "2026-10-22",
+        "gasto": 296.88,
+        "impresiones": 1237,
+        "clics": 38,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-23",
+        "gasto": 286.33,
+        "impresiones": 1316,
+        "clics": 35,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-24",
+        "gasto": 215.49,
+        "impresiones": 1117,
+        "clics": 33,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-25",
+        "gasto": 489.2,
+        "impresiones": 1466,
+        "clics": 61,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-26",
+        "gasto": 270.57,
+        "impresiones": 802,
+        "clics": 19,
+        "resultados": 1.0
+      }
+    ]
   },
   "google": {
     "estado": "sin_llaves",
     "mensaje": "Faltan los secrets: GOOGLE_REFRESH_TOKEN.",
-    "fallo": "2026-10-27T16:36-06:00"
+    "fallo": "2026-10-27T17:40-06:00"
   }
 }
