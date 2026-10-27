@@ -1,9 +1,9 @@
 {
-  "actualizado": "2026-10-27T17:40-06:00",
+  "actualizado": "2026-10-27T17:50-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-10-27T17:40-06:00",
+    "consultado": "2026-10-27T17:50-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-10-01",
@@ -139,8 +139,740 @@
     ]
   },
   "google": {
-    "estado": "sin_llaves",
-    "mensaje": "Faltan los secrets: GOOGLE_REFRESH_TOKEN.",
-    "fallo": "2026-10-27T17:40-06:00"
+    "estado": "ok",
+    "mensaje": null,
+    "consultado": "2026-10-27T17:50-06:00",
+    "periodos": {
+      "mes": {
+        "desde": "2026-10-01",
+        "hasta": "2026-10-26"
+      },
+      "7d": {
+        "desde": "2026-10-20",
+        "hasta": "2026-10-26"
+      },
+      "30d": {
+        "desde": "2026-09-27",
+        "hasta": "2026-10-26"
+      }
+    },
+    "moneda": "MXN",
+    "resultado_etiqueta": "Conversiones",
+    "totales": {
+      "mes": {
+        "gasto": 12998.88,
+        "impresiones": 21431,
+        "clics": 1153,
+        "resultados": 3.0
+      },
+      "7d": {
+        "gasto": 4633.89,
+        "impresiones": 8375,
+        "clics": 404,
+        "resultados": 2.0
+      }
+    },
+    "campanas": [
+      {
+        "nombre": "Lofton | Diag IMSS-Infonavit | Search MX",
+        "estado": "ENABLED",
+        "gasto": 2838.51,
+        "impresiones": 908,
+        "clics": 107,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton | Diag Fiscal | Search MX",
+        "estado": "ENABLED",
+        "gasto": 2751.81,
+        "impresiones": 7485,
+        "clics": 313,
+        "resultados": 2.0
+      },
+      {
+        "nombre": "Lofton | Diag Laboral STPS | Search MX",
+        "estado": "ENABLED",
+        "gasto": 2670.78,
+        "impresiones": 2638,
+        "clics": 256,
+        "resultados": 1.0
+      },
+      {
+        "nombre": "Lofton | Diag Corporativo Legal | Search MX",
+        "estado": "ENABLED",
+        "gasto": 2393.36,
+        "impresiones": 9845,
+        "clics": 432,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton | Diag Nómina | Search MX",
+        "estado": "ENABLED",
+        "gasto": 2340.13,
+        "impresiones": 367,
+        "clics": 36,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2026 Laboral",
+        "estado": "PAUSED",
+        "gasto": 4.29,
+        "impresiones": 175,
+        "clics": 9,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0518_LOFTON_SEARCH_MAY",
+        "estado": "REMOVED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0518_LOFTON_SEARCH_NÓMINAS",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0518_LOFTON_SEARCH_JURÍDICO",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0518_LOFTON_SEARCH_CONSULTORÍA",
+        "estado": "REMOVED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "AUDITORIA..",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0518_LOFTON_SEARCH_CONTABILIDAD",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Contable Fiscal",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Jurídico-G y Lab",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "CONSULTORIA",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Auditoría",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Nómina",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Mochomos",
+        "estado": "REMOVED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Declaración Anual",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "JURIDICO LABORAL 2.0",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Jurídico Mercantil 2.0",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Gestoría",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Comercio exterior",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Contable Fiscal",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Jurídico Reclutamiento",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Auditoría Financiera",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Nomina",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton_Consultoría_estrategica",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton-Juridico-Fiscal",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Jurídico-G y Lab Lofton - Jurídico-G y Lab experimento  Prueba de recomendaciones",
+        "estado": "REMOVED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Contable Fiscal Contabilidad fiscal   Prueba de recomendaciones",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton-Juridico-Fiscal juridico Fiscal   Prueba de recomendaciones",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton_Consultoría_estrategica Consultoría_estrategica  Prueba de recomendaciones",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton-Juridico Mercantil",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton-Juridico-Corporativo",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Lofton - Auditoría Lofton Prueba  recomendaciones   Prueba de recomendaciones",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Curso Retos Patronales 23",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Nueva campaña Auditoria 23-24",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Nueva Campaña Conta 23-24",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Nueva campaña Juridico Gral 23 - 24",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Nueva Campaña Nominas 23 - 24",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "5. Bootes_Lofton_AlwaysOn_Google_SEM_Corporativo_ Gral Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2. Bootes_Lofton_AlwaysOn_Google_SEM_Contabilidad_Gral Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "3. Bootes_Lofton_AlwaysOn_Google_SEM_Nominas_Gral Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "1. Bootes_Lofton_AlwaysOn_Google_SEM_Auditoría_Gral Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "4. Bootes_Lofton_AlwaysOn_Google_SEM_Laboral_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "0. Bootes_Lofton_AlwaysOn_Google_Pmax_Services_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Bootes_Lofton_AlwaysOn_Google_SEM_Laboral_Conversions Leads #2",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2. Bootes_Lofton_AlwaysOn_Google_SEM_Contabilidad_Specific Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "1. Bootes_Lofton_AlwaysOn_Google_SEM_Auditoría_Specific Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "3. Bootes_Lofton_AlwaysOn_Google_SEM_Nominas_Specific Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "5. Bootes_Lofton_AlwaysOn_Google_SEM_Corporativo_ Specific Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "7. Bootes_Lofton_AlwaysOn_Google_SEM_Competencia Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "4. Bootes_Lofton_AlwaysOn_Google_SEM_Laboral Specific_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "5. Bootes_Lofton_AlwaysOn_Google_SEM_Corporativo_ Gral Conversions Leads #2",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "6. Bootes_Lofton_AlwaysOn_Google_SEM_Arrendamiento_ Specific Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "6. Bootes_Lofton_AlwaysOn_Google_SEM_Arrendamiento_ Gral Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "7. Bootes_Lofton_AlwaysOn_Google_SEM_ComercioExterior_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "8. Bootes_Lofton_AlwaysOn_Google_SEM_Fiscal_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "9. Bootes_Lofton_AlwaysOn_Google_SEM_PreciosTransferencia_Conversions Leads",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Bootes_Lofton_Nominas_Leads_Feb25",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Bootes_Lofton_Contabilidad_Leads_Feb25",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Bootes_Lofton_Auditoría_Leads_Feb25",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "Bootes_Lofton_Juridico_Leads_Feb25",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2026 - Auditoría (abril/mayo)",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2026 Fiscal (abril-mayo)",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2026 Display",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
+      },
+      {
+        "nombre": "2026 - Brand Search Always On",
+        "estado": "PAUSED",
+        "gasto": 0.0,
+        "impresiones": 13,
+        "clics": 0,
+        "resultados": 0.0
+      }
+    ],
+    "diario": [
+      {
+        "fecha": "2026-09-27",
+        "gasto": 134.03,
+        "impresiones": 4744,
+        "clics": 150,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-09-28",
+        "gasto": 0.92,
+        "impresiones": 116,
+        "clics": 3,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-09-29",
+        "gasto": 13.4,
+        "impresiones": 220,
+        "clics": 16,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-09-30",
+        "gasto": 0.36,
+        "impresiones": 71,
+        "clics": 2,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-04",
+        "gasto": 2.94,
+        "impresiones": 95,
+        "clics": 4,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-05",
+        "gasto": 0.05,
+        "impresiones": 55,
+        "clics": 1,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-07",
+        "gasto": 2.07,
+        "impresiones": 44,
+        "clics": 5,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-09",
+        "gasto": 407.06,
+        "impresiones": 1363,
+        "clics": 111,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-10",
+        "gasto": 487.81,
+        "impresiones": 1302,
+        "clics": 75,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-12",
+        "gasto": 1120.77,
+        "impresiones": 1503,
+        "clics": 95,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-13",
+        "gasto": 1227.75,
+        "impresiones": 674,
+        "clics": 55,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-14",
+        "gasto": 1226.45,
+        "impresiones": 1721,
+        "clics": 87,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-15",
+        "gasto": 1198.58,
+        "impresiones": 1643,
+        "clics": 92,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-16",
+        "gasto": 928.74,
+        "impresiones": 2439,
+        "clics": 103,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-17",
+        "gasto": 513.38,
+        "impresiones": 999,
+        "clics": 50,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-10-19",
+        "gasto": 1249.39,
+        "impresiones": 1218,
+        "clics": 71,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-20",
+        "gasto": 934.01,
+        "impresiones": 1086,
+        "clics": 62,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-10-21",
+        "gasto": 783.68,
+        "impresiones": 1508,
+        "clics": 79,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-22",
+        "gasto": 742.49,
+        "impresiones": 1549,
+        "clics": 80,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-23",
+        "gasto": 737.12,
+        "impresiones": 2255,
+        "clics": 60,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-10-24",
+        "gasto": 696.28,
+        "impresiones": 1060,
+        "clics": 63,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-10-26",
+        "gasto": 740.32,
+        "impresiones": 917,
+        "clics": 60,
+        "resultados": 0.0
+      }
+    ]
   }
 }
