@@ -1,21 +1,21 @@
 {
-  "actualizado": "2026-11-01T12:26-06:00",
+  "actualizado": "2026-11-02T16:19-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-01T12:26-06:00",
+    "consultado": "2026-11-02T16:19-06:00",
     "periodos": {
       "mes": {
-        "desde": "2026-10-01",
-        "hasta": "2026-10-31"
+        "desde": "2026-11-01",
+        "hasta": "2026-11-01"
       },
       "7d": {
-        "desde": "2026-10-25",
-        "hasta": "2026-10-31"
+        "desde": "2026-10-26",
+        "hasta": "2026-11-01"
       },
       "30d": {
-        "desde": "2026-10-02",
-        "hasta": "2026-10-31"
+        "desde": "2026-10-03",
+        "hasta": "2026-11-01"
       }
     },
     "moneda": "MXN",
@@ -23,25 +23,25 @@
     "token_vence": null,
     "totales": {
       "mes": {
-        "gasto": 6337.32,
-        "impresiones": 29864,
-        "clics": 880,
-        "resultados": 11.0
+        "gasto": 511.89,
+        "impresiones": 1353,
+        "clics": 41,
+        "resultados": 0.0
       },
       "7d": {
-        "gasto": 2582.22,
-        "impresiones": 8310,
-        "clics": 246,
+        "gasto": 2604.91,
+        "impresiones": 8198,
+        "clics": 226,
         "resultados": 2.0
       }
     },
     "campanas": [
       {
         "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
-        "gasto": 6337.32,
-        "impresiones": 29864,
-        "clics": 880,
-        "resultados": 11.0
+        "gasto": 511.89,
+        "impresiones": 1353,
+        "clics": 41,
+        "resultados": 0.0
       }
     ],
     "diario": [
@@ -167,8 +167,15 @@
       {
         "fecha": "2026-10-31",
         "gasto": 226.6,
-        "impresiones": 879,
+        "impresiones": 880,
         "clics": 25,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-01",
+        "gasto": 511.89,
+        "impresiones": 1353,
+        "clics": 41,
         "resultados": 0.0
       }
     ]
@@ -176,29 +183,29 @@
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-01T12:26-06:00",
+    "consultado": "2026-11-02T16:19-06:00",
     "periodos": {
       "mes": {
-        "desde": "2026-10-01",
-        "hasta": "2026-10-31"
+        "desde": "2026-11-01",
+        "hasta": "2026-11-01"
       },
       "7d": {
-        "desde": "2026-10-25",
-        "hasta": "2026-10-31"
+        "desde": "2026-10-26",
+        "hasta": "2026-11-01"
       },
       "30d": {
-        "desde": "2026-10-02",
-        "hasta": "2026-10-31"
+        "desde": "2026-10-03",
+        "hasta": "2026-11-01"
       }
     },
     "moneda": "MXN",
     "resultado_etiqueta": "Conversiones",
     "totales": {
       "mes": {
-        "gasto": 15610.96,
-        "impresiones": 26304,
-        "clics": 1430,
-        "resultados": 3.0
+        "gasto": 0.0,
+        "impresiones": 0,
+        "clics": 0,
+        "resultados": 0.0
       },
       "7d": {
         "gasto": 3363.17,
@@ -207,64 +214,7 @@
         "resultados": 0.0
       }
     },
-    "campanas": [
-      {
-        "nombre": "Lofton | Diag IMSS-Infonavit | Search MX",
-        "estado": "ENABLED",
-        "gasto": 3541.05,
-        "impresiones": 1241,
-        "clics": 149,
-        "resultados": 0.0
-      },
-      {
-        "nombre": "Lofton | Diag Laboral STPS | Search MX",
-        "estado": "ENABLED",
-        "gasto": 3313.88,
-        "impresiones": 3142,
-        "clics": 303,
-        "resultados": 1.0
-      },
-      {
-        "nombre": "Lofton | Diag Fiscal | Search MX",
-        "estado": "ENABLED",
-        "gasto": 3117.93,
-        "impresiones": 8689,
-        "clics": 394,
-        "resultados": 2.0
-      },
-      {
-        "nombre": "Lofton | Diag Nómina | Search MX",
-        "estado": "ENABLED",
-        "gasto": 2905.45,
-        "impresiones": 489,
-        "clics": 46,
-        "resultados": 0.0
-      },
-      {
-        "nombre": "Lofton | Diag Corporativo Legal | Search MX",
-        "estado": "ENABLED",
-        "gasto": 2728.36,
-        "impresiones": 12555,
-        "clics": 529,
-        "resultados": 0.0
-      },
-      {
-        "nombre": "2026 Laboral",
-        "estado": "PAUSED",
-        "gasto": 4.29,
-        "impresiones": 175,
-        "clics": 9,
-        "resultados": 0.0
-      },
-      {
-        "nombre": "2026 - Brand Search Always On",
-        "estado": "PAUSED",
-        "gasto": 0.0,
-        "impresiones": 13,
-        "clics": 0,
-        "resultados": 0.0
-      }
-    ],
+    "campanas": [],
     "diario": [
       {
         "fecha": "2026-10-04",
