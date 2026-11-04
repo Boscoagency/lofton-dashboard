@@ -1,21 +1,21 @@
 {
-  "actualizado": "2026-11-03T14:06-06:00",
+  "actualizado": "2026-11-04T14:25-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-03T14:06-06:00",
+    "consultado": "2026-11-04T14:25-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-02"
+        "hasta": "2026-11-03"
       },
       "7d": {
-        "desde": "2026-10-27",
-        "hasta": "2026-11-02"
+        "desde": "2026-10-28",
+        "hasta": "2026-11-03"
       },
       "30d": {
-        "desde": "2026-10-04",
-        "hasta": "2026-11-02"
+        "desde": "2026-10-05",
+        "hasta": "2026-11-03"
       }
     },
     "moneda": "MXN",
@@ -23,25 +23,25 @@
     "token_vence": null,
     "totales": {
       "mes": {
-        "gasto": 909.94,
-        "impresiones": 2430,
-        "clics": 68,
-        "resultados": 1.0
+        "gasto": 1352.83,
+        "impresiones": 3986,
+        "clics": 107,
+        "resultados": 2.0
       },
       "7d": {
-        "gasto": 2732.39,
-        "impresiones": 8473,
-        "clics": 234,
-        "resultados": 2.0
+        "gasto": 2691.79,
+        "impresiones": 8468,
+        "clics": 228,
+        "resultados": 3.0
       }
     },
     "campanas": [
       {
         "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
-        "gasto": 909.94,
-        "impresiones": 2430,
-        "clics": 68,
-        "resultados": 1.0
+        "gasto": 1352.83,
+        "impresiones": 3986,
+        "clics": 107,
+        "resultados": 2.0
       }
     ],
     "diario": [
@@ -180,9 +180,16 @@
       },
       {
         "fecha": "2026-11-02",
-        "gasto": 398.05,
-        "impresiones": 1077,
+        "gasto": 398.2,
+        "impresiones": 1078,
         "clics": 27,
+        "resultados": 1.0
+      },
+      {
+        "fecha": "2026-11-03",
+        "gasto": 442.74,
+        "impresiones": 1555,
+        "clics": 39,
         "resultados": 1.0
       }
     ]
@@ -190,87 +197,80 @@
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-03T14:06-06:00",
+    "consultado": "2026-11-04T14:25-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-02"
+        "hasta": "2026-11-03"
       },
       "7d": {
-        "desde": "2026-10-27",
-        "hasta": "2026-11-02"
+        "desde": "2026-10-28",
+        "hasta": "2026-11-03"
       },
       "30d": {
-        "desde": "2026-10-04",
-        "hasta": "2026-11-02"
+        "desde": "2026-10-05",
+        "hasta": "2026-11-03"
       }
     },
     "moneda": "MXN",
     "resultado_etiqueta": "Conversiones",
     "totales": {
       "mes": {
-        "gasto": 630.94,
-        "impresiones": 1305,
-        "clics": 66,
+        "gasto": 1301.99,
+        "impresiones": 2662,
+        "clics": 142,
         "resultados": 0.0
       },
       "7d": {
-        "gasto": 3266.9,
-        "impresiones": 6201,
-        "clics": 348,
+        "gasto": 3245.22,
+        "impresiones": 6832,
+        "clics": 368,
         "resultados": 0.0
       }
     },
     "campanas": [
       {
-        "nombre": "Lofton | Diag Laboral STPS | Search MX",
+        "nombre": "Lofton | Diag Nómina | Search MX",
         "estado": "ENABLED",
-        "gasto": 159.46,
-        "impresiones": 55,
-        "clics": 13,
+        "gasto": 317.42,
+        "impresiones": 63,
+        "clics": 3,
         "resultados": 0.0
       },
       {
         "nombre": "Lofton | Diag IMSS-Infonavit | Search MX",
         "estado": "ENABLED",
-        "gasto": 150.27,
-        "impresiones": 89,
-        "clics": 8,
+        "gasto": 307.07,
+        "impresiones": 134,
+        "clics": 23,
         "resultados": 0.0
       },
       {
-        "nombre": "Lofton | Diag Nómina | Search MX",
+        "nombre": "Lofton | Diag Laboral STPS | Search MX",
         "estado": "ENABLED",
-        "gasto": 138.38,
-        "impresiones": 29,
-        "clics": 1,
+        "gasto": 306.94,
+        "impresiones": 122,
+        "clics": 26,
         "resultados": 0.0
       },
       {
         "nombre": "Lofton | Diag Fiscal | Search MX",
         "estado": "ENABLED",
-        "gasto": 121.15,
-        "impresiones": 311,
-        "clics": 20,
+        "gasto": 241.97,
+        "impresiones": 666,
+        "clics": 40,
         "resultados": 0.0
       },
       {
         "nombre": "Lofton | Diag Corporativo Legal | Search MX",
         "estado": "ENABLED",
-        "gasto": 61.68,
-        "impresiones": 821,
-        "clics": 24,
+        "gasto": 128.59,
+        "impresiones": 1677,
+        "clics": 50,
         "resultados": 0.0
       }
     ],
     "diario": [
-      {
-        "fecha": "2026-10-04",
-        "gasto": 2.94,
-        "impresiones": 95,
-        "clics": 4,
-        "resultados": 0.0
-      },
       {
         "fecha": "2026-10-05",
         "gasto": 0.05,
@@ -430,6 +430,13 @@
         "gasto": 630.94,
         "impresiones": 1305,
         "clics": 66,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-03",
+        "gasto": 671.06,
+        "impresiones": 1357,
+        "clics": 76,
         "resultados": 0.0
       }
     ]
