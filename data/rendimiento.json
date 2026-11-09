@@ -1,21 +1,21 @@
 {
-  "actualizado": "2026-11-08T12:21-06:00",
+  "actualizado": "2026-11-09T16:58-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-08T12:21-06:00",
+    "consultado": "2026-11-09T16:58-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-07"
+        "hasta": "2026-11-08"
       },
       "7d": {
-        "desde": "2026-11-01",
-        "hasta": "2026-11-07"
+        "desde": "2026-11-02",
+        "hasta": "2026-11-08"
       },
       "30d": {
-        "desde": "2026-10-09",
-        "hasta": "2026-11-07"
+        "desde": "2026-10-10",
+        "hasta": "2026-11-08"
       }
     },
     "moneda": "MXN",
@@ -23,24 +23,24 @@
     "token_vence": null,
     "totales": {
       "mes": {
-        "gasto": 2580.68,
-        "impresiones": 8665,
-        "clics": 210,
+        "gasto": 3101.5,
+        "impresiones": 10227,
+        "clics": 254,
         "resultados": 4.0
       },
       "7d": {
-        "gasto": 2580.68,
-        "impresiones": 8665,
-        "clics": 210,
+        "gasto": 2589.61,
+        "impresiones": 8874,
+        "clics": 213,
         "resultados": 4.0
       }
     },
     "campanas": [
       {
         "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
-        "gasto": 2580.68,
-        "impresiones": 8665,
-        "clics": 210,
+        "gasto": 3101.5,
+        "impresiones": 10227,
+        "clics": 254,
         "resultados": 4.0
       }
     ],
@@ -219,40 +219,47 @@
         "impresiones": 643,
         "clics": 6,
         "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-08",
+        "gasto": 520.82,
+        "impresiones": 1562,
+        "clics": 44,
+        "resultados": 0.0
       }
     ]
   },
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-08T12:21-06:00",
+    "consultado": "2026-11-09T16:58-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-07"
+        "hasta": "2026-11-08"
       },
       "7d": {
-        "desde": "2026-11-01",
-        "hasta": "2026-11-07"
+        "desde": "2026-11-02",
+        "hasta": "2026-11-08"
       },
       "30d": {
-        "desde": "2026-10-09",
-        "hasta": "2026-11-07"
+        "desde": "2026-10-10",
+        "hasta": "2026-11-08"
       }
     },
     "moneda": "MXN",
     "resultado_etiqueta": "Conversiones",
     "totales": {
       "mes": {
-        "gasto": 3900.58,
-        "impresiones": 10125,
-        "clics": 471,
+        "gasto": 3899.6,
+        "impresiones": 10124,
+        "clics": 470,
         "resultados": 0.0
       },
       "7d": {
-        "gasto": 3900.57,
-        "impresiones": 10125,
-        "clics": 471,
+        "gasto": 3899.59,
+        "impresiones": 10124,
+        "clics": 470,
         "resultados": 0.0
       }
     },
@@ -267,7 +274,7 @@
       },
       {
         "nombre": "Lofton | Diag IMSS-Infonavit | Search MX",
-        "estado": "ENABLED",
+        "estado": "PAUSED",
         "gasto": 869.56,
         "impresiones": 500,
         "clics": 66,
@@ -284,9 +291,9 @@
       {
         "nombre": "Lofton | Diag Fiscal | Search MX",
         "estado": "ENABLED",
-        "gasto": 820.04,
-        "impresiones": 2866,
-        "clics": 157,
+        "gasto": 819.06,
+        "impresiones": 2865,
+        "clics": 156,
         "resultados": 0.0
       },
       {
@@ -299,13 +306,6 @@
       }
     ],
     "diario": [
-      {
-        "fecha": "2026-10-09",
-        "gasto": 407.06,
-        "impresiones": 1358,
-        "clics": 111,
-        "resultados": 0.0
-      },
       {
         "fecha": "2026-10-10",
         "gasto": 487.81,
@@ -470,15 +470,15 @@
       {
         "fecha": "2026-11-06",
         "gasto": 785.77,
-        "impresiones": 1615,
+        "impresiones": 1614,
         "clics": 97,
         "resultados": 0.0
       },
       {
         "fecha": "2026-11-07",
-        "gasto": 577.32,
+        "gasto": 576.34,
         "impresiones": 2673,
-        "clics": 96,
+        "clics": 95,
         "resultados": 0.0
       }
     ]
