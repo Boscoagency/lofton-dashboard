@@ -620,7 +620,7 @@
 
     <!-- Secondary actions -->
     <div class="flex flex-wrap gap-3 justify-center mt-8 fade-up" style="animation-delay:.25s">
-      <button onclick="window.print()" class="btn-ghost">
+      <button onclick="descargarInformePDF(this)" class="btn-ghost">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Descargar PDF
       </button>
@@ -811,7 +811,379 @@ function submitCuestionario() {
 const WEB3FORMS_ACCESS_KEY = '65a6c8df-e9d0-4b20-a212-7b88665f5a3d';
 const DIAGNOSTICO_NOMBRE = 'Diagnóstico de Riesgo Legal';
 
+const LEAD_CFG = {
+  diagnostico_id: 'legal',
+  formulario: 'Diagnóstico de Riesgo Legal',
+  pdfSlug: 'Riesgo-Legal',
+  vista: 'view-reporte',
+  // Mismo cálculo que pinta el reporte (calcScore + NIVELES + pilarStatus).
+  // Este diagnóstico no estima pesos: exposicion_mxn va en 0 y hallazgos_alto
+  // cuenta los pilares que salen en "Riesgo alto".
+  resultado() {
+    const sc = calcScore();
+    const N = NIVELES[sc.nivel];
+    const pct = Math.round(sc.total / 44 * 100); // la pantalla dice "de 44 puntos de preparación"
+    const estados = PILARES.map(p => ({ p, ps: sc.pilarScores[p.id] || {}, st: pilarStatus((sc.pilarScores[p.id] || {}).pct || 0) }));
+    const altos = estados.filter(e => e.st.label === 'Riesgo alto').length;
+    return {
+      nivel: N.badge,
+      score_pct: pct, // %% de preparación sobre 44 puntos (más alto = menor riesgo)
+      hallazgos_alto: altos,
+      exposicion_mxn: 0,
+      resumen: N.title + '. ' + pct + '% de preparación (' + sc.total + ' de 44 pts)' + '. Por pilar: '
+        + estados.map(e => e.p.nombre + ' ' + e.st.label + ' (' + (e.ps.pct || 0) + '%)').join('; ') + '.',
+    };
+  },
+};
+
+/* ══════════ INFORME PDF + ENVÍO AL WORKER lofton-leads ══════════
+   Contrato fijo: PLAN_TRABAJO_KOMMO_LEADS.md, sección "Contrato entre piezas".
+   Web3Forms sigue igual en paralelo. Si LEADS_ENDPOINT está vacío no se manda
+   nada al Worker. Un fallo aquí nunca rompe la experiencia ni Web3Forms. */
+const LEADS_ENDPOINT = 'https://lofton-leads.antuna92.workers.dev';
+const TURNSTILE_SITEKEY = '';   // sitekey público de Cloudflare Turnstile (aún no activo)
+// Leads de prueba: abrir el diagnóstico con ?lofton_prueba=1 manda "prueba": true
+// (Kommo lo marca [PRUEBA] y no copia al gerente).
+const LEAD_PRUEBA = /[?&]lofton_prueba=1/.test(location.search);
+
+const PDF_LIBS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+];
+const PDF_MAX_BYTES = 2.4 * 1024 * 1024; // Microsoft Graph adjunta hasta 2.5 MB (antes de base64)
+
+function cargarScriptUnaVez(src) {
+  window.__loftonScripts = window.__loftonScripts || {};
+  if (!window.__loftonScripts[src]) {
+    window.__loftonScripts[src] = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src; s.async = true; s.crossOrigin = 'anonymous';
+      s.onload = resolve;
+      s.onerror = () => { delete window.__loftonScripts[src]; reject(new Error('No cargó ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+  return window.__loftonScripts[src];
+}
+
+function nombreArchivoPDF(ld) {
+  const empresa = String((ld && ld.empresa) || 'Empresa')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'Empresa';
+  return 'Informe-' + LEAD_CFG.pdfSlug + '-' + empresa + '.pdf';
+}
+
+// Estilos solo para la copia que se fotografía: sin animaciones (si no, salen
+// bloques en blanco), sin botones y con el encabezado de impresión visible.
+function asegurarEstilosPDF() {
+  if (document.getElementById('lofton-pdf-css')) return;
+  const st = document.createElement('style');
+  st.id = 'lofton-pdf-css';
+  st.textContent =
+    '.lofton-pdf-capture,.lofton-pdf-capture *,.lofton-pdf-capture *::before,.lofton-pdf-capture *::after{animation:none!important;transition:none!important}' +
+    '.lofton-pdf-capture .fade-up{opacity:1!important;transform:none!important}' +
+    '.lofton-pdf-capture .view{display:block!important;min-height:0!important}' +
+    // html2canvas encima el texto grande con line-height:1 sobre la línea de abajo.
+    '.lofton-pdf-capture .leading-none{line-height:1.1!important;padding-bottom:.3em!important}' +
+    '.lofton-pdf-capture .print-only{display:block!important}' +
+    '.lofton-pdf-capture .no-print,.lofton-pdf-capture button,.lofton-pdf-capture .btn-primary,.lofton-pdf-capture .btn-outline,.lofton-pdf-capture .btn-ghost,.lofton-pdf-capture .conf-note,.lofton-pdf-capture #audit-panel{display:none!important}';
+  document.head.appendChild(st);
+}
+
+// Genera el PDF a partir del reporte que ya está pintado en pantalla.
+// Devuelve { nombre, base64, doc } (doc es el jsPDF, para descargarlo).
+async function generarInformePDF(ld) {
+  await Promise.all(PDF_LIBS.map(cargarScriptUnaVez));
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+  asegurarEstilosPDF();
+
+  const fuente = document.getElementById(LEAD_CFG.vista);
+  if (!fuente) throw new Error('No existe #' + LEAD_CFG.vista);
+
+  const ANCHO = 1000; // px CSS del lienzo (diseño de escritorio)
+  const capa = document.createElement('div');
+  capa.className = 'lofton-pdf-capture';
+  capa.id = 'lofton-pdf-capture-' + Date.now();
+  capa.setAttribute('aria-hidden', 'true');
+  capa.style.cssText = 'position:fixed;left:0;top:0;width:' + ANCHO + 'px;background:#fff;opacity:0;pointer-events:none;z-index:-1;';
+  const copia = fuente.cloneNode(true);
+  copia.removeAttribute('id');
+  copia.classList.add('active');
+  // Los <canvas> no se copian con cloneNode: se redibujan.
+  const lienzosOrig = fuente.querySelectorAll('canvas');
+  copia.querySelectorAll('canvas').forEach((c, i) => {
+    try { c.getContext('2d').drawImage(lienzosOrig[i], 0, 0); } catch (e) {}
+  });
+  // Encabezado con empresa y fecha, solo si el reporte no trae el suyo de impresión.
+  if (!copia.querySelector('.print-only')) {
+    const enc = document.createElement('div');
+    enc.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:24px 24px 0;padding-bottom:8px;border-bottom:2px solid #003e1c;';
+    const izq = document.createElement('span');
+    izq.style.cssText = 'font-size:15px;font-weight:800;color:#003e1c;';
+    izq.textContent = 'Lofton Servicios Integrales';
+    const der = document.createElement('span');
+    der.style.cssText = 'font-size:11px;color:#6b7280;text-align:right;';
+    const fecha = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+    der.textContent = [LEAD_CFG.formulario, (ld && ld.empresa) || '', fecha].filter(Boolean).join(' · ');
+    enc.appendChild(izq); enc.appendChild(der);
+    capa.appendChild(enc);
+  }
+  capa.appendChild(copia);
+  document.body.appendChild(capa);
+
+  try {
+    // Bloques que no conviene partir entre hojas: "grandes" (tarjetas) y "chicos"
+    // (renglones de texto). Se miden DENTRO de la copia que fotografía html2canvas
+    // (a 1280 px de ventana), porque ahí el diseño puede ser distinto al de pantalla.
+    const grandes = [], chicos = [];
+    let altoCSS = capa.scrollHeight;
+    const medir = (raiz) => {
+      const ver = raiz.ownerDocument.defaultView;
+      const base = raiz.getBoundingClientRect().top;
+      const caja = (el) => { const r = el.getBoundingClientRect(); return [Math.round(r.top - base), Math.round(r.bottom - base)]; };
+      // Una "tarjeta" es cualquier caja con fondo, borde o sombra visibles.
+      const visible = (v) => v && v !== 'none' && v !== 'transparent' && !/rgba\([^)]*,\s*0\)$/.test(v);
+      raiz.querySelectorAll('div, section, article, table, ul, ol, header, footer').forEach(el => {
+        const bx = caja(el); if (bx[1] - bx[0] < 24) return;
+        const cs = ver.getComputedStyle(el);
+        if (cs.display === 'inline') return;
+        const borde = parseFloat(cs.borderTopWidth) > 0 || parseFloat(cs.borderBottomWidth) > 0;
+        if (el.matches('.cta-section, .card, .card-emerald, .pc-card') || visible(cs.backgroundColor) || cs.backgroundImage !== 'none' || borde || cs.boxShadow !== 'none') grandes.push(bx);
+      });
+      raiz.querySelectorAll('h1, h2, h3, h4, p, li, tr, span, strong, img, svg')
+        .forEach(el => { const bx = caja(el); if (bx[1] > bx[0]) chicos.push(bx); });
+      // Alto real: hasta el último contenido visible (evita una hoja final en blanco).
+      let fondo = 0;
+      grandes.concat(chicos).forEach(bx => { if (bx[1] > fondo) fondo = bx[1]; });
+      altoCSS = Math.min(raiz.scrollHeight, fondo + 24);
+    };
+
+    // Escala: nítido pero sin pasar el límite de lienzo de los celulares.
+    let escala = Math.min(1.6, Math.sqrt(14e6 / (ANCHO * Math.max(altoCSS, 1))));
+    escala = Math.max(escala, 0.6);
+
+    const canvas = await window.html2canvas(capa, {
+      scale: escala, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      windowWidth: 1280, scrollX: 0, scrollY: 0,
+      onclone: (doc) => {
+        const c = doc.getElementById(capa.id);
+        if (!c) return;
+        c.style.opacity = '1';
+        try { medir(c); } catch (e) { console.error('[Lofton] No se pudieron medir los cortes del PDF', e); }
+      },
+    });
+    altoCSS = Math.min(altoCSS, Math.floor(canvas.height / escala));
+
+    // Corte que no parta renglones de texto y parta el menor número de cajas;
+    // a igualdad, el más bajo. Debe llenar al menos 55% de la hoja.
+    const buscarCorte = (inicio, fin, paginaCss) => {
+      const minimo = inicio + paginaCss * 0.55;
+      const parte = (y, b) => b[0] < y && b[1] > y;
+      const candidatos = [...grandes, ...chicos].map(b => b[1] + 1).concat([...grandes, ...chicos].map(b => b[0] - 1))
+        .filter(y => y > minimo && y <= fin).sort((a, b) => b - a);
+      let mejor = null, menos = Infinity;
+      for (const y of candidatos) {
+        if (chicos.some(b => parte(y, b))) continue;
+        const n = grandes.filter(b => parte(y, b)).length;
+        if (n < menos) { menos = n; mejor = y; }
+      }
+      return mejor || fin;
+    };
+
+    const info = { altoCSS, escala, grandes: grandes.length, chicos: chicos.length, cortes: [] };
+    window.__ultimoPDFInfo = info; // para revisar desde la consola
+    const { jsPDF } = window.jspdf;
+    const armar = (calidad) => {
+      info.cortes = [];
+      const doc = new jsPDF({ unit: 'pt', format: 'letter', orientation: 'portrait', compress: true });
+      const pw = doc.internal.pageSize.getWidth(), ph = doc.internal.pageSize.getHeight();
+      const margen = 24;
+      const anchoUtil = pw - margen * 2;
+      const ptPorCss = anchoUtil / ANCHO;
+      const paginaCss = Math.floor((ph - margen * 2) / ptPorCss);
+      let inicio = 0, pagina = 0;
+      while (inicio < altoCSS - 2) {
+        let fin = inicio + paginaCss;
+        if (fin < altoCSS) {
+          fin = buscarCorte(inicio, fin, paginaCss);
+        } else {
+          fin = altoCSS;
+        }
+        const sy = Math.round(inicio * escala), sh = Math.max(1, Math.round((fin - inicio) * escala));
+        const trozo = document.createElement('canvas');
+        trozo.width = canvas.width; trozo.height = Math.min(sh, canvas.height - sy);
+        const ctx = trozo.getContext('2d');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, trozo.width, trozo.height);
+        ctx.drawImage(canvas, 0, sy, canvas.width, trozo.height, 0, 0, trozo.width, trozo.height);
+        if (pagina > 0) doc.addPage();
+        doc.addImage(trozo.toDataURL('image/jpeg', calidad), 'JPEG', margen, margen, anchoUtil, trozo.height / escala * ptPorCss, undefined, 'FAST');
+        doc.setFontSize(7); doc.setTextColor(140);
+        doc.text('Lofton Servicios Integrales · ' + LEAD_CFG.formulario + ' · Página ' + (pagina + 1), pw / 2, ph - 10, { align: 'center' });
+        info.cortes.push(fin);
+        inicio = fin; pagina++;
+        if (pagina > 25) break; // tope de seguridad
+      }
+      info.paginaCss = paginaCss;
+      return doc;
+    };
+
+    let doc = null, base64 = '';
+    for (const calidad of [0.82, 0.65, 0.5]) {
+      doc = armar(calidad);
+      base64 = doc.output('datauristring').split(',')[1] || '';
+      if (base64.length * 3 / 4 < PDF_MAX_BYTES) break;
+    }
+    if (base64.length * 3 / 4 >= PDF_MAX_BYTES) throw new Error('PDF demasiado grande: ' + Math.round(base64.length * 3 / 4 / 1024) + ' KB');
+    return { nombre: nombreArchivoPDF(ld), base64, doc };
+  } finally {
+    capa.remove();
+  }
+}
+
+// Botón "Descargar PDF": baja el PDF real. Si algo falla, cae a imprimir.
+async function descargarInformePDF(btn) {
+  const etiqueta = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = 'Generando PDF…'; }
+  try {
+    const ld = window.leadData || (typeof leadData !== 'undefined' ? leadData : {}) || {};
+    const pdf = await generarInformePDF(ld);
+    pdf.doc.save(pdf.nombre);
+  } catch (e) {
+    console.error('[Lofton] ✗ No se pudo generar el PDF, se abre impresión', e);
+    window.print();
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = etiqueta; }
+  }
+}
+
+function leerAtribucionLead() {
+  const leer = (k) => {
+    try { const v = sessionStorage.getItem(k); if (v) return v; } catch (e) {}
+    try { return localStorage.getItem(k); } catch (e) {}
+    return null;
+  };
+  let a = {};
+  try {
+    a = (window.LOFTON_TRACKING && window.LOFTON_TRACKING.atribucion) || JSON.parse(leer('lofton_attr') || '{}') || {};
+  } catch (e) { a = {}; }
+  const sesion = (window.LOFTON_TRACKING && window.LOFTON_TRACKING.sesion) || leer('lofton_sid') || '';
+  // event_id del evento Lead que ya disparó lofton-tracking.js (dedupe Pixel/CAPI).
+  let eventId = '';
+  try {
+    const dl = window.dataLayer || [];
+    for (let i = dl.length - 1; i >= 0; i--) {
+      if (dl[i] && dl[i].event === 'diag_lead_submit' && dl[i].event_id) { eventId = dl[i].event_id; break; }
+    }
+  } catch (e) {}
+  const s = (v) => (v == null ? '' : String(v));
+  return {
+    utm_source: s(a.utm_source), utm_medium: s(a.utm_medium), utm_campaign: s(a.utm_campaign),
+    utm_content: s(a.utm_content), utm_term: s(a.utm_term), gclid: s(a.gclid), gbraid: s(a.gbraid),
+    wbraid: s(a.wbraid), fbclid: s(a.fbclid), msclkid: s(a.msclkid), referrer: s(a.referrer),
+    landing_page: s(a.landing_page), primera_visita: s(a.primera_visita), session_id: s(sesion),
+    event_id: s(eventId),
+  };
+}
+
+// Turnstile en modo "solo si hace falta interacción": casi siempre invisible.
+async function obtenerTurnstileToken() {
+  if (!TURNSTILE_SITEKEY) return '';
+  try {
+    await cargarScriptUnaVez('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit');
+    return await new Promise((resolve) => {
+      const caja = document.createElement('div');
+      caja.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:9999;';
+      document.body.appendChild(caja);
+      let listo = false;
+      const fin = (t) => { if (listo) return; listo = true; setTimeout(() => caja.remove(), 0); resolve(t || ''); };
+      const espera = setTimeout(() => fin(''), 20000);
+      try {
+        window.turnstile.render(caja, {
+          sitekey: TURNSTILE_SITEKEY, appearance: 'interaction-only', action: 'lead',
+          callback: (t) => { clearTimeout(espera); fin(t); },
+          'error-callback': () => { clearTimeout(espera); fin(''); },
+          'timeout-callback': () => { clearTimeout(espera); fin(''); },
+        });
+      } catch (e) { clearTimeout(espera); fin(''); }
+    });
+  } catch (e) {
+    console.error('[Lofton] Turnstile no cargó', e);
+    return '';
+  }
+}
+
+function armarPayloadLead(ld, pdf) {
+  let resultado = { nivel: '', score_pct: 0, hallazgos_alto: 0, exposicion_mxn: 0, resumen: '' };
+  try { resultado = Object.assign(resultado, LEAD_CFG.resultado()); }
+  catch (e) { console.error('[Lofton] No se pudo leer el resultado del diagnóstico', e); }
+  const payload = {
+    origen: 'diagnostico',
+    formulario: LEAD_CFG.formulario,
+    diagnostico_id: LEAD_CFG.diagnostico_id,
+    contacto: {
+      nombre: ld.nombre || '', tel: ld.tel || '', email: ld.email || '',
+      empresa: ld.empresa || '', cargo: ld.cargo || '',
+      colaboradores: ld.colaboradores || '', acepta_comercial: !!ld.comercial,
+    },
+    resultado,
+    atribucion: leerAtribucionLead(),
+    turnstile_token: '',
+  };
+  if (pdf) payload.pdf = { nombre: pdf.nombre, base64: pdf.base64 };
+  if (LEAD_PRUEBA) payload.prueba = true;
+  return payload;
+}
+
+// Se manda una sola vez por correo y página (el informe interno puede reenviarse
+// a Web3Forms a mano, pero eso no debe crear otro lead ni otro correo al cliente).
+async function enviarLeadWorker(ld) {
+  if (!LEADS_ENDPOINT) { console.info('[Lofton] LEADS_ENDPOINT vacío: no se envía al Worker'); return null; }
+  const clave = String(ld.email || '').toLowerCase();
+  window.__leadWorkerEnviados = window.__leadWorkerEnviados || {};
+  if (window.__leadWorkerEnviados[clave]) return window.__leadWorkerEnviados[clave];
+
+  const tarea = (async () => {
+    // Deja que el reporte termine de pintarse antes de fotografiarlo.
+    await new Promise(r => setTimeout(r, 1200));
+    let pdf = null;
+    try { pdf = await generarInformePDF(ld); }
+    catch (e) { console.error('[Lofton] ✗ PDF no generado; el lead se manda sin PDF', e); }
+    const payload = armarPayloadLead(ld, pdf);
+    window.__ultimoPayloadLead = payload; // para revisar desde la consola
+
+    let ultimoError = null;
+    for (let intento = 1; intento <= 2; intento++) {
+      try {
+        payload.turnstile_token = await obtenerTurnstileToken();
+        const res = await fetch(LEADS_ENDPOINT.replace(/\/+$/, '') + '/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          console.info('[Lofton] Lead en Kommo ✓', LEAD_CFG.diagnostico_id, data.lead_id, 'correo:', data.correo_en_proceso ?? data.correo_enviado ?? '(sin dato)');
+          return data;
+        }
+        ultimoError = new Error('Worker respondió ' + res.status + ' ' + JSON.stringify(data));
+      } catch (e) {
+        ultimoError = e;
+      }
+      if (intento === 1) await new Promise(r => setTimeout(r, 1500));
+    }
+    console.error('[Lofton] ✗ NO LLEGÓ EL LEAD AL WORKER (Web3Forms sí sigue) ·', LEAD_CFG.diagnostico_id, ld.email || '', ultimoError);
+    delete window.__leadWorkerEnviados[clave]; // que un reintento manual pueda volver a intentarlo
+    return null;
+  })();
+  window.__leadWorkerEnviados[clave] = tarea;
+  return tarea;
+}
+
 async function enviarLead(ld, extra) {
+  // Worker (Kommo + correo con PDF) en paralelo: nunca bloquea ni rompe Web3Forms.
+  try { enviarLeadWorker(ld || {}).catch(e => console.error('[Lofton] Worker', e)); }
+  catch (e) { console.error('[Lofton] Worker', e); }
+
   const fields = Object.assign({
     'Diagnóstico': DIAGNOSTICO_NOMBRE,
     'Nombre': ld.nombre || '',
