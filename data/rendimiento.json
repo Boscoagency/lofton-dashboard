@@ -1,21 +1,21 @@
 {
-  "actualizado": "2026-11-10T14:27-06:00",
+  "actualizado": "2026-11-11T14:11-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-10T14:27-06:00",
+    "consultado": "2026-11-11T14:11-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-09"
+        "hasta": "2026-11-10"
       },
       "7d": {
-        "desde": "2026-11-03",
-        "hasta": "2026-11-09"
+        "desde": "2026-11-04",
+        "hasta": "2026-11-10"
       },
       "30d": {
-        "desde": "2026-10-11",
-        "hasta": "2026-11-09"
+        "desde": "2026-10-12",
+        "hasta": "2026-11-10"
       }
     },
     "moneda": "MXN",
@@ -23,24 +23,24 @@
     "token_vence": null,
     "totales": {
       "mes": {
-        "gasto": 3561.08,
-        "impresiones": 11736,
-        "clics": 282,
+        "gasto": 3924.26,
+        "impresiones": 13089,
+        "clics": 329,
         "resultados": 4.0
       },
       "7d": {
-        "gasto": 2650.99,
-        "impresiones": 9305,
-        "clics": 214,
-        "resultados": 3.0
+        "gasto": 2571.22,
+        "impresiones": 9102,
+        "clics": 222,
+        "resultados": 2.0
       }
     },
     "campanas": [
       {
         "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
-        "gasto": 3561.08,
-        "impresiones": 11736,
-        "clics": 282,
+        "gasto": 3924.26,
+        "impresiones": 13089,
+        "clics": 329,
         "resultados": 4.0
       }
     ],
@@ -233,40 +233,47 @@
         "impresiones": 1508,
         "clics": 28,
         "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-10",
+        "gasto": 363.18,
+        "impresiones": 1353,
+        "clics": 47,
+        "resultados": 0.0
       }
     ]
   },
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-10T14:27-06:00",
+    "consultado": "2026-11-11T14:11-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-09"
+        "hasta": "2026-11-10"
       },
       "7d": {
-        "desde": "2026-11-03",
-        "hasta": "2026-11-09"
+        "desde": "2026-11-04",
+        "hasta": "2026-11-10"
       },
       "30d": {
-        "desde": "2026-10-11",
-        "hasta": "2026-11-09"
+        "desde": "2026-10-12",
+        "hasta": "2026-11-10"
       }
     },
     "moneda": "MXN",
     "resultado_etiqueta": "Conversiones",
     "totales": {
       "mes": {
-        "gasto": 4856.54,
-        "impresiones": 13333,
-        "clics": 582,
+        "gasto": 5640.88,
+        "impresiones": 15299,
+        "clics": 675,
         "resultados": 0.0
       },
       "7d": {
-        "gasto": 4225.6,
-        "impresiones": 12028,
-        "clics": 516,
+        "gasto": 4341.75,
+        "impresiones": 12637,
+        "clics": 535,
         "resultados": 0.0
       }
     },
@@ -274,25 +281,25 @@
       {
         "nombre": "Lofton | Diag Nómina | Search MX",
         "estado": "ENABLED",
-        "gasto": 1071.46,
-        "impresiones": 114,
-        "clics": 13,
+        "gasto": 1273.29,
+        "impresiones": 140,
+        "clics": 16,
         "resultados": 0.0
       },
       {
         "nombre": "Lofton | Diag Fiscal | Search MX",
         "estado": "ENABLED",
-        "gasto": 1068.17,
-        "impresiones": 3128,
-        "clics": 167,
+        "gasto": 1242.73,
+        "impresiones": 3363,
+        "clics": 187,
         "resultados": 0.0
       },
       {
         "nombre": "Lofton | Diag Laboral STPS | Search MX",
         "estado": "ENABLED",
-        "gasto": 1059.21,
-        "impresiones": 612,
-        "clics": 88,
+        "gasto": 1220.16,
+        "impresiones": 693,
+        "clics": 104,
         "resultados": 0.0
       },
       {
@@ -306,9 +313,9 @@
       {
         "nombre": "Lofton | Diag Corporativo Legal | Search MX",
         "estado": "ENABLED",
-        "gasto": 671.46,
-        "impresiones": 8933,
-        "clics": 239,
+        "gasto": 918.46,
+        "impresiones": 10557,
+        "clics": 293,
         "resultados": 0.0
       }
     ],
@@ -484,8 +491,15 @@
       {
         "fecha": "2026-11-09",
         "gasto": 956.95,
-        "impresiones": 3210,
+        "impresiones": 3209,
         "clics": 112,
+        "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-10",
+        "gasto": 784.34,
+        "impresiones": 1967,
+        "clics": 93,
         "resultados": 0.0
       }
     ]
