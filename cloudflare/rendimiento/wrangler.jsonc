@@ -1,0 +1,13 @@
+// Dashboard de campañas de Lofton (plan + rendimiento real). Solo archivos estáticos.
+// Lo publica la acción diaria de GitHub (.github/workflows/actualizar-campanas.yml)
+// o a mano con: bash cloudflare/publicar-rendimiento.sh
+{
+  "name": "lofton-rendimiento",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./publicar",
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  }
+}
