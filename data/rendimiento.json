@@ -1,9 +1,9 @@
 {
-  "actualizado": "2026-11-17T15:45-06:00",
+  "actualizado": "2026-11-17T15:46-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-17T15:45-06:00",
+    "consultado": "2026-11-17T15:46-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
@@ -260,7 +260,7 @@
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-17T15:45-06:00",
+    "consultado": "2026-11-17T15:46-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
