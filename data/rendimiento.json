@@ -1,21 +1,21 @@
 {
-  "actualizado": "2026-11-22T14:20-06:00",
+  "actualizado": "2026-11-23T18:49-06:00",
   "meta": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-22T14:20-06:00",
+    "consultado": "2026-11-23T18:49-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-21"
+        "hasta": "2026-11-22"
       },
       "7d": {
-        "desde": "2026-11-15",
-        "hasta": "2026-11-21"
+        "desde": "2026-11-16",
+        "hasta": "2026-11-22"
       },
       "30d": {
-        "desde": "2026-10-23",
-        "hasta": "2026-11-21"
+        "desde": "2026-10-24",
+        "hasta": "2026-11-22"
       }
     },
     "moneda": "MXN",
@@ -23,35 +23,28 @@
     "token_vence": null,
     "totales": {
       "mes": {
-        "gasto": 6844.34,
-        "impresiones": 22605,
-        "clics": 593,
-        "resultados": 8.0
+        "gasto": 7260.35,
+        "impresiones": 24134,
+        "clics": 638,
+        "resultados": 9.0
       },
       "7d": {
-        "gasto": 2061.93,
-        "impresiones": 6358,
-        "clics": 177,
-        "resultados": 2.0
+        "gasto": 2062.18,
+        "impresiones": 6675,
+        "clics": 187,
+        "resultados": 3.0
       }
     },
     "campanas": [
       {
         "nombre": "Lofton | Meta | Diagnósticos | Frío MX",
-        "gasto": 6844.34,
-        "impresiones": 22605,
-        "clics": 593,
-        "resultados": 8.0
+        "gasto": 7260.35,
+        "impresiones": 24134,
+        "clics": 638,
+        "resultados": 9.0
       }
     ],
     "diario": [
-      {
-        "fecha": "2026-10-23",
-        "gasto": 286.33,
-        "impresiones": 1316,
-        "clics": 35,
-        "resultados": 0.0
-      },
       {
         "fecha": "2026-10-24",
         "gasto": 215.49,
@@ -244,35 +237,42 @@
       {
         "fecha": "2026-11-20",
         "gasto": 204.88,
-        "impresiones": 940,
+        "impresiones": 941,
         "clics": 16,
         "resultados": 0.0
       },
       {
         "fecha": "2026-11-21",
-        "gasto": 121.37,
-        "impresiones": 595,
+        "gasto": 121.39,
+        "impresiones": 596,
         "clics": 24,
         "resultados": 0.0
+      },
+      {
+        "fecha": "2026-11-22",
+        "gasto": 415.99,
+        "impresiones": 1527,
+        "clics": 45,
+        "resultados": 1.0
       }
     ]
   },
   "google": {
     "estado": "ok",
     "mensaje": null,
-    "consultado": "2026-11-22T14:20-06:00",
+    "consultado": "2026-11-23T18:49-06:00",
     "periodos": {
       "mes": {
         "desde": "2026-11-01",
-        "hasta": "2026-11-21"
+        "hasta": "2026-11-22"
       },
       "7d": {
-        "desde": "2026-11-15",
-        "hasta": "2026-11-21"
+        "desde": "2026-11-16",
+        "hasta": "2026-11-22"
       },
       "30d": {
-        "desde": "2026-10-23",
-        "hasta": "2026-11-21"
+        "desde": "2026-10-24",
+        "hasta": "2026-11-22"
       }
     },
     "moneda": "MXN",
@@ -334,13 +334,6 @@
       }
     ],
     "diario": [
-      {
-        "fecha": "2026-10-23",
-        "gasto": 737.12,
-        "impresiones": 2252,
-        "clics": 60,
-        "resultados": 1.0
-      },
       {
         "fecha": "2026-10-24",
         "gasto": 696.28,
